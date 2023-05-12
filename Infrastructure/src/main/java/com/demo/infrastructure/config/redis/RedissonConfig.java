@@ -1,5 +1,6 @@
 package com.demo.infrastructure.config.redis;
 
+
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
@@ -41,8 +42,8 @@ public class RedissonConfig {
     }
 
     /** for bucket4j */
-//    @Bean
-//    ProxyManager<String> proxyManager(CacheManager cacheManager) {
-//        return new JCacheProxyManager<>(cacheManager.getCache("bucket4j"));
-//    }
+    //    @Bean
+    //    ProxyManager<String> proxyManager(CacheManager cacheManager) {
+    //        return new JCacheProxyManager<>(cacheManager.getCache("bucket4j"));
+    //    }
 }
