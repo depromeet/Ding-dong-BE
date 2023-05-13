@@ -41,9 +41,4 @@ public class RedissonConfig {
         return manager;
     }
 
-    /** for bucket4j */
-    //    @Bean
-    //    ProxyManager<String> proxyManager(CacheManager cacheManager) {
-    //        return new JCacheProxyManager<>(cacheManager.getCache("bucket4j"));
-    //    }
 }
