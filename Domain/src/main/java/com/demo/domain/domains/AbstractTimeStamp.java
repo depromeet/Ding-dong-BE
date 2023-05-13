@@ -2,10 +2,12 @@ package com.demo.domain.domains;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
