@@ -1,0 +1,30 @@
+bootJar.enabled = false
+jar.enabled = true
+
+dependencies {
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'mysql:mysql-connector-java:8.0.32'
+    runtimeOnly 'com.h2database:h2'
+    implementation project(':Core')
+    implementation project(':Infrastructure')
+
+    //QueryDsl 설정
+    api ("com.querydsl:querydsl-core") // querydsl
+    api ("com.querydsl:querydsl-jpa:5.0.0") // querydsl
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jpa" // querydsl JPAAnnotationProcessor 사용 지정
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+}
+//https://jojoldu.tistory.com/372
+def generated='src/main/generated'
+sourceSets {
+    main.java.srcDirs += [ generated ]
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(generated)
+}
+
+clean.doLast {
+    file(generated).deleteDir()
+}

@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    include:
+      - domain
+      - core
+      - infrastructure
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+swagger:
+  user: ${SWAGGER_USER:user}
+  password: ${SWAGGER_PASSWORD:password}

@@ -1,0 +1,6 @@
+rootProject.name = 'demo'
+include 'Api'
+include 'Domain'
+include 'Core'
+include 'Infrastructure'
+

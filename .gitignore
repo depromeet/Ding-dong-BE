@@ -1,4 +1,4 @@
-13th-7team-be/HELP.md
+HELP.md
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar
@@ -40,4 +40,4 @@ out/
 
 *.xlsx
 
-DuDoong-Domain/src/main/generated/**/*.java
+Domain/src/main/generated/**/*.java
