@@ -2,7 +2,9 @@ package com.demo.api.config.security;
 
 
 import com.demo.core.exception.SecurityContextNotFoundException;
+
 import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +24,7 @@ public class SecurityUtils {
 
         if (authentication.isAuthenticated()
                 && !CollectionUtils.containsAny(
-                        authentication.getAuthorities(), notUserAuthority)) {
+                authentication.getAuthorities(), notUserAuthority)) {
             return Long.valueOf(authentication.getName());
         }
         // 스웨거 유저일시 유저 아이디 0 반환

@@ -4,6 +4,7 @@ package com.demo.infrastructure.config.redis;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
+
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -30,7 +31,9 @@ public class RedissonConfig {
         return Redisson.create(config);
     }
 
-    /** for bucket4j */
+    /**
+     * for bucket4j
+     */
     @Bean
     public CacheManager cacheManager(RedissonClient redissonClient) {
         CacheManager manager = Caching.getCachingProvider().getCacheManager();
