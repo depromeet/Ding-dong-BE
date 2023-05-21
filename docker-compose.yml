@@ -1,0 +1,12 @@
+version: '3'
+services:
+
+  spring-boot:
+    container_name: api-server
+    build:
+      context: './Api'
+      dockerfile: Dockerfile
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
