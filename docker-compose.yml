@@ -3,6 +3,7 @@ services:
 
   spring-boot:
     container_name: api-server
+    image: simmigyeong/depromeet7
     build:
       context: './Api'
       dockerfile: Dockerfile

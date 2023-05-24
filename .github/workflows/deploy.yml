@@ -1,4 +1,4 @@
-name: Java CI with Gradle
+name: Java CI / CD with Gradle
 
 on:
   push:
@@ -23,13 +23,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: spotless check
+        run: ./gradlew spotlessCheck --no-daemon
+
       - uses: actions/checkout@v2
       - run: mkdir -p ./Domain/src/main/resources
       - run: touch ./Domain/src/main/resources/application-domain.yml
       - run: echo "${{ secrets.APPLICATION_DOMAIN }}" > ./Domain/src/main/resources/application-domain.yml
 
+      - uses: actions/checkout@v2
+      - run: mkdir -p ./Infrastructure/src/main/resources
+      - run: touch ./Infrastructure/src/main/resources/application-infrastructure.yml
+      - run: echo "${{ secrets.APPLICATION_INFRASTRUCTURE }}" > ./Infrastructure/src/main/resources/application-infrastructure.yml
+
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Docker build
         run: |
