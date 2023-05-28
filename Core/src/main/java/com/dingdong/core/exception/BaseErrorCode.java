@@ -7,5 +7,4 @@ import com.dingdong.core.dto.ErrorDetail;
 public interface BaseErrorCode {
 
     ErrorDetail getErrorDetail();
-
 }

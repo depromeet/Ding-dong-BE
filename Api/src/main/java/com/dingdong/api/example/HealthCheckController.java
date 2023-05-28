@@ -4,9 +4,7 @@ package com.dingdong.api.example;
 import com.dingdong.api.example.dto.HealthCheckResponse;
 import com.dingdong.core.exception.ExampleException;
 import io.swagger.v3.oas.annotations.Operation;
-
 import java.util.Objects;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

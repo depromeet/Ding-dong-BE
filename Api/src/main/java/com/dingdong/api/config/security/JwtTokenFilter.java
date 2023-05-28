@@ -8,13 +8,11 @@ import com.dingdong.core.exception.BaseErrorCode;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.core.jwt.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
