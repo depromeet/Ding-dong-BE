@@ -1,9 +1,16 @@
 version: '3'
-services:
 
-  spring-boot:
+services:
+  redis:
+    image: redis
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+
+  api-server:
+    image: simmigyeong/depromeet
     container_name: api-server
-    image: simmigyeong/depromeet7
     build:
       context: './Api'
       dockerfile: Dockerfile
@@ -11,3 +18,5 @@ services:
       - 8080
     ports:
       - 8080:8080
+    depends_on:
+      - redis

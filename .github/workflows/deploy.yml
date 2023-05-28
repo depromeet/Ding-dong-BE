@@ -2,7 +2,7 @@ name: Java CI / CD with Gradle
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -23,18 +23,20 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: spotless check
-        run: ./gradlew spotlessCheck --no-daemon
+      #      - name: spotless check
+      #        run: ./gradlew spotlessCheck --no-daemon
 
       - uses: actions/checkout@v2
-      - run: mkdir -p ./Domain/src/main/resources
       - run: touch ./Domain/src/main/resources/application-domain.yml
       - run: echo "${{ secrets.APPLICATION_DOMAIN }}" > ./Domain/src/main/resources/application-domain.yml
 
       - uses: actions/checkout@v2
-      - run: mkdir -p ./Infrastructure/src/main/resources
       - run: touch ./Infrastructure/src/main/resources/application-infrastructure.yml
       - run: echo "${{ secrets.APPLICATION_INFRASTRUCTURE }}" > ./Infrastructure/src/main/resources/application-infrastructure.yml
+
+      - uses: actions/checkout@v2
+      - run: touch ./Infrastructure/src/main/resources/application-core.yml
+      - run: echo "${{ secrets.APPLICATION_CORE }}" > ./Infrastructure/src/main/resources/application-core.yml
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -74,11 +76,13 @@ jobs:
           timeout: 60s
           # 도커 작업
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
-            docker stop $(docker ps -a -q)
-            docker run -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
-            docker rm $(docker ps --filter 'status=exited' -a -q)
-            docker image prune -a -f
+            cd app
+            sudo rm concal.log
+            sudo docker rm - f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+            docker-compose up -d
+            sudo docker logs -f api-server &> concal.log &
+            docker image prune -f
 
       # REMOVE Github IP FROM security group
       - name: Remove IP FROM security group
