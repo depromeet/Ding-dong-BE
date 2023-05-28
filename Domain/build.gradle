@@ -15,7 +15,7 @@ dependencies {
     annotationProcessor("jakarta.persistence:jakarta.persistence-api")
     annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 }
-//https://jojoldu.tistory.com/372
+
 def generated='src/main/generated'
 sourceSets {
     main.java.srcDirs += [ generated ]

@@ -1,4 +1,4 @@
-rootProject.name = 'demo'
+rootProject.name = 'dingdong'
 include 'Api'
 include 'Domain'
 include 'Core'
