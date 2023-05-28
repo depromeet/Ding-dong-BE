@@ -80,6 +80,7 @@ jobs:
             sudo rm concal.log
             sudo docker rm - f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
+            docker stop $(docker ps -a -q)
             docker-compose up -d
             sudo docker logs -f api-server &> concal.log &
             docker image prune -f
