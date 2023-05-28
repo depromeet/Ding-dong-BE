@@ -4,7 +4,6 @@ package com.dingdong.infrastructure.config.redis;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
-
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -12,7 +11,6 @@ import org.redisson.jcache.configuration.RedissonConfiguration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 public class RedissonConfig {
@@ -32,9 +30,7 @@ public class RedissonConfig {
         return Redisson.create(config);
     }
 
-    /**
-     * for bucket4j
-     */
+    /** for bucket4j */
     @Bean
     public CacheManager cacheManager(RedissonClient redissonClient) {
         CacheManager manager = Caching.getCachingProvider().getCacheManager();
@@ -44,5 +40,4 @@ public class RedissonConfig {
         }
         return manager;
     }
-
 }

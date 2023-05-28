@@ -28,9 +28,7 @@ public class SecurityConfig {
     @Value("${swagger.password}")
     private String swaggerPassword;
 
-    /**
-     * 스웨거용 인메모리 유저 설정
-     */
+    /** 스웨거용 인메모리 유저 설정 */
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
         UserDetails user =
