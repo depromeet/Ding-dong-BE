@@ -1,8 +1,8 @@
-name: Java CI / CD with Gradle
+name: Ding-dong CI/CD
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "dev", "main" ]
 
 permissions:
   contents: read
