@@ -17,6 +17,8 @@ dependencies {
     implementation project(':Domain')
     implementation project(':Core')
     implementation project(':Infrastructure')
+    implementation 'io.sentry:sentry-spring-boot-starter:6.20.0'
+    implementation 'io.sentry:sentry-logback:6.20.0'
 }
 
 test {
