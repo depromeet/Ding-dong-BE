@@ -15,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,7 +47,8 @@ public class CommentReply extends AbstractTimeStamp {
         this.content = content;
     }
 
-    public static CommentReply toEntity(Long idCardId, Long commentId, Long userId, String content) {
+    public static CommentReply toEntity(
+            Long idCardId, Long commentId, Long userId, String content) {
         return new CommentReply(idCardId, commentId, userId, content);
     }
 }

@@ -41,8 +41,12 @@ public class User extends AbstractTimeStamp {
 
     private String profileImageUrl;
 
-    private User(String email, GenderType genderType, String ageRange,
-                 String nickname, String profileImageUrl) {
+    private User(
+            String email,
+            GenderType genderType,
+            String ageRange,
+            String nickname,
+            String profileImageUrl) {
         this.email = email;
         this.genderType = genderType;
         this.ageRange = ageRange;
@@ -50,8 +54,12 @@ public class User extends AbstractTimeStamp {
         this.profileImageUrl = profileImageUrl;
     }
 
-    public static User toEntity(String email, GenderType genderType, String ageRange,
-                                String nickname, String profileImageUrl) {
+    public static User toEntity(
+            String email,
+            GenderType genderType,
+            String ageRange,
+            String nickname,
+            String profileImageUrl) {
         return new User(email, genderType, ageRange, nickname, profileImageUrl);
     }
 }

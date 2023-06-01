@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -45,8 +44,14 @@ public class AlarmHistory extends AbstractTimeStamp {
 
     private String targetUrl;
 
-    private AlarmHistory(AlarmType alarmType, Long toUserId, Long fromUserId,
-                         String title, String content, Long communityId, String targetUrl) {
+    private AlarmHistory(
+            AlarmType alarmType,
+            Long toUserId,
+            Long fromUserId,
+            String title,
+            String content,
+            Long communityId,
+            String targetUrl) {
         this.alarmType = alarmType;
         this.isRead = Status.N;
         this.toUserId = toUserId;
@@ -57,8 +62,15 @@ public class AlarmHistory extends AbstractTimeStamp {
         this.targetUrl = targetUrl;
     }
 
-    public static AlarmHistory toEntity(AlarmType alarmType, Long toUserId, Long fromUserId,
-            String title, String content, Long communityId, String targetUrl) {
-        return new AlarmHistory(alarmType, toUserId, fromUserId, title, content, communityId, targetUrl);
+    public static AlarmHistory toEntity(
+            AlarmType alarmType,
+            Long toUserId,
+            Long fromUserId,
+            String title,
+            String content,
+            Long communityId,
+            String targetUrl) {
+        return new AlarmHistory(
+                alarmType, toUserId, fromUserId, title, content, communityId, targetUrl);
     }
 }

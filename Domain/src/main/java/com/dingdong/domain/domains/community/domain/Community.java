@@ -48,7 +48,8 @@ public class Community extends AbstractTimeStamp {
         this.invitationCode = invitationCode;
     }
 
-    public static Community toEntity(String name, CommunityImage communityImage, String invitationCode) {
+    public static Community toEntity(
+            String name, CommunityImage communityImage, String invitationCode) {
         return new Community(name, communityImage, invitationCode);
     }
 }
