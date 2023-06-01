@@ -3,6 +3,7 @@ jar.enabled = true
 
 dependencies {
     api 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springframework.boot:spring-boot-starter-validation'
     api 'mysql:mysql-connector-java:8.0.32'
     runtimeOnly 'com.h2database:h2'
     implementation project(':Core')
