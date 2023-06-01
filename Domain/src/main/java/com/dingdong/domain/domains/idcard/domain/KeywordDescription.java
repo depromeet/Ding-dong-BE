@@ -2,11 +2,8 @@ package com.dingdong.domain.domains.idcard.domain;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
-import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
-import javax.persistence.Embedded;
+import com.esotericsoftware.kryo.serializers.FieldSerializer.NotNull;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,23 +14,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Table(name = "tbl_id_card")
+@Table(name = "tbl_keyword_description")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IdCard extends AbstractTimeStamp {
+public class KeywordDescription extends AbstractTimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded private UserInfo userInfo;
+    @NotNull private Long keywordId;
 
-    @Enumerated(EnumType.STRING)
-    private CharacterType character;
+    @NotNull private String description;
 
     @Builder
-    public IdCard(UserInfo userInfo, CharacterType character) {
-        this.userInfo = userInfo;
-        this.character = character;
+    public KeywordDescription(Long keywordId, String description) {
+        this.keywordId = keywordId;
+        this.description = description;
     }
 }

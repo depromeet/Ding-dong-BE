@@ -1,9 +1,10 @@
 package com.dingdong.domain.domains.idcard.domain;
 
 
+import com.dingdong.core.consts.Status;
 import com.dingdong.domain.domains.AbstractTimeStamp;
-import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
-import javax.persistence.Embedded;
+import com.dingdong.domain.domains.idcard.domain.enums.NudgeType;
+import com.esotericsoftware.kryo.serializers.FieldSerializer.NotNull;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,23 +18,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Table(name = "tbl_id_card")
+@Table(name = "tbl_nudge")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class IdCard extends AbstractTimeStamp {
+public class Nudge extends AbstractTimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded private UserInfo userInfo;
+    @Enumerated(EnumType.STRING)
+    private NudgeType type;
+
+    @NotNull private Long fromUserId;
+
+    @NotNull private Long toUserId;
 
     @Enumerated(EnumType.STRING)
-    private CharacterType character;
+    private Status isLike;
 
     @Builder
-    public IdCard(UserInfo userInfo, CharacterType character) {
-        this.userInfo = userInfo;
-        this.character = character;
+    public Nudge(NudgeType type, Long fromUserId, Long toUserId) {
+        this.type = type;
+        this.fromUserId = fromUserId;
+        this.toUserId = toUserId;
+        this.isLike = Status.N;
     }
 }
