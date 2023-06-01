@@ -37,15 +37,18 @@ public class CommentReply extends AbstractTimeStamp {
 
     @NotNull private String content;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "comment_reply_id")
     private final List<CommentReplyLike> replyLikes = new ArrayList<>();
 
-    @Builder
-    public CommentReply(Long idCardId, Long commentId, Long userId, String content) {
+    private CommentReply(Long idCardId, Long commentId, Long userId, String content) {
         this.idCardId = idCardId;
         this.commentId = commentId;
         this.userId = userId;
         this.content = content;
+    }
+
+    public static CommentReply toEntity(Long idCardId, Long commentId, Long userId, String content) {
+        return new CommentReply(idCardId, commentId, userId, content);
     }
 }

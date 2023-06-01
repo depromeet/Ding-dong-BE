@@ -37,11 +37,14 @@ public class Nudge extends AbstractTimeStamp {
     @Enumerated(EnumType.STRING)
     private Status isLike;
 
-    @Builder
-    public Nudge(NudgeType type, Long fromUserId, Long toUserId) {
+    private Nudge(NudgeType type, Long fromUserId, Long toUserId) {
         this.type = type;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
         this.isLike = Status.N;
+    }
+
+    public static Nudge toEntity(NudgeType type, Long fromUserId, Long toUserId) {
+        return new Nudge(type, fromUserId, toUserId);
     }
 }

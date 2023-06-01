@@ -27,9 +27,12 @@ public class KeywordDescription extends AbstractTimeStamp {
 
     @NotNull private String description;
 
-    @Builder
-    public KeywordDescription(Long keywordId, String description) {
+    private KeywordDescription(Long keywordId, String description) {
         this.keywordId = keywordId;
         this.description = description;
+    }
+
+    public static KeywordDescription toEntity(Long keywordId, String description) {
+        return new KeywordDescription(keywordId, description);
     }
 }

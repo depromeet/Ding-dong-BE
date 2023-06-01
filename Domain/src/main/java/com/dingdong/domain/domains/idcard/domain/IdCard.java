@@ -31,9 +31,12 @@ public class IdCard extends AbstractTimeStamp {
     @Enumerated(EnumType.STRING)
     private CharacterType character;
 
-    @Builder
-    public IdCard(UserInfo userInfo, CharacterType character) {
+    private IdCard(UserInfo userInfo, CharacterType character) {
         this.userInfo = userInfo;
         this.character = character;
+    }
+
+    public static IdCard toEntity(UserInfo userInfo, CharacterType character) {
+        return new IdCard(userInfo, character);
     }
 }

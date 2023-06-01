@@ -27,9 +27,12 @@ public class CommentLike extends AbstractTimeStamp {
 
     @NotNull private Long userId;
 
-    @Builder
-    public CommentLike(Long commentId, Long userId) {
+    private CommentLike(Long commentId, Long userId) {
         this.commentId = commentId;
         this.userId = userId;
+    }
+
+    public static CommentLike toEntity(Long commentId, Long userId) {
+        return new CommentLike(commentId, userId);
     }
 }

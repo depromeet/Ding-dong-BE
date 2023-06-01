@@ -43,17 +43,10 @@ public class AlarmHistory extends AbstractTimeStamp {
 
     @NotNull private Long communityId;
 
-    private String path;
+    private String targetUrl;
 
-    @Builder
-    public AlarmHistory(
-            AlarmType alarmType,
-            Long toUserId,
-            Long fromUserId,
-            String title,
-            String content,
-            Long communityId,
-            String path) {
+    private AlarmHistory(AlarmType alarmType, Long toUserId, Long fromUserId,
+                         String title, String content, Long communityId, String targetUrl) {
         this.alarmType = alarmType;
         this.isRead = Status.N;
         this.toUserId = toUserId;
@@ -61,6 +54,11 @@ public class AlarmHistory extends AbstractTimeStamp {
         this.title = title;
         this.content = content;
         this.communityId = communityId;
-        this.path = path;
+        this.targetUrl = targetUrl;
+    }
+
+    public static AlarmHistory toEntity(AlarmType alarmType, Long toUserId, Long fromUserId,
+            String title, String content, Long communityId, String targetUrl) {
+        return new AlarmHistory(alarmType, toUserId, fromUserId, title, content, communityId, targetUrl);
     }
 }

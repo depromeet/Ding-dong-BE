@@ -23,4 +23,12 @@ public class Keyword extends AbstractTimeStamp {
     private Long id;
 
     @NotNull private String title;
+
+    private Keyword(String title) {
+        this.title = title;
+    }
+
+    public static Keyword toEntity(String title) {
+        return new Keyword(title);
+    }
 }

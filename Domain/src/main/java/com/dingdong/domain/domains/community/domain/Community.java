@@ -41,4 +41,14 @@ public class Community extends AbstractTimeStamp {
     @Embedded private CommunityImage communityImage;
 
     private String invitationCode;
+
+    private Community(String name, CommunityImage communityImage, String invitationCode) {
+        this.name = name;
+        this.communityImage = communityImage;
+        this.invitationCode = invitationCode;
+    }
+
+    public static Community toEntity(String name, CommunityImage communityImage, String invitationCode) {
+        return new Community(name, communityImage, invitationCode);
+    }
 }

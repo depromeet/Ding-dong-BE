@@ -40,4 +40,18 @@ public class User extends AbstractTimeStamp {
     private String nickname;
 
     private String profileImageUrl;
+
+    private User(String email, GenderType genderType, String ageRange,
+                 String nickname, String profileImageUrl) {
+        this.email = email;
+        this.genderType = genderType;
+        this.ageRange = ageRange;
+        this.nickname = nickname;
+        this.profileImageUrl = profileImageUrl;
+    }
+
+    public static User toEntity(String email, GenderType genderType, String ageRange,
+                                String nickname, String profileImageUrl) {
+        return new User(email, genderType, ageRange, nickname, profileImageUrl);
+    }
 }

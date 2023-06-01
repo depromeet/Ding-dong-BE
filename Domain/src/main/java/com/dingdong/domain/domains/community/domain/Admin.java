@@ -27,4 +27,13 @@ public class Admin {
     private AdminRole role;
 
     @NotNull private Long userId;
+
+    private Admin(AdminRole role, Long userId) {
+        this.role = role;
+        this.userId = userId;
+    }
+
+    public static Admin toEntity(AdminRole role, Long userId) {
+        return new Admin(role, userId);
+    }
 }
