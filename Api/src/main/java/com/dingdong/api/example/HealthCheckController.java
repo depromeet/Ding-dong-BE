@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/health")
+@RequestMapping(value = "/api/health")
 @Slf4j
 public class HealthCheckController {
 
