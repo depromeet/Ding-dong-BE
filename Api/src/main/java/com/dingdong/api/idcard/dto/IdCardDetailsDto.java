@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class IdCardDetailsDto {
+    @Schema(description = "주민증 Id")
     private Long idCardId;
 
     @Schema(description = "이름")
