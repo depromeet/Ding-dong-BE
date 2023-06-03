@@ -3,6 +3,9 @@ package com.dingdong.domain.domains.idcard.domain;
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,6 +33,9 @@ public class IdCard extends AbstractTimeStamp {
 
     @Enumerated(EnumType.STRING)
     private CharacterType character;
+
+    @OneToMany(mappedBy = "idCard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Keyword> keywords = new ArrayList<>();
 
     private IdCard(UserInfo userInfo, CharacterType character) {
         this.userInfo = userInfo;
