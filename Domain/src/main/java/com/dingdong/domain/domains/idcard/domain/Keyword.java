@@ -31,11 +31,18 @@ public class Keyword extends AbstractTimeStamp {
 
     @NotNull private String title;
 
-    private Keyword(String title) {
+    @NotNull private String content;
+
+    private String imagerUrl;
+
+    private Keyword(String title, String content, IdCard idCard, String imagerUrl) {
         this.title = title;
+        this.content = content;
+        this.idCard = idCard;
+        this.imagerUrl = imagerUrl;
     }
 
-    public static Keyword toEntity(String title) {
-        return new Keyword(title);
+    public static Keyword toEntity(String title, String content, IdCard idCard, String imagerUrl) {
+        return new Keyword(title, content, idCard, imagerUrl);
     }
 }
