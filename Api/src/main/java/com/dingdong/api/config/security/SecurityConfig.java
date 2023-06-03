@@ -58,7 +58,7 @@ public class SecurityConfig {
                 .permitAll()
                 .mvcMatchers("/auth/token/refresh")
                 .permitAll()
-                .mvcMatchers("**/health/**")
+                .mvcMatchers("/**/health/**")
                 .permitAll()
                 .anyRequest()
                 .hasRole("USER");

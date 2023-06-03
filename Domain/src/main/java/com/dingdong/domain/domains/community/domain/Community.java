@@ -32,11 +32,11 @@ public class Community extends AbstractTimeStamp {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Admin> admins = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Admin> admins = new ArrayList<>();
 
-    @OneToMany(mappedBy = "community", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<IdCard> idCards = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<IdCard> idCards = new ArrayList<>();
 
     @Embedded private CommunityImage communityImage;
 

@@ -11,7 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -37,7 +36,6 @@ public class CommentReply extends AbstractTimeStamp {
     @NotNull private String content;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "comment_reply_id")
     private final List<CommentReplyLike> replyLikes = new ArrayList<>();
 
     private CommentReply(Long idCardId, Long commentId, Long userId, String content) {
