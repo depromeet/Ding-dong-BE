@@ -2,9 +2,9 @@ package com.dingdong.api.community.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class CommunityListDto {
     @Schema(description = "커뮤니티 Id")
     private Long communityId;

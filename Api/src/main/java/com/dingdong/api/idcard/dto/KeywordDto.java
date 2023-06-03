@@ -2,9 +2,9 @@ package com.dingdong.api.idcard.dto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class KeywordDto {
     @Schema(description = "키워드 Id")
     private Long keywordId;

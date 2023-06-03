@@ -5,9 +5,11 @@ import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
 public class CommunityIdCardsDto {
 
     @Schema(description = "주민증 고유 값")
@@ -23,5 +25,5 @@ public class CommunityIdCardsDto {
     private CharacterType characterType;
 
     @Schema(description = "키워드 타이틀 목록")
-    private List<String> keyWordTitles = new ArrayList<>();
+    private final List<String> keywordTitles = new ArrayList<>();
 }
