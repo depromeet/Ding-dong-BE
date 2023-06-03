@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +34,7 @@ public class CommentReply extends AbstractTimeStamp {
 
     @NotNull private String content;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<CommentReplyLike> replyLikes = new ArrayList<>();
 
     private CommentReply(Long idCardId, Long commentId, Long userId, String content) {
