@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,9 +26,12 @@ public class CommentReplyLike extends AbstractTimeStamp {
 
     @NotNull private Long userId;
 
-    @Builder
-    public CommentReplyLike(Long commentReplyId, Long userId) {
+    private CommentReplyLike(Long commentReplyId, Long userId) {
         this.commentReplyId = commentReplyId;
         this.userId = userId;
+    }
+
+    public static CommentReplyLike toEntity(Long commentReplyId, Long userId) {
+        return new CommentReplyLike(commentReplyId, userId);
     }
 }
