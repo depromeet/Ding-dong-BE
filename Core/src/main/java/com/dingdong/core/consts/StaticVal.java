@@ -29,6 +29,6 @@ public class StaticVal {
     스웨거 패턴
      */
     public static final String[] SwaggerPatterns = {
-        "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs",
+        "/swagger-resources/**", "/api/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs",
     };
 }
