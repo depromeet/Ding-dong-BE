@@ -33,7 +33,6 @@ public class User extends AbstractTimeStamp {
 
     private String ageRange;
 
-    //    @NotNull
     @Column(unique = true)
     @Size(max = 10)
     private String nickname;
