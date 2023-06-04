@@ -30,8 +30,7 @@ public class IdCard extends AbstractTimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private Long communityId;
+    @NotNull private Long communityId;
 
     @Embedded private UserInfo userInfo;
 

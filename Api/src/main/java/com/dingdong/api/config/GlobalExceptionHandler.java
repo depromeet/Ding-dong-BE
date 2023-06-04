@@ -1,6 +1,5 @@
 package com.dingdong.api.config;
 
-
 import static com.dingdong.core.consts.StaticVal.BAD_REQUEST;
 
 import com.dingdong.core.dto.ErrorDetail;
@@ -12,16 +11,12 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.ServletWebRequest;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestControllerAdvice
@@ -57,18 +52,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> argumentNotValidHandle(
-        MethodArgumentNotValidException exception) {
+            MethodArgumentNotValidException exception) {
         ErrorDetail reason =
-            ErrorDetail.builder()
-                .statusCode(BAD_REQUEST)
-                .errorCode("Global-400-1")
-                .reason(
-                    exception
-                        .getBindingResult()
-                        .getAllErrors()
-                        .get(0)
-                        .getDefaultMessage())
-                .build();
+                ErrorDetail.builder()
+                        .statusCode(BAD_REQUEST)
+                        .errorCode("Global-400-1")
+                        .reason(
+                                exception
+                                        .getBindingResult()
+                                        .getAllErrors()
+                                        .get(0)
+                                        .getDefaultMessage())
+                        .build();
         ErrorResponse errorResponse = new ErrorResponse(reason);
         return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse);
     }
