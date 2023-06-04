@@ -52,7 +52,7 @@ public class SecurityConfig {
         http.authorizeRequests().expressionHandler(expressionHandler());
 
         http.authorizeRequests()
-                .mvcMatchers(SwaggerPatterns)
+                .antMatchers(SwaggerPatterns)
                 .permitAll()
                 .mvcMatchers("/auth/oauth/**")
                 .permitAll()
