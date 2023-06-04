@@ -20,8 +20,7 @@ public class CreateIdCardRequest {
     private Long communityId;
 
     @Schema(description = "행성에서 사용할 유저 닉네임", example = "김민준")
-    @NotNull(message = "행성에서 사용할 유저 닉네임을 입력해주세요.")
-    @NotBlank(message = "유저 닉네임에 공백은 허용하지 않습니다.")
+    @NotBlank(message = "행성에서 사용할 유저 닉네임을 입력해주세요. 공백은 허용하지 않습니다.")
     private String nickname;
 
     @Schema(description = "유저 간단 자기소개", example = "안녕하세요. 김민준입니다.")
