@@ -22,8 +22,8 @@ server:
 
 client:
   kakao:
-    clientId: 87c4a522c16ebfb0908e31de14e71d26
-    clientSecret: oRcPYEMM4U68DshJqhP1Iv2EkCtI5I2f
-    redirectUri: https:/ding-dong-planet.com/auth/callback/kakao
-    authUrl: https://kauth.kakao.com
-    apiUrl: https://kapi.kakao.com
+    clientId: ${KAKAO_CLIENT_ID}
+    clientSecret: ${KAKAO_CLIENT_SECRET}
+    redirectUri: ${KAKAO_REDIRECT_URI}
+    authUrl: ${KAKAO_AUTH_URL}
+    apiUrl: ${KAKAO_API_URL}
