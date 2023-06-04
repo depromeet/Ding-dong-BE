@@ -13,4 +13,4 @@ swagger:
 
 sentry:
   dsn: ${DSN_KEY}
-  enable-tracing: false
+  enable-tracing: true
