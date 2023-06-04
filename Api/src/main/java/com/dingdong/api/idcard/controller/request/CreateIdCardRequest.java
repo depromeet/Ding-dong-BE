@@ -13,6 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CreateIdCardRequest {
 
+    @Schema(description = "행성 id", example = "1")
+    @NotNull(message = "행성 식별 값을 입력해주세요.")
+    private Long communityId;
+
     @Schema(description = "행성에서 사용할 유저 닉네임", example = "김민준")
     @NotNull(message = "행성에서 사용할 유저 닉네임을 입력해주세요.")
     private String nickname;

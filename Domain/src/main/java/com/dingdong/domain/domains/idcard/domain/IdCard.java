@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,9 @@ public class IdCard extends AbstractTimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
+    private Long communityId;
+
     @Embedded private UserInfo userInfo;
 
     @Enumerated(EnumType.STRING)
@@ -37,12 +41,13 @@ public class IdCard extends AbstractTimeStamp {
     @OneToMany(mappedBy = "idCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Keyword> keywords = new ArrayList<>();
 
-    private IdCard(UserInfo userInfo, CharacterType character) {
+    private IdCard(Long communityId, UserInfo userInfo, CharacterType character) {
+        this.communityId = communityId;
         this.userInfo = userInfo;
         this.character = character;
     }
 
-    public static IdCard toEntity(UserInfo userInfo, CharacterType character) {
-        return new IdCard(userInfo, character);
+    public static IdCard toEntity(Long communityId, UserInfo userInfo, CharacterType character) {
+        return new IdCard(communityId, userInfo, character);
     }
 }

@@ -34,6 +34,7 @@ public class IdCardController {
     @Operation(summary = "주민증 생성")
     @PostMapping
     public Void postIdCard(@RequestBody @Valid CreateIdCardRequest body) {
+        //Todo: 유저 id값은 나중에 로그인 기능 완성되고 AccessToken 필터 추가 되면 거기서 가져오기
         return null;
     }
 }
