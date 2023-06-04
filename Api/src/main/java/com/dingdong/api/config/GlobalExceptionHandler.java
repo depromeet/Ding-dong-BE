@@ -1,6 +1,8 @@
 package com.dingdong.api.config;
 
 
+import static com.dingdong.core.consts.StaticVal.BAD_REQUEST;
+
 import com.dingdong.core.dto.ErrorDetail;
 import com.dingdong.core.dto.ErrorResponse;
 import com.dingdong.core.exception.BaseErrorCode;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
@@ -24,22 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RestControllerAdvice
 @Slf4j
 @RequiredArgsConstructor
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
-    @Override
-    protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ServletWebRequest servletWebRequest = (ServletWebRequest) request;
-        String url =
-                UriComponentsBuilder.fromHttpRequest(
-                                new ServletServerHttpRequest(servletWebRequest.getRequest()))
-                        .build()
-                        .toUriString();
-
-        ErrorResponse errorResponse =
-                new ErrorResponse(ErrorDetail.of(status.value(), status.name(), ex.getMessage()));
-        return super.handleExceptionInternal(ex, errorResponse, headers, status, request);
-    }
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> internalServerExceptionHandle(
@@ -65,5 +53,23 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(errorDetail);
         return ResponseEntity.status(HttpStatus.valueOf(errorDetail.getStatusCode()))
                 .body(errorResponse);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> argumentNotValidHandle(
+        MethodArgumentNotValidException exception) {
+        ErrorDetail reason =
+            ErrorDetail.builder()
+                .statusCode(BAD_REQUEST)
+                .errorCode("Global-400-1")
+                .reason(
+                    exception
+                        .getBindingResult()
+                        .getAllErrors()
+                        .get(0)
+                        .getDefaultMessage())
+                .build();
+        ErrorResponse errorResponse = new ErrorResponse(reason);
+        return ResponseEntity.status(errorResponse.getStatusCode()).body(errorResponse);
     }
 }
