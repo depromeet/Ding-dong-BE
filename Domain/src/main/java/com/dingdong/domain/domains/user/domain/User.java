@@ -11,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,7 +33,7 @@ public class User extends AbstractTimeStamp {
 
     private String ageRange;
 
-    @NotNull
+    //    @NotNull
     @Column(unique = true)
     @Size(max = 10)
     private String nickname;
@@ -61,5 +60,9 @@ public class User extends AbstractTimeStamp {
             String nickname,
             String profileImageUrl) {
         return new User(email, genderType, ageRange, nickname, profileImageUrl);
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

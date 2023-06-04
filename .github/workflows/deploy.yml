@@ -36,7 +36,7 @@ jobs:
 
       - uses: actions/checkout@v2
       - run: touch ./Infrastructure/src/main/resources/application-core.yml
-      - run: echo "${{ secrets.APPLICATION_CORE }}" > ./Infrastructure/src/main/resources/application-core.yml
+      - run: echo "${{ secrets.APPLICATION_CORE }}" > ./Core/src/main/resources/application-core.yml
 
       - name: Build with Gradle
         run: ./gradlew build
