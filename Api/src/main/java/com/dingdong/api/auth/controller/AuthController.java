@@ -1,7 +1,7 @@
 package com.dingdong.api.auth.controller;
 
 
-import com.dingdong.api.auth.dto.response.AuthResponse;
+import com.dingdong.api.auth.controller.response.AuthResponse;
 import com.dingdong.api.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

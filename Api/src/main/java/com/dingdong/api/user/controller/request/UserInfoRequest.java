@@ -1,4 +1,4 @@
-package com.dingdong.api.user.dto.request;
+package com.dingdong.api.user.controller.request;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

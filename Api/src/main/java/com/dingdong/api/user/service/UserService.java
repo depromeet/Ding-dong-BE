@@ -2,9 +2,9 @@ package com.dingdong.api.user.service;
 
 import static com.dingdong.core.exception.GlobalException.*;
 
-import com.dingdong.api.auth.dto.response.UserInfoResponse;
+import com.dingdong.api.auth.controller.response.UserInfoResponse;
 import com.dingdong.api.config.security.SecurityUtils;
-import com.dingdong.api.user.dto.request.UserInfoRequest;
+import com.dingdong.api.user.controller.request.UserInfoRequest;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
@@ -21,17 +22,29 @@ public class UserService {
     @Transactional
     public UserInfoResponse updateUserInfo(UserInfoRequest request) {
         User user = findUser();
-        if (!request.getNickname().equals(user.getNickname())
-                && userRepository.existsByNickname(request.getNickname())) {
-            throw new BaseException(ALREADY_EXISTS_NICKNAME);
-        }
+        checkDuplicateNickname(request.getNickname(), user);
         user.updateNickname(request.getNickname());
-        return UserInfoResponse.of(user);
+
+        return UserInfoResponse.from(user);
     }
 
     private User findUser() {
         return userRepository
                 .findById(SecurityUtils.getCurrentUserId())
                 .orElseThrow(() -> new BaseException(NOT_FOUND_USER));
+    }
+
+    private void checkDuplicateNickname(String nickname, User user) {
+        if (isNicknameChanged(nickname, user) && isNicknameExists(nickname)) {
+            throw new BaseException(ALREADY_EXISTS_NICKNAME);
+        }
+    }
+
+    private boolean isNicknameChanged(String nickname, User user) {
+        return !nickname.equals(user.getNickname());
+    }
+
+    private boolean isNicknameExists(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 }

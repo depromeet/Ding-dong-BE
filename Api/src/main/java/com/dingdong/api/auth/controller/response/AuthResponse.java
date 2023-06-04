@@ -1,4 +1,4 @@
-package com.dingdong.api.auth.dto.response;
+package com.dingdong.api.auth.controller.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

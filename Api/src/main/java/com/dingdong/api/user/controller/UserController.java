@@ -1,8 +1,8 @@
 package com.dingdong.api.user.controller;
 
 
-import com.dingdong.api.auth.dto.response.UserInfoResponse;
-import com.dingdong.api.user.dto.request.UserInfoRequest;
+import com.dingdong.api.auth.controller.response.UserInfoResponse;
+import com.dingdong.api.user.controller.request.UserInfoRequest;
 import com.dingdong.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
