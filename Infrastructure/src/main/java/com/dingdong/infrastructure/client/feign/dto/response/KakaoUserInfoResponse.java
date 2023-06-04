@@ -1,4 +1,4 @@
-package com.dingdong.api.auth.dto.response;
+package com.dingdong.infrastructure.client.feign.dto.response;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

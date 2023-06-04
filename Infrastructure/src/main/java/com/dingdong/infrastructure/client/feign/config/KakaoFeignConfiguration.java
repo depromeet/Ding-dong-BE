@@ -1,4 +1,4 @@
-package com.dingdong.api.auth.client;
+package com.dingdong.infrastructure.client.feign.config;
 
 
 import feign.Client;

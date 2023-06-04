@@ -1,7 +1,8 @@
-package com.dingdong.api.auth.client;
+package com.dingdong.infrastructure.client.feign;
 
 
-import com.dingdong.api.auth.dto.response.KakaoAuthResponse;
+import com.dingdong.infrastructure.client.feign.config.KakaoFeignConfiguration;
+import com.dingdong.infrastructure.client.feign.dto.response.KakaoAuthResponse;
 import java.util.Map;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;

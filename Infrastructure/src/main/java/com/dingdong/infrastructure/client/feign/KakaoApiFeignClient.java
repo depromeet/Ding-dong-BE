@@ -1,7 +1,8 @@
-package com.dingdong.api.auth.client;
+package com.dingdong.infrastructure.client.feign;
 
 
-import com.dingdong.api.auth.dto.response.KakaoUserInfoResponse;
+import com.dingdong.infrastructure.client.feign.config.KakaoFeignConfiguration;
+import com.dingdong.infrastructure.client.feign.dto.response.KakaoUserInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
