@@ -2,14 +2,11 @@ package com.dingdong.domain.domains.idcard.domain;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
-import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,19 +31,15 @@ public class IdCard extends AbstractTimeStamp {
 
     @Embedded private UserInfo userInfo;
 
-    @Enumerated(EnumType.STRING)
-    private CharacterType character;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Keyword> keywords = new ArrayList<>();
 
-    private IdCard(Long communityId, UserInfo userInfo, CharacterType character) {
+    private IdCard(Long communityId, UserInfo userInfo) {
         this.communityId = communityId;
         this.userInfo = userInfo;
-        this.character = character;
     }
 
-    public static IdCard toEntity(Long communityId, UserInfo userInfo, CharacterType character) {
-        return new IdCard(communityId, userInfo, character);
+    public static IdCard toEntity(Long communityId, UserInfo userInfo) {
+        return new IdCard(communityId, userInfo);
     }
 }
