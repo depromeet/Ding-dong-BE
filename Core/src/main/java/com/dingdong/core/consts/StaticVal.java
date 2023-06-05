@@ -10,6 +10,7 @@ public class StaticVal {
     public static final String REFRESH_TOKEN = "REFRESH_TOKEN";
     public static final String BEARER = "Bearer ";
 
+    public static final Integer OK = 200;
     /*
     에러 코드 관련 static 변수들
      */
