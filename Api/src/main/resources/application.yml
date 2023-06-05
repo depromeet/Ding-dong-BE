@@ -10,10 +10,10 @@ spring:
 swagger:
   user: ${SWAGGER_USER:user}
   password: ${SWAGGER_PASSWORD:password}
-
-sentry:
-  dsn: ${DSN_KEY}
-  enable-tracing: true
+#
+#sentry:
+#  dsn: ${DSN_KEY}
+#  enable-tracing: true
 
 server:
   servlet:

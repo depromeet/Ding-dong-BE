@@ -37,7 +37,7 @@ public class IdCard extends AbstractTimeStamp {
     @Enumerated(EnumType.STRING)
     private CharacterType character;
 
-    @OneToMany(mappedBy = "idCard", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Keyword> keywords = new ArrayList<>();
 
     private IdCard(Long communityId, UserInfo userInfo, CharacterType character) {
