@@ -3,6 +3,7 @@ package com.dingdong.api.idcard.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
@@ -10,6 +11,7 @@ public class CreateKeywordDto {
 
     @Schema(description = "키워드 제목", example = "안산러")
     @NotNull(message = "키워드 이름을 입력해주세요")
+    @Size(max = 8, message = "태그 이름은 최대 8글자 입니다.")
     private String title;
 
     @Schema(description = "키워드 이미지", example = "test.com")
