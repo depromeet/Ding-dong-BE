@@ -2,8 +2,10 @@ package com.dingdong.domain.domains.user.domain;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.user.domain.enums.GenderType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -38,6 +40,8 @@ public class User extends AbstractTimeStamp {
     private String nickname;
 
     private String profileImageUrl;
+
+    @Embedded private Character character;
 
     private User(
             String email,
