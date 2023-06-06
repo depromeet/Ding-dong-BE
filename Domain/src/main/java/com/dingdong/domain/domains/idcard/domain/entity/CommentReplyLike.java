@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.idcard.domain;
+package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
@@ -13,25 +13,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Table(name = "tbl_comment_like")
+@Table(name = "tbl_comment_reply_like")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommentLike extends AbstractTimeStamp {
+public class CommentReplyLike extends AbstractTimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull private Long commentId;
+    @NotNull private Long commentReplyId;
 
     @NotNull private Long userId;
 
-    private CommentLike(Long commentId, Long userId) {
-        this.commentId = commentId;
+    private CommentReplyLike(Long commentReplyId, Long userId) {
+        this.commentReplyId = commentReplyId;
         this.userId = userId;
     }
 
-    public static CommentLike toEntity(Long commentId, Long userId) {
-        return new CommentLike(commentId, userId);
+    public static CommentReplyLike toEntity(Long commentReplyId, Long userId) {
+        return new CommentReplyLike(commentReplyId, userId);
     }
 }
