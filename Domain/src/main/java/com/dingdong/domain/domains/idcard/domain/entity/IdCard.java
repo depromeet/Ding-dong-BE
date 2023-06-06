@@ -1,7 +1,8 @@
-package com.dingdong.domain.domains.idcard.domain;
+package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.idcard.domain.vo.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -32,7 +33,7 @@ public class IdCard extends AbstractTimeStamp {
     @Embedded private UserInfo userInfo;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Keyword> keywords = new ArrayList<>();
+    private List<Keyword> keywords = new ArrayList<>();
 
     private IdCard(Long communityId, UserInfo userInfo) {
         this.communityId = communityId;
@@ -41,5 +42,9 @@ public class IdCard extends AbstractTimeStamp {
 
     public static IdCard toEntity(Long communityId, UserInfo userInfo) {
         return new IdCard(communityId, userInfo);
+    }
+
+    public void updateKeywords(List<Keyword> keywords) {
+        this.keywords = keywords;
     }
 }
