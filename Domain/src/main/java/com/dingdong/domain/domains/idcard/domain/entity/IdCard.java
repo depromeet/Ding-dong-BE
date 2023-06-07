@@ -2,6 +2,7 @@ package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.idcard.domain.vo.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,13 @@ public class IdCard extends AbstractTimeStamp {
     }
 
     public static IdCard toEntity(Long communityId, UserInfo userInfo) {
+        return new IdCard(communityId, userInfo);
+    }
+
+    public static IdCard createIdCard(
+            Long communityId, Long userId, String nickname, String aboutMe, Character character) {
+        UserInfo userInfo = UserInfo.create(userId, nickname, aboutMe, character);
+
         return new IdCard(communityId, userInfo);
     }
 
