@@ -23,7 +23,11 @@ public enum GlobalException implements BaseErrorCode {
     OUTER_SERVER_BAD_REQUEST_EXCEPTION(BAD_REQUEST, "Feign-400-1", "외부 서버 400 오류입니다."),
     OUTER_SERVER_EXPIRED_TOKEN_EXCEPTION(BAD_REQUEST, "Feign-400-2", "외부 서버 토큰 만료 오류입니다."),
 
-    NOT_FOUND_USER(NOT_FOUND, "404-1", "존재하지 않는 사용자입니다.");
+    /** 커뮤니티 Aggregate 관련 에러 코드 */
+    NOT_FOUND_COMMUNITY(NOT_FOUND, "Community-404-1", "존재하지 않는 커뮤니티입니다."),
+
+    /** 유저 Aggregate 관련 에러 코드 */
+    NOT_FOUND_USER(NOT_FOUND, "User-404-1", "존재하지 않는 사용자입니다.");
 
     private final Integer statusCode;
     private final String errorCode;

@@ -30,6 +30,7 @@ public class CreateIdCardRequest {
 
     @Schema(description = "유저가 선택한 키워드와 키워드 설명글 리스트")
     @NotNull(message = "적어도 한 개의 키워드는 선택해야 합니다.")
+    @Size(max = 7, message = "태그는 최대 7개 입니다.")
     @Valid
     private List<CreateKeywordDto> keywords;
 }

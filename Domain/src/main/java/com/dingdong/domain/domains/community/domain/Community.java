@@ -2,7 +2,7 @@ package com.dingdong.domain.domains.community.domain;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
-import com.dingdong.domain.domains.idcard.domain.IdCard;
+import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
