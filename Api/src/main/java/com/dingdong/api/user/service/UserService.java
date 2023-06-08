@@ -2,6 +2,11 @@ package com.dingdong.api.user.service;
 
 import static com.dingdong.core.exception.GlobalException.*;
 
+import com.dingdong.api.auth.controller.response.UserInfoResponse;
+import com.dingdong.api.config.security.SecurityUtils;
+import com.dingdong.api.user.controller.request.UserInfoRequest;
+import com.dingdong.core.exception.BaseException;
+import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,11 +19,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Deprecated(since = "DEP-63", forRemoval = true)
     @Transactional
     public UserInfoResponse updateUserInfo(UserInfoRequest request) {
         User user = findUser();
         checkDuplicateNickname(request.getNickname(), user);
-        user.updateNickname(request.getNickname());
 
         return UserInfoResponse.from(user);
     }
@@ -36,7 +41,7 @@ public class UserService {
     }
 
     private boolean isNicknameChanged(String nickname, User user) {
-        return !nickname.equals(user.getNickname());
+        return true;
     }
 
     private boolean isNicknameExists(String nickname) {
