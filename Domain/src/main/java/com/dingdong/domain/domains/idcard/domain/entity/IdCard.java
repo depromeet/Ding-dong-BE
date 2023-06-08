@@ -46,9 +46,13 @@ public class IdCard extends AbstractTimeStamp {
     }
 
     public static IdCard createIdCard(
-            Long communityId, Long userId, String nickname, String aboutMe, Character character) {
-        UserInfo userInfo = UserInfo.create(userId, nickname, aboutMe, character);
-
+            Long communityId,
+            Long userId,
+            String profileImageUrl,
+            String nickname,
+            String aboutMe,
+            Character character) {
+        UserInfo userInfo = UserInfo.create(userId, profileImageUrl, nickname, aboutMe, character);
         return new IdCard(communityId, userInfo);
     }
 

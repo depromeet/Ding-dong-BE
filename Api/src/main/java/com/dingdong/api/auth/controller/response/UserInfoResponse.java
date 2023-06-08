@@ -11,18 +11,11 @@ public class UserInfoResponse {
 
     private Long userId;
     private String email;
-    private String nickname;
     private String gender;
     private String ageRange;
-    private String profileImageUrl;
 
     public static UserInfoResponse from(User user) {
         return new UserInfoResponse(
-                user.getId(),
-                user.getEmail(),
-                user.getNickname(),
-                user.getGenderType().name(),
-                user.getAgeRange(),
-                user.getProfileImageUrl());
+                user.getId(), user.getEmail(), user.getGenderType().name(), user.getAgeRange());
     }
 }
