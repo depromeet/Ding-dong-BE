@@ -20,9 +20,11 @@ public class UserController {
 
     private final UserService userService;
 
+    @Deprecated(since = "DEP-63", forRemoval = true)
     @Operation(summary = "유저가 프로필 정보 등록/수정")
     @PostMapping("/info")
     public UserInfoResponse updateUserInfo(@RequestBody UserInfoRequest request) {
+        // Todo: 미경님 여기 고치고 NoArg 도 삭제해주세용
         return userService.updateUserInfo(request);
     }
 }

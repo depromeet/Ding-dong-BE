@@ -19,11 +19,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Deprecated(since = "DEP-63", forRemoval = true)
     @Transactional
     public UserInfoResponse updateUserInfo(UserInfoRequest request) {
         User user = findUser();
         checkDuplicateNickname(request.getNickname(), user);
-        user.updateNickname(request.getNickname());
 
         return UserInfoResponse.from(user);
     }
@@ -41,7 +41,7 @@ public class UserService {
     }
 
     private boolean isNicknameChanged(String nickname, User user) {
-        return !nickname.equals(user.getNickname());
+        return true;
     }
 
     private boolean isNicknameExists(String nickname) {

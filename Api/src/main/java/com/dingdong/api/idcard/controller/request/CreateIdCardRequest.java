@@ -19,6 +19,9 @@ public class CreateIdCardRequest {
     @NotNull(message = "행성 식별 값을 입력해주세요.")
     private Long communityId;
 
+    @Schema(description = "유저 프로필 이미지 url. null 값이면 기본 이미지", example = "test.com")
+    private String profileImageUrl;
+
     @Schema(description = "행성에서 사용할 유저 닉네임", example = "김민준")
     @NotBlank(message = "행성에서 사용할 유저 닉네임을 입력해주세요. 공백은 허용하지 않습니다.")
     private String nickname;
