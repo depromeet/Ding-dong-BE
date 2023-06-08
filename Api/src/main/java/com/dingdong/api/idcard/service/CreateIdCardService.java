@@ -82,7 +82,7 @@ public class CreateIdCardService {
             String profileImageUrl,
             String nickname,
             String aboutMe) {
-      
+
         // idCard entity 생성
         IdCard idCard =
                 IdCard.createIdCard(
