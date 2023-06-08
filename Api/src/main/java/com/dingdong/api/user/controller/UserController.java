@@ -23,6 +23,8 @@ public class UserController {
     @Operation(summary = "유저가 프로필 정보 등록/수정")
     @PostMapping("/info")
     public UserInfoResponse updateUserInfo(@RequestBody UserInfoRequest request) {
-        return userService.updateUserInfo(request);
+        // Todo: 미경님 여기 고치고 NoArg 도 삭제해주세용
+        return new UserInfoResponse();
+        //        return userService.updateUserInfo(request);
     }
 }
