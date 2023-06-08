@@ -2,12 +2,6 @@ package com.dingdong.api.user.service;
 
 import static com.dingdong.core.exception.GlobalException.*;
 
-import com.dingdong.api.auth.controller.response.UserInfoResponse;
-import com.dingdong.api.config.security.SecurityUtils;
-import com.dingdong.api.user.controller.request.UserInfoRequest;
-import com.dingdong.core.exception.BaseException;
-import com.dingdong.domain.domains.user.domain.User;
-import com.dingdong.domain.domains.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,36 +9,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserService {
-
-    private final UserRepository userRepository;
-
-    @Deprecated(since = "DEP-63", forRemoval = true)
-    @Transactional
-    public UserInfoResponse updateUserInfo(UserInfoRequest request) {
-        User user = findUser();
-        checkDuplicateNickname(request.getNickname(), user);
-
-        return UserInfoResponse.from(user);
-    }
-
-    private User findUser() {
-        return userRepository
-                .findById(SecurityUtils.getCurrentUserId())
-                .orElseThrow(() -> new BaseException(NOT_FOUND_USER));
-    }
-
-    private void checkDuplicateNickname(String nickname, User user) {
-        if (isNicknameChanged(nickname, user) && isNicknameExists(nickname)) {
-            throw new BaseException(ALREADY_EXISTS_NICKNAME);
-        }
-    }
-
-    private boolean isNicknameChanged(String nickname, User user) {
-        return true;
-    }
-
-    private boolean isNicknameExists(String nickname) {
-        return userRepository.existsByNickname(nickname);
-    }
-}
+public class UserService {}
