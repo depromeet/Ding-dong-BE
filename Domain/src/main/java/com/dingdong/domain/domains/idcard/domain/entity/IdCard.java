@@ -53,7 +53,6 @@ public class IdCard extends AbstractTimeStamp {
             String aboutMe,
             Character character) {
         UserInfo userInfo = UserInfo.create(userId, profileImageUrl, nickname, aboutMe, character);
-
         return new IdCard(communityId, userInfo);
     }
 
