@@ -14,3 +14,16 @@ swagger:
 sentry:
   dsn: ${DSN_KEY}
   enable-tracing: true
+
+server:
+  servlet:
+    context-path: /api
+  forward-headers-strategy: framework
+
+client:
+  kakao:
+    clientId: ${KAKAO_CLIENT_ID}
+    clientSecret: ${KAKAO_CLIENT_SECRET}
+    redirectUri: ${KAKAO_REDIRECT_URI}
+    authUrl: ${KAKAO_AUTH_URL}
+    apiUrl: ${KAKAO_API_URL}

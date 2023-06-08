@@ -52,13 +52,15 @@ public class SecurityConfig {
         http.authorizeRequests().expressionHandler(expressionHandler());
 
         http.authorizeRequests()
-                .mvcMatchers(SwaggerPatterns)
+                .antMatchers(SwaggerPatterns)
                 .permitAll()
                 .mvcMatchers("/auth/oauth/**")
                 .permitAll()
+                .mvcMatchers("/auth/login/**")
+                .permitAll()
                 .mvcMatchers("/auth/token/refresh")
                 .permitAll()
-                .mvcMatchers("**/health")
+                .mvcMatchers("/**/health/**")
                 .permitAll()
                 .anyRequest()
                 .hasRole("USER");
