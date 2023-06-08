@@ -42,6 +42,7 @@ public class CreateIdCardService {
                 createAndSaveIdCard(
                         community.getId(),
                         currentUser,
+                        request.getProfileImageUrl(),
                         request.getNickname(),
                         request.getAboutMe());
 
@@ -76,12 +77,17 @@ public class CreateIdCardService {
      * @return 생성된 idCard 객체
      */
     private IdCard createAndSaveIdCard(
-            Long communityId, User currentUser, String nickname, String aboutMe) {
+            Long communityId,
+            User currentUser,
+            String profileImageUrl,
+            String nickname,
+            String aboutMe) {
         // idCard entity 생성
         IdCard idCard =
                 IdCard.createIdCard(
                         communityId,
                         currentUser.getId(),
+                        profileImageUrl,
                         nickname,
                         aboutMe,
                         currentUser.getCharacter());
