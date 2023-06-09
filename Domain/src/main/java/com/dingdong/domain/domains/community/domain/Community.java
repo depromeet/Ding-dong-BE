@@ -40,6 +40,8 @@ public class Community extends AbstractTimeStamp {
 
     @Embedded private CommunityImage communityImage;
 
+    private String description;
+
     private String invitationCode;
 
     private Community(String name, CommunityImage communityImage, String invitationCode) {
