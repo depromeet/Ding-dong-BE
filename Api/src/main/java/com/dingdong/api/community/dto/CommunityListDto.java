@@ -10,11 +10,17 @@ public class CommunityListDto {
     private Long communityId;
 
     @Schema(description = "썸네일 이미지")
-    private String thumbnailImageUrl;
+    private String logoImageUrl;
 
     @Schema(description = "커버 이미지")
     private String coverImageUrl;
 
     @Schema(description = "커뮤니티 이름")
     private String title;
+
+    @Schema(description = "주민 수")
+    private int idCardCount;
+
+    @Schema(description = "소개 글")
+    private String description;
 }
