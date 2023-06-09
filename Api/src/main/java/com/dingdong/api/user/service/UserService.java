@@ -1,6 +1,5 @@
 package com.dingdong.api.user.service;
 
-import static com.dingdong.core.exception.GlobalException.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
