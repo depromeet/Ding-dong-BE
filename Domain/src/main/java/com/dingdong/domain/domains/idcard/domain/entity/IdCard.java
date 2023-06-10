@@ -2,8 +2,10 @@ package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.idcard.domain.vo.UserInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -15,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,9 +32,11 @@ public class IdCard extends AbstractTimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull private Long communityId;
+    @NotNull
+    private Long communityId;
 
-    @Embedded private UserInfo userInfo;
+    @Embedded
+    private UserInfo userInfo;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Keyword> keywords = new ArrayList<>();
@@ -58,5 +63,21 @@ public class IdCard extends AbstractTimeStamp {
 
     public void updateKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
+    }
+
+    public String getNickname() {
+        return this.userInfo.getNickname();
+    }
+
+    public String getProfileImageUrl() {
+        return this.userInfo.getProfileImageUrl();
+    }
+
+    public String getAboutMe() {
+        return this.getUserInfo().getAboutMe();
+    }
+
+    public CharacterType getCharacterType() {
+        return this.userInfo.getCharacter().getCharacterType();
     }
 }
