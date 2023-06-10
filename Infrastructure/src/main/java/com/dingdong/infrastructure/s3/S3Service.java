@@ -1,16 +1,7 @@
 package com.dingdong.infrastructure.s3;
 
 
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,65 +17,24 @@ public class S3Service {
     @Value("${aws.s3.bucket}")
     private String bucket;
 
-    private final AmazonS3 amazonS3;
-
-    public S3Service() {
-        this.amazonS3 = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_NORTHEAST_2).build();
-    }
+    private final S3Api s3Api;
 
     public String uploadImage(MultipartFile multipartFile) {
-
         String fileName = createFileName(multipartFile.getOriginalFilename());
-        ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentLength(multipartFile.getSize());
-        objectMetadata.setContentType(multipartFile.getContentType());
+        ObjectMetadata objectMetadata = createObjectMetaData(multipartFile);
 
-        String fileUrl = "";
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
-            fileUrl = amazonS3.getUrl(bucket, fileName).toString();
-        } catch (IOException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        return fileUrl;
-    }
-
-    public List<String> uploadImageList(List<MultipartFile> multipartFile) {
-
-        List<String> fileUrlList = new ArrayList<>();
-
-        multipartFile.forEach(
-                file -> {
-                    String fileName = createFileName(file.getOriginalFilename());
-                    ObjectMetadata objectMetadata = new ObjectMetadata();
-                    objectMetadata.setContentLength(file.getSize());
-                    objectMetadata.setContentType(file.getContentType());
-
-                    try (InputStream inputStream = file.getInputStream()) {
-                        amazonS3.putObject(
-                                new PutObjectRequest(
-                                        bucket, fileName, inputStream, objectMetadata));
-                        String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
-                        fileUrlList.add(fileUrl);
-                    } catch (IOException e) {
-                        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
-                    }
-                });
-
-        return fileUrlList;
+        return s3Api.uploadImage(bucket, fileName, multipartFile, objectMetadata);
     }
 
     public void remove(String fileUrl) throws Exception {
         String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
-        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
+        s3Api.removeImage(bucket, fileName);
     }
 
     private String createFileName(String fileName) {
         return UUID.randomUUID().toString().concat(getFileExtension(fileName));
     }
 
-    // 파일 확장자 전달
     private String getFileExtension(String fileName) {
         try {
             return fileName.substring(fileName.lastIndexOf("."));
@@ -92,5 +42,12 @@ public class S3Service {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "잘못된 형식의 파일 (" + fileName + ") 입니다.");
         }
+    }
+
+    private ObjectMetadata createObjectMetaData(MultipartFile multipartFile) {
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentLength(multipartFile.getSize());
+        objectMetadata.setContentType(multipartFile.getContentType());
+        return objectMetadata;
     }
 }

@@ -23,7 +23,7 @@ public class S3Controller {
     @PostMapping(path = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public UploadImageResponse uploadImage(@RequestParam("image") MultipartFile multipartFile)
             throws Exception {
-        return new UploadImageResponse(s3Service.uploadImage(multipartFile));
+        return UploadImageResponse.from(s3Service.uploadImage(multipartFile));
     }
 
     @Operation(summary = "이미지 삭제")
