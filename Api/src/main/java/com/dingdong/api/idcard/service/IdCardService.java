@@ -13,10 +13,8 @@ import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.user.domain.User;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,22 +32,17 @@ public class IdCardService {
 
     private final CommunityAdaptor communityAdaptor;
 
-    /**
-     * 주민증 세부 조회
-     */
+    /** 주민증 세부 조회 */
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
         IdCard idCard = idCardAdaptor.findById(idCardsId);
 
-        List<KeywordDto> keywordDtos = idCard.getKeywords().stream()
-                .map(KeywordDto::of)
-                .collect(Collectors.toList());
+        List<KeywordDto> keywordDtos =
+                idCard.getKeywords().stream().map(KeywordDto::of).collect(Collectors.toList());
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
     }
 
-    /**
-     * 주민증 생성
-     */
+    /** 주민증 생성 */
     @Transactional
     public void createIdCard(CreateIdCardRequest request) {
 
@@ -71,9 +64,7 @@ public class IdCardService {
         saveIdCard.updateKeywords(createKeywords(request.getKeywords(), saveIdCard.getId()));
     }
 
-    /**
-     * idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사
-     */
+    /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */
     private Community findAndValidateCommunity(Long communityId, Long currentUserId) {
         // community validation
         Community community = communityAdaptor.findById(communityId);
@@ -84,9 +75,7 @@ public class IdCardService {
         return community;
     }
 
-    /**
-     * idCard 생성 및 저장
-     */
+    /** idCard 생성 및 저장 */
     private IdCard createAndSaveIdCard(
             Long communityId,
             User currentUser,
@@ -108,9 +97,7 @@ public class IdCardService {
         return idCardAdaptor.save(idCard);
     }
 
-    /**
-     * keyword 리스트 생성
-     */
+    /** keyword 리스트 생성 */
     private List<Keyword> createKeywords(List<CreateKeywordDto> keywordDtos, Long idCardId) {
         return keywordDtos.stream()
                 .map(

@@ -4,10 +4,8 @@ package com.dingdong.api.idcard.dto;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import io.swagger.v3.oas.annotations.media.Schema;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.Getter;
 
 @Getter
