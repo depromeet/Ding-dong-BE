@@ -1,8 +1,9 @@
 package com.dingdong.infrastructure.s3;
 
 
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -27,6 +28,10 @@ public class S3Service {
 
     private final AmazonS3 amazonS3;
 
+    public S3Service() {
+        this.amazonS3 = AmazonS3ClientBuilder.standard().withRegion(Regions.AP_NORTHEAST_2).build();
+    }
+
     public String uploadImage(MultipartFile multipartFile) {
 
         String fileName = createFileName(multipartFile.getOriginalFilename());
@@ -36,9 +41,7 @@ public class S3Service {
 
         String fileUrl = "";
         try (InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3.putObject(
-                    new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                            .withCannedAcl(CannedAccessControlList.PublicRead));
+            amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
             fileUrl = amazonS3.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -60,8 +63,8 @@ public class S3Service {
 
                     try (InputStream inputStream = file.getInputStream()) {
                         amazonS3.putObject(
-                                new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                                        .withCannedAcl(CannedAccessControlList.PublicRead));
+                                new PutObjectRequest(
+                                        bucket, fileName, inputStream, objectMetadata));
                         String fileUrl = amazonS3.getUrl(bucket, fileName).toString();
                         fileUrlList.add(fileUrl);
                     } catch (IOException e) {
