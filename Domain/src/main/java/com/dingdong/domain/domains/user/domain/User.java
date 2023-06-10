@@ -2,8 +2,9 @@ package com.dingdong.domain.domains.user.domain;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.user.domain.enums.GenderType;
-import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -11,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,35 +33,15 @@ public class User extends AbstractTimeStamp {
 
     private String ageRange;
 
-    @Column(unique = true)
-    @Size(max = 10)
-    private String nickname;
+    @Embedded private Character character;
 
-    private String profileImageUrl;
-
-    private User(
-            String email,
-            GenderType genderType,
-            String ageRange,
-            String nickname,
-            String profileImageUrl) {
+    private User(String email, GenderType genderType, String ageRange) {
         this.email = email;
         this.genderType = genderType;
         this.ageRange = ageRange;
-        this.nickname = nickname;
-        this.profileImageUrl = profileImageUrl;
     }
 
-    public static User toEntity(
-            String email,
-            GenderType genderType,
-            String ageRange,
-            String nickname,
-            String profileImageUrl) {
-        return new User(email, genderType, ageRange, nickname, profileImageUrl);
-    }
-
-    public void updateNickname(String nickname) {
-        this.nickname = nickname;
+    public static User toEntity(String email, GenderType genderType, String ageRange) {
+        return new User(email, genderType, ageRange);
     }
 }

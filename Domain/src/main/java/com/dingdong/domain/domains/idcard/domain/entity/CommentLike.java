@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.idcard.domain;
+package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;

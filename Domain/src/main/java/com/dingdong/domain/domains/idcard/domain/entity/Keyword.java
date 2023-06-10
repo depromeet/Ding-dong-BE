@@ -1,14 +1,11 @@
-package com.dingdong.domain.domains.idcard.domain;
+package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -25,9 +22,7 @@ public class Keyword extends AbstractTimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_card_id")
-    private IdCard idCard;
+    @NotNull private Long idCardId;
 
     @NotNull private String title;
 
@@ -35,14 +30,14 @@ public class Keyword extends AbstractTimeStamp {
 
     private String imagerUrl;
 
-    private Keyword(String title, String content, IdCard idCard, String imagerUrl) {
+    private Keyword(String title, String content, Long idCardId, String imagerUrl) {
         this.title = title;
         this.content = content;
-        this.idCard = idCard;
+        this.idCardId = idCardId;
         this.imagerUrl = imagerUrl;
     }
 
-    public static Keyword toEntity(String title, String content, IdCard idCard, String imagerUrl) {
-        return new Keyword(title, content, idCard, imagerUrl);
+    public static Keyword toEntity(String title, String content, Long idCardId, String imagerUrl) {
+        return new Keyword(title, content, idCardId, imagerUrl);
     }
 }

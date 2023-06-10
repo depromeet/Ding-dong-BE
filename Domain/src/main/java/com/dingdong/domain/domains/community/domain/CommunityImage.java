@@ -7,6 +7,6 @@ import lombok.Getter;
 @Embeddable
 @Getter
 public class CommunityImage {
-    private String profileImageUrl;
+    private String logoImageUrl;
     private String coverImageUrl;
 }

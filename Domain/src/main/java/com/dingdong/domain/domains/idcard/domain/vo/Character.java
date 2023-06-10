@@ -1,23 +1,18 @@
-package com.dingdong.domain.domains.idcard.domain;
+package com.dingdong.domain.domains.idcard.domain.vo;
 
 
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Embeddable
 @Getter
-public class UserInfo {
-    @NotNull private Long userId;
-
-    @NotNull private String nickname;
-
-    @NotNull private String aboutMe;
+@NoArgsConstructor
+public class Character {
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private CharacterType characterType;
 }

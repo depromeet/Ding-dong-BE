@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.idcard.domain;
+package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
@@ -17,10 +17,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Table(name = "tbl_comment")
+@Table(name = "tbl_comment_reply")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends AbstractTimeStamp {
+public class CommentReply extends AbstractTimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,23 +28,24 @@ public class Comment extends AbstractTimeStamp {
 
     @NotNull private Long idCardId;
 
+    @NotNull private Long commentId;
+
     @NotNull private Long userId;
 
     @NotNull private String content;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<CommentReply> replies = new ArrayList<>();
+    private final List<CommentReplyLike> replyLikes = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<CommentLike> likes = new ArrayList<>();
-
-    private Comment(Long idCardId, Long userId, String content) {
+    private CommentReply(Long idCardId, Long commentId, Long userId, String content) {
         this.idCardId = idCardId;
+        this.commentId = commentId;
         this.userId = userId;
         this.content = content;
     }
 
-    public static Comment toEntity(Long idCardId, Long userId, String content) {
-        return new Comment(idCardId, userId, content);
+    public static CommentReply toEntity(
+            Long idCardId, Long commentId, Long userId, String content) {
+        return new CommentReply(idCardId, commentId, userId, content);
     }
 }

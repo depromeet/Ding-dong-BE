@@ -63,9 +63,7 @@ public class AuthService {
                 User.toEntity(
                         kakaoUserInfoResponse.getKakaoAcount().getEmail(),
                         findGenderType(kakaoUserInfoResponse.getKakaoAcount().getGender()),
-                        kakaoUserInfoResponse.getKakaoAcount().getAgeRange(),
-                        null,
-                        kakaoUserInfoResponse.getProperties().getProfileImage());
+                        kakaoUserInfoResponse.getKakaoAcount().getAgeRange());
 
         return userRepository.save(user);
     }
