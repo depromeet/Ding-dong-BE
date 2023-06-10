@@ -9,4 +9,11 @@ import lombok.Getter;
 public class IdCardDetailsResponse {
     @Schema(description = "주민증 세부 내용")
     private IdCardDetailsDto idCardDetailsDto;
+
+    public static IdCardDetailsResponse from(IdCardDetailsDto idCardDetailsDto) {
+        IdCardDetailsResponse response = new IdCardDetailsResponse();
+        response.idCardDetailsDto = idCardDetailsDto;
+
+        return response;
+    }
 }
