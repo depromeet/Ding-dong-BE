@@ -1,17 +1,14 @@
 package com.dingdong.api.s3.controller;
 
 
+import com.dingdong.api.s3.controller.request.DeleteImageRequest;
 import com.dingdong.api.s3.controller.response.UploadImageResponse;
 import com.dingdong.infrastructure.s3.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "이미지 업로드")
@@ -31,7 +28,7 @@ public class S3Controller {
 
     @Operation(summary = "이미지 삭제")
     @DeleteMapping("/image")
-    public void remove(String fileUrl) throws Exception {
-        s3Service.remove(fileUrl);
+    public void remove(@RequestBody DeleteImageRequest request) throws Exception {
+        s3Service.remove(request.getImageUrl());
     }
 }
