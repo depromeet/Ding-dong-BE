@@ -14,7 +14,6 @@ import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.user.domain.User;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +35,7 @@ public class IdCardService {
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
         IdCard idCard = idCardAdaptor.findById(idCardsId);
 
-        List<KeywordDto> keywordDtos =
-                idCard.getKeywords().stream().map(KeywordDto::of).collect(Collectors.toList());
+        List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
     }
