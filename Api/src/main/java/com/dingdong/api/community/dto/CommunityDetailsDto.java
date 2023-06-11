@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class CommunityDetailsDto {
-    @Schema(description = "커뮤니티 Id")
+    @Schema(description = "행성 Id")
     private Long communityId;
 
     @Schema(description = "로고 이미지")

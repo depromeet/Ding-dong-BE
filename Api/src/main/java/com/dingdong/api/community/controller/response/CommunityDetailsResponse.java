@@ -7,6 +7,6 @@ import lombok.Getter;
 
 @Getter
 public class CommunityDetailsResponse {
-    @Schema(description = "커뮤니티 상세정보")
+    @Schema(description = "행성 상세정보")
     private CommunityDetailsDto communityDetailsDto;
 }

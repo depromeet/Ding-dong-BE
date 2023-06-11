@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 public class CommunityListDto {
-    @Schema(description = "커뮤니티 Id")
+    @Schema(description = "행성 Id")
     private Long communityId;
 
     @Schema(description = "로고 이미지")
     private String logoImageUrl;
 
-    @Schema(description = "커뮤니티 이름")
+    @Schema(description = "행성 이름")
     private String title;
 
     @Schema(description = "주민 수")
