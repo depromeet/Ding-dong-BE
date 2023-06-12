@@ -33,3 +33,10 @@ front:
   domain:
     local: ${LOCAL_FRONT_DOMAIN}
     server: ${FRONT_DOMAIN}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+---
