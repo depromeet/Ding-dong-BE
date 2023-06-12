@@ -1,4 +1,4 @@
-package com.dingdong.infrastructure.s3;
+package com.dingdong.infrastructure.image.s3;
 
 
 import com.amazonaws.regions.Regions;
@@ -32,11 +32,15 @@ public class S3Api {
         String fileUrl = "";
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
-            fileUrl = amazonS3.getUrl(bucket, fileName).toString();
+            fileUrl = generateFileUrl(bucket, fileName);
         } catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return fileUrl;
+    }
+
+    private String generateFileUrl(String bucket, String fileName) {
+        return amazonS3.getUrl(bucket, fileName).toString();
     }
 
     public void removeImage(String bucket, String fileName) {

@@ -1,9 +1,7 @@
 package com.dingdong.api.image.service;
 
 
-import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
-import com.dingdong.domain.domains.image.domain.Image;
-import com.dingdong.infrastructure.s3.IS3Service;
+import com.dingdong.infrastructure.image.ImageHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,14 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class ImageService {
-    private final ImageAdaptor imageAdaptor;
-    private final IS3Service s3Service;
+    private final ImageHandler imageHandler;
 
     public String uploadImage(MultipartFile multipartFile) {
-        return s3Service.uploadImage(multipartFile);
+        return imageHandler.uploadImage(multipartFile);
     }
 
-    public void archive(String imageUrl) {
-        imageAdaptor.save(Image.toEntity(imageUrl));
+    public void removeImage(String imageUrl) {
+        imageHandler.removeImage(imageUrl);
     }
 }

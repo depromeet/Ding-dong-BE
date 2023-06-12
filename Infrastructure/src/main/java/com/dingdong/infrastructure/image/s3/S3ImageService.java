@@ -1,9 +1,8 @@
-package com.dingdong.infrastructure.s3.impl;
+package com.dingdong.infrastructure.image.s3;
 
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.dingdong.infrastructure.s3.IS3Service;
-import com.dingdong.infrastructure.s3.S3Api;
+import com.dingdong.infrastructure.image.ImageHandler;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service implements IS3Service {
+public class S3ImageService implements ImageHandler {
 
     @Value("${aws.s3.bucket}")
     private String bucket;
@@ -28,7 +27,7 @@ public class S3Service implements IS3Service {
         return s3Api.uploadImage(bucket, fileName, multipartFile, objectMetadata);
     }
 
-    public void remove(String imageUrl) throws Exception {
+    public void removeImage(String imageUrl) {
         String fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         s3Api.removeImage(bucket, fileName);
     }
@@ -42,7 +41,7 @@ public class S3Service implements IS3Service {
             return fileName.substring(fileName.lastIndexOf("."));
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "잘못된 형식의 파일 (" + fileName + ") 입니다.");
+                    HttpStatus.BAD_REQUEST, String.format("잘못된 형식의 파일(%s) 입니다.", fileName));
         }
     }
 
