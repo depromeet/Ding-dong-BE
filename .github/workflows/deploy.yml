@@ -28,8 +28,9 @@ jobs:
 
       - uses: actions/checkout@v2
       - run: touch ./Domain/src/main/resources/application-domain.yml
-      - run: echo "${{ secrets.APPLICATION_DOMAIN }}" > ./Domain/src/main/resources/application-domain.yml
-      - run: cat ./Domain/src/main/resources/application-domain.yml
+      - run: echo "$PROPERTIES_DOMAIN" > ./Domain/src/main/resources/application-domain.yml
+      - env:
+          PROPERTIES_DOMAIN: ${{ secrets.PROPERTIES_PROD }}
 
       - uses: actions/checkout@v2
       - run: touch ./Infrastructure/src/main/resources/application-infrastructure.yml
