@@ -9,6 +9,6 @@ import lombok.Getter;
 
 @Getter
 public class CommunityListResponse {
-    @Schema(description = "내가 속한 커뮤니티 목록")
+    @Schema(description = "내가 속한 행성 목록")
     List<CommunityListDto> communityListDtos = new ArrayList<>();
 }

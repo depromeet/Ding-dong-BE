@@ -1,6 +1,7 @@
 package com.dingdong.api.idcard.dto;
 
 
+import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -26,4 +27,17 @@ public class IdCardDetailsDto {
 
     @Schema(description = "캐릭터 타입")
     private CharacterType characterType;
+
+    public static IdCardDetailsDto of(IdCard idCard, List<KeywordDto> keywordDtos) {
+        IdCardDetailsDto dto = new IdCardDetailsDto();
+
+        dto.idCardId = idCard.getId();
+        dto.nickname = idCard.getNickname();
+        dto.profileImageUrl = idCard.getProfileImageUrl();
+        dto.aboutMe = idCard.getAboutMe();
+        dto.keywords = keywordDtos;
+        dto.characterType = idCard.getCharacterType();
+
+        return dto;
+    }
 }
