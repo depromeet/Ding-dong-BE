@@ -27,17 +27,19 @@ public class WebInterceptor implements HandlerInterceptor {
     @Value("${client.kakao.redirectUri}")
     private String redirectUri;
 
+    private static final String HOST_HEADER = "host";
+
     @Override
     public boolean preHandle(
             HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
         ApplicationProperty applicationProperty = provider.getObject();
-        if (request.getHeader("host").equals(localDomain)) {
-            applicationProperty.setLoginRedirectUri(localRedirectUri);
-        } else {
-            applicationProperty.setLoginRedirectUri(redirectUri);
-        }
+        String hostHeader = request.getHeader(HOST_HEADER);
+
+        String loginRedirectUri = hostHeader.equals(localDomain) ? localRedirectUri : redirectUri;
+        applicationProperty.setLoginRedirectUri(loginRedirectUri);
+
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
