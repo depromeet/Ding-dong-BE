@@ -1,4 +1,4 @@
-package com.dingdong.api.s3.controller.response;
+package com.dingdong.api.image.controller.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

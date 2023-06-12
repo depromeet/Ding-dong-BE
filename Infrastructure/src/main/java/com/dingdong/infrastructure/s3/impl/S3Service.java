@@ -28,8 +28,8 @@ public class S3Service implements IS3Service {
         return s3Api.uploadImage(bucket, fileName, multipartFile, objectMetadata);
     }
 
-    public void remove(String fileUrl) throws Exception {
-        String fileName = fileUrl.substring(fileUrl.lastIndexOf('/') + 1);
+    public void remove(String imageUrl) throws Exception {
+        String fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         s3Api.removeImage(bucket, fileName);
     }
 
