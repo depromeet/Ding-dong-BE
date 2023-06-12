@@ -46,11 +46,6 @@ jobs:
       - run: echo "${{ secrets.APPLICATION }}" > ./Api/src/main/resources/application.yml
       - run: cat ./Api/src/main/resources/application.yml
 
-      - uses: actions/checkout@v2
-      - run: touch ./Api/src/main/resources/application-${{ env.PROFILE_DEV }}.yml
-      - run: echo "${{ secrets.APPLICATION }}" > ./Api/src/main/resources/application-${{ env.PROFILE_DEV }}.yml
-      - run: cat ./Api/src/main/resources/application-${{ env.PROFILE_DEV }}.yml
-
       - name: Build with Gradle
         run: ./gradlew build
 
