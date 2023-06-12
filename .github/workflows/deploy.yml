@@ -26,18 +26,22 @@ jobs:
       - uses: actions/checkout@v2
       - run: touch ./Domain/src/main/resources/application-domain.yml
       - run: echo "${{ secrets.APPLICATION_DOMAIN }}" > ./Domain/src/main/resources/application-domain.yml
+      - run: cat ./Domain/src/main/resources/application-domain.yml
 
       - uses: actions/checkout@v2
       - run: touch ./Infrastructure/src/main/resources/application-infrastructure.yml
       - run: echo "${{ secrets.APPLICATION_INFRASTRUCTURE }}" > ./Infrastructure/src/main/resources/application-infrastructure.yml
+      - run: cat ./Infrastructure/src/main/resources/application-infrastructure.yml
 
       - uses: actions/checkout@v2
-      - run: touch ./Infrastructure/src/main/resources/application-core.yml
+      - run: touch ./Core/src/main/resources/application-core.yml
       - run: echo "${{ secrets.APPLICATION_CORE }}" > ./Core/src/main/resources/application-core.yml
+      - run: cat ./Core/src/main/resources/application-core.yml
       
       - uses: actions/checkout@v2
       - run: touch ./Api/src/main/resources/application.yml
       - run: echo "${{ secrets.APPLICATION }}" > ./Api/src/main/resources/application.yml
+      - run: cat ./Api/src/main/resources/application.yml
 
       - name: Build with Gradle
         run: ./gradlew build
