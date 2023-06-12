@@ -13,10 +13,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Table(name = "tbl_image")
+@Table(name = "tbl_delete_image")
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Image extends AbstractTimeStamp {
+public class DeleteImage extends AbstractTimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +24,11 @@ public class Image extends AbstractTimeStamp {
 
     @NotNull private String imageUrl;
 
-    private Image(String imageUrl) {
+    private DeleteImage(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public static Image toEntity(String imageUrl) {
-        return new Image(imageUrl);
+    public static DeleteImage toEntity(String imageUrl) {
+        return new DeleteImage(imageUrl);
     }
 }
