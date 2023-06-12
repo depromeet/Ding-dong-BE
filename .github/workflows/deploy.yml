@@ -91,7 +91,6 @@ jobs:
             sudo docker rm - f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
             docker stop $(docker ps -a -q)
-#            docker-compose up -d
             docker-compose -f ~/app/docker-compose-test.yml --env-file ~/app/.env up --build -d
             sudo docker logs -f api-server &> concal.log &
             docker image prune -f
