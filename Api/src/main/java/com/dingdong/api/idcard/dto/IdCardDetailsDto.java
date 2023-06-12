@@ -4,11 +4,12 @@ package com.dingdong.api.idcard.dto;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class IdCardDetailsDto {
     @Schema(description = "주민증 Id")
     private Long idCardId;
@@ -23,21 +24,19 @@ public class IdCardDetailsDto {
     private String aboutMe;
 
     @Schema(description = "키워드 정보")
-    private List<KeywordDto> keywords = new ArrayList<>();
+    private List<KeywordDto> keywords;
 
     @Schema(description = "캐릭터 타입")
     private CharacterType characterType;
 
     public static IdCardDetailsDto of(IdCard idCard, List<KeywordDto> keywordDtos) {
-        IdCardDetailsDto dto = new IdCardDetailsDto();
-
-        dto.idCardId = idCard.getId();
-        dto.nickname = idCard.getNickname();
-        dto.profileImageUrl = idCard.getProfileImageUrl();
-        dto.aboutMe = idCard.getAboutMe();
-        dto.keywords = keywordDtos;
-        dto.characterType = idCard.getCharacterType();
-
-        return dto;
+        return IdCardDetailsDto.builder()
+                .idCardId(idCard.getId())
+                .nickname(idCard.getNickname())
+                .profileImageUrl(idCard.getProfileImageUrl())
+                .aboutMe(idCard.getAboutMe())
+                .keywords(keywordDtos)
+                .characterType(idCard.getCharacterType())
+                .build();
     }
 }
