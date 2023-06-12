@@ -29,7 +29,7 @@ jobs:
       - name: Make application-domain.yml
         run: |
           touch touch ./Domain/src/main/resources/application-domain.yml
-          echo "$APPLICATION_DOMAIN" > ./Domain/src/main/resources/application-domain.yml
+          echo "APPLICATION_DOMAIN=$APPLICATION_DOMAIN" > ./Domain/src/main/resources/application-domain.yml
         env:
           APPLICATION_DOMAIN: ${{ secrets.APPLICATION_DOMAIN }}
 
