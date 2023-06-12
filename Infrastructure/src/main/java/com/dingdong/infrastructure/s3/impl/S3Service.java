@@ -1,7 +1,9 @@
-package com.dingdong.infrastructure.s3;
+package com.dingdong.infrastructure.s3.impl;
 
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.dingdong.infrastructure.s3.IS3Service;
+import com.dingdong.infrastructure.s3.S3Api;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class S3Service implements IS3Service {
 
     @Value("${aws.s3.bucket}")
     private String bucket;
