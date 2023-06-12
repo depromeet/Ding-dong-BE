@@ -42,7 +42,7 @@ jobs:
       - run: touch ./Core/src/main/resources/application-core.yml
       - run: echo "${{ secrets.APPLICATION_CORE }}" > ./Core/src/main/resources/application-core.yml
       - run: cat ./Core/src/main/resources/application-core.yml
-      
+
       - uses: actions/checkout@v2
       - run: touch ./Api/src/main/resources/application.yml
       - run: echo "${{ secrets.APPLICATION }}" > ./Api/src/main/resources/application.yml
