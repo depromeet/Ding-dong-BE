@@ -25,5 +25,18 @@ client:
     clientId: ${KAKAO_CLIENT_ID}
     clientSecret: ${KAKAO_CLIENT_SECRET}
     redirectUri: ${KAKAO_REDIRECT_URI}
+    localRedirectUri: ${KAKAO_LOCAL_REDIRECT_URI}
     authUrl: ${KAKAO_AUTH_URL}
     apiUrl: ${KAKAO_API_URL}
+
+front:
+  domain:
+    local: ${LOCAL_FRONT_DOMAIN}
+    server: ${FRONT_DOMAIN}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+---

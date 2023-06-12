@@ -3,6 +3,7 @@ package com.dingdong.api.auth.service;
 import static com.dingdong.domain.domains.user.domain.enums.GenderType.findGenderType;
 
 import com.dingdong.api.auth.controller.response.AuthResponse;
+import com.dingdong.api.config.ApplicationProperty;
 import com.dingdong.core.jwt.JwtTokenProvider;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
@@ -12,6 +13,7 @@ import com.dingdong.infrastructure.client.feign.dto.request.KakaoAuthRequest;
 import com.dingdong.infrastructure.client.feign.dto.response.KakaoAuthResponse;
 import com.dingdong.infrastructure.client.feign.dto.response.KakaoUserInfoResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,8 +41,7 @@ public class AuthService {
     @Value("${client.kakao.clientSecret}")
     private String clientSecret;
 
-    @Value("${client.kakao.redirectUri}")
-    private String redirectUri;
+    private final ObjectProvider<ApplicationProperty> provider;
 
     @Transactional
     public AuthResponse loginKakao(String authCode) {
@@ -77,8 +78,13 @@ public class AuthService {
     }
 
     private KakaoAuthResponse getKakaoAuthToken(String authCode) {
+        ApplicationProperty applicationProperty = provider.getObject();
         return kakaoAuthFeignClient.getKakaoAuth(
-                KakaoAuthRequest.createAuthFormData(authCode, clientId, clientSecret, redirectUri));
+                KakaoAuthRequest.createAuthFormData(
+                        authCode,
+                        clientId,
+                        clientSecret,
+                        applicationProperty.getLoginRedirectUri()));
     }
 
     private KakaoUserInfoResponse getKakaoUserInfo(KakaoAuthResponse response) {
