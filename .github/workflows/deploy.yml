@@ -26,11 +26,12 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - uses: actions/checkout@v2
-      - run: touch ./Domain/src/main/resources/application-domain.yml
-      - run: echo "$PROPERTIES_DOMAIN" > ./Domain/src/main/resources/application-domain.yml
-      - env:
-          PROPERTIES_DOMAIN: ${{ secrets.PROPERTIES_PROD }}
+    - name: Make application-domain.yml
+      run: |
+        touch touch ./Domain/src/main/resources/application-domain.yml
+        echo "$APPLICATION_DOMAIN" > ./Domain/src/main/resources/application-domain.yml
+      env:
+        APPLICATION_DOMAIN: ${{ secrets.APPLICATION_DOMAIN }}
 
       - uses: actions/checkout@v2
       - run: touch ./Infrastructure/src/main/resources/application-infrastructure.yml
