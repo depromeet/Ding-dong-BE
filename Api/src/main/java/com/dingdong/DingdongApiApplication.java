@@ -16,7 +16,14 @@ import org.springframework.core.env.Environment;
 @EnableFeignClients
 @EntityScan("com.dingdong.domain")
 @RequiredArgsConstructor
-@SpringBootApplication
+@SpringBootApplication(
+        exclude = {
+            org.springframework.cloud.aws.autoconfigure.context.ContextInstanceDataAutoConfiguration
+                    .class,
+            org.springframework.cloud.aws.autoconfigure.context.ContextStackAutoConfiguration.class,
+            org.springframework.cloud.aws.autoconfigure.context
+                    .ContextRegionProviderAutoConfiguration.class
+        })
 @Slf4j
 public class DingdongApiApplication implements ApplicationListener<ApplicationReadyEvent> {
 
