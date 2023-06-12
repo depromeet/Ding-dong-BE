@@ -3,13 +3,3 @@ spring:
     host: ${REDIS_HOST:localhost}
     port: 6379
 
----
-
-spring:
-  config:
-    activate:
-      on-profile: dev
-  redis:
-    configuration:
-      secure: true
-
