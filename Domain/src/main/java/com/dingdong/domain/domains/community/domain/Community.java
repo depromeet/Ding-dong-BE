@@ -5,6 +5,7 @@ import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -56,10 +57,14 @@ public class Community extends AbstractTimeStamp {
     }
 
     public String getLogoImageUrl() {
-        return this.communityImage.getLogoImageUrl();
+        return Optional.ofNullable(communityImage)
+                .map(CommunityImage::getLogoImageUrl)
+                .orElse(null);
     }
 
     public String getCoverImageUrl() {
-        return this.communityImage.getCoverImageUrl();
+        return Optional.ofNullable(communityImage)
+                .map(CommunityImage::getCoverImageUrl)
+                .orElse(null);
     }
 }
