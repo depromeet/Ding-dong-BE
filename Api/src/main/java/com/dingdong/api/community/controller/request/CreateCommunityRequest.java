@@ -15,5 +15,5 @@ public class CreateCommunityRequest {
     private String name;
 
     @Schema(description = "행성 프로필 이미지", example = "http://image.com")
-    private String profileImageUrl;
+    private String logoImageUrl;
 }
