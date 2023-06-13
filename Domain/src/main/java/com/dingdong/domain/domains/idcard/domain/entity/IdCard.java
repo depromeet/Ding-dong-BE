@@ -2,6 +2,7 @@ package com.dingdong.domain.domains.idcard.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.idcard.domain.vo.UserInfo;
 import java.util.ArrayList;
@@ -58,5 +59,21 @@ public class IdCard extends AbstractTimeStamp {
 
     public void updateKeywords(List<Keyword> keywords) {
         this.keywords = keywords;
+    }
+
+    public String getNickname() {
+        return this.userInfo.getNickname();
+    }
+
+    public String getProfileImageUrl() {
+        return this.userInfo.getProfileImageUrl();
+    }
+
+    public String getAboutMe() {
+        return this.getUserInfo().getAboutMe();
+    }
+
+    public CharacterType getCharacterType() {
+        return this.userInfo.getCharacter().getCharacterType();
     }
 }

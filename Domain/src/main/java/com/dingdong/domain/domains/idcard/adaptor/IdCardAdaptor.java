@@ -14,7 +14,7 @@ public class IdCardAdaptor {
 
     private final IdCardRepository idCardRepository;
 
-    public IdCard find(Long idCardId) {
+    public IdCard findById(Long idCardId) {
         return idCardRepository
                 .findById(idCardId)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
