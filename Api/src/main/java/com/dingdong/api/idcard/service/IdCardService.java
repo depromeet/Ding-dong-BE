@@ -42,7 +42,7 @@ public class IdCardService {
 
     /** 주민증 생성 */
     @Transactional
-    public void createIdCard(CreateIdCardRequest request) {
+    public Long createIdCard(CreateIdCardRequest request) {
 
         // access token으로 유저 잡아옴
         User currentUser = userHelper.getCurrentUser();
@@ -60,6 +60,8 @@ public class IdCardService {
 
         // idCard keyword insert
         saveIdCard.updateKeywords(createKeywords(request.getKeywords(), saveIdCard.getId()));
+
+        return saveIdCard.getId();
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */
