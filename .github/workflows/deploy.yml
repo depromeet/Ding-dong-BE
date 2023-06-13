@@ -69,7 +69,7 @@ jobs:
             sudo docker rm - f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_REPO }}:latest
             docker stop $(docker ps -a -q)
-            docker-compose -f ~/app/docker-compose.yml --build -d
+            docker-compose -f ~/app/docker-compose.yml up -d
             sudo docker logs -f api-server &> concal.log &
             docker image prune -f
 
