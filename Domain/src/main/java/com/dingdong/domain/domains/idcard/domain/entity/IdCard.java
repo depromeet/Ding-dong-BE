@@ -7,6 +7,7 @@ import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.idcard.domain.vo.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -62,18 +63,20 @@ public class IdCard extends AbstractTimeStamp {
     }
 
     public String getNickname() {
-        return this.userInfo.getNickname();
+        return Optional.ofNullable(userInfo).map(UserInfo::getNickname).orElse(null);
     }
 
     public String getProfileImageUrl() {
-        return this.userInfo.getProfileImageUrl();
+        return Optional.ofNullable(userInfo).map(UserInfo::getProfileImageUrl).orElse(null);
     }
 
     public String getAboutMe() {
-        return this.getUserInfo().getAboutMe();
+        return Optional.ofNullable(userInfo).map(UserInfo::getAboutMe).orElse(null);
     }
 
     public CharacterType getCharacterType() {
-        return this.userInfo.getCharacter().getCharacterType();
+        return Optional.ofNullable(userInfo)
+                .map(u -> u.getCharacter().getCharacterType())
+                .orElse(null);
     }
 }
