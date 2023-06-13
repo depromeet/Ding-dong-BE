@@ -54,4 +54,12 @@ public class Community extends AbstractTimeStamp {
             String name, CommunityImage communityImage, String invitationCode) {
         return new Community(name, communityImage, invitationCode);
     }
+
+    public String getLogoImageUrl() {
+        return this.communityImage.getLogoImageUrl();
+    }
+
+    public String getCoverImageUrl() {
+        return this.communityImage.getCoverImageUrl();
+    }
 }
