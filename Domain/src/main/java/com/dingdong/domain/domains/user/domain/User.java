@@ -2,8 +2,12 @@ package com.dingdong.domain.domains.user.domain;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.community.domain.Community;
 import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.user.domain.enums.GenderType;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,6 +39,9 @@ public class User extends AbstractTimeStamp {
     private String ageRange;
 
     @Embedded private Character character;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Community> communities = new ArrayList<>();
 
     private User(String email, GenderType genderType, String ageRange) {
         this.email = email;
