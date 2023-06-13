@@ -3,6 +3,7 @@ package com.dingdong.api.idcard.service;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
+import com.dingdong.api.idcard.controller.response.CreateIdCardResponse;
 import com.dingdong.api.idcard.dto.CreateKeywordDto;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
@@ -42,7 +43,7 @@ public class IdCardService {
 
     /** 주민증 생성 */
     @Transactional
-    public void createIdCard(CreateIdCardRequest request) {
+    public CreateIdCardResponse createIdCard(CreateIdCardRequest request) {
 
         // access token으로 유저 잡아옴
         User currentUser = userHelper.getCurrentUser();
@@ -60,6 +61,8 @@ public class IdCardService {
 
         // idCard keyword insert
         saveIdCard.updateKeywords(createKeywords(request.getKeywords(), saveIdCard.getId()));
+
+        return CreateIdCardResponse.from(saveIdCard);
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */

@@ -3,6 +3,7 @@ package com.dingdong.api.idcard.controller;
 
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.response.CommentCountResponse;
+import com.dingdong.api.idcard.controller.response.CreateIdCardResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
 import com.dingdong.api.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +42,12 @@ public class IdCardController {
 
     @Operation(summary = "주민증 생성")
     @PostMapping
-    public void postIdCard(@RequestBody @Valid CreateIdCardRequest body) {
-        idCardService.createIdCard(body);
+    public CreateIdCardResponse postIdCard(@RequestBody @Valid CreateIdCardRequest body) {
+        return idCardService.createIdCard(body);
     }
+
+    @Operation(summary = "주민증 수정", description = "주민증 수정 정보를 받아와 put 요청을 통해 덮어씁니다.")
+    @PutMapping("/{idCardsId}")
+    public void putIdCard(
+            @PathVariable Long idCardsId, @RequestBody @Valid CreateIdCardRequest body) {}
 }
