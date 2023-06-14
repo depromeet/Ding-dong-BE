@@ -37,9 +37,12 @@ public class CommunityAdaptor {
     }
 
     private void addAdmin(Community community, User user) {
-        Admin admin = Admin.toEntity(AdminRole.ADMIN, user.getId());
-        adminRepository.save(admin);
-        community.getAdmins().add(admin);
+        community.getAdmins().add(createAdmin(user.getId()));
+    }
+
+    private Admin createAdmin(Long userId) {
+        Admin admin = Admin.toEntity(AdminRole.ADMIN, userId);
+        return adminRepository.save(admin);
     }
 
     public boolean isAdminUser(Long communityId, Long userId) {
