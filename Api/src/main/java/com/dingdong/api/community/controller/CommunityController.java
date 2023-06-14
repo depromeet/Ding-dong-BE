@@ -8,6 +8,7 @@ import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityIdCardsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
 import com.dingdong.api.community.service.CommunityService;
+import com.dingdong.api.global.response.IdResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
@@ -43,13 +44,16 @@ public class CommunityController {
     @PostMapping
     public CommunityCodeResponse createCommunity(
             @RequestBody @Valid CreateCommunityRequest request) {
-        return new CommunityCodeResponse();
+        return communityService.createCommunity(request);
     }
 
     @Operation(summary = "행성 꾸미기")
-    @PatchMapping("/{communityId}")
-    public void updateCommunity(
-            @PathVariable Long communityId, @RequestBody @Valid UpdateCommunityRequest request) {}
+    @PutMapping("/{communityId}")
+    public IdResponse updateCommunity(
+            @PathVariable Long communityId, @RequestBody @Valid UpdateCommunityRequest request) {
+
+        return IdResponse.from(communityService.updateCommunity(communityId, request));
+    }
 
     @Operation(summary = "행성 세부 정보 조회")
     @GetMapping("/{communityId}")
