@@ -29,7 +29,7 @@ public class CommunityController {
     @Operation(summary = "유저가 소속되어 있는 모든 행성 목록 조회")
     @GetMapping("/users/{userId}")
     public CommunityListResponse getUserCommunityList(@PathVariable Long userId) {
-        return new CommunityListResponse();
+        return CommunityListResponse.from(communityService.getUserCommunityList(userId));
     }
 
     @Operation(summary = "행성의 모든 주민증 목록 조회")
