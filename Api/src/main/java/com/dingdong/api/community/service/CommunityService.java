@@ -14,7 +14,6 @@ import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import java.util.List;
-import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -87,12 +86,6 @@ public class CommunityService {
             }
         }
         return code;
-    }
-
-    private String generateRandomNumericCode() {
-        Random generator = new java.util.Random();
-        generator.setSeed(System.currentTimeMillis());
-        return String.valueOf(generator.nextInt(1000000) % 1000000);
     }
 
     private String generateRandomAlphanumericCode() {
