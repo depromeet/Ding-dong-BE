@@ -1,9 +1,11 @@
 package com.dingdong.api.auth.service;
 
+import static com.dingdong.core.exception.GlobalException.NOT_FOUND_USER;
 import static com.dingdong.domain.domains.user.domain.enums.GenderType.findGenderType;
 
 import com.dingdong.api.auth.controller.response.AuthResponse;
 import com.dingdong.api.config.ApplicationProperty;
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.core.jwt.JwtTokenProvider;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
@@ -56,6 +58,16 @@ public class AuthService {
                         .findByEmail(kakaoUserInfoResponse.getKakaoAcount().getEmail())
                         .orElseGet(() -> createUser(kakaoUserInfoResponse));
 
+        return createAuthResponse(user);
+    }
+
+    @Transactional
+    public AuthResponse reissue(String refreshToken) {
+        Long userId = jwtTokenProvider.parseRefreshToken(refreshToken);
+        User user =
+                userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> new BaseException(NOT_FOUND_USER));
         return createAuthResponse(user);
     }
 

@@ -6,10 +6,7 @@ import com.dingdong.api.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "로그인/회원가입")
 @RestController
@@ -23,5 +20,11 @@ public class AuthController {
     @GetMapping("/login/kakao")
     public AuthResponse loginKakao(@RequestParam String authCode) {
         return authService.loginKakao(authCode);
+    }
+
+    @Operation(summary = "리프레시 토큰으로 액세스 토큰 재발급")
+    @GetMapping("/login/reissue")
+    public AuthResponse reissue(@RequestHeader(value = "REFRESH_TOKEN") String refreshToken) {
+        return authService.reissue(refreshToken);
     }
 }
