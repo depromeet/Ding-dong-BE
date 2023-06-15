@@ -63,9 +63,6 @@ public class IdCardService {
                         request.getNickname(),
                         request.getAboutMe());
 
-        // idCard keyword insert
-        saveIdCard.updateKeywords(createKeywords(request.getKeywords(), saveIdCard.getId()));
-
         return saveIdCard.getId();
     }
 
@@ -78,8 +75,12 @@ public class IdCardService {
 
         List<Keyword> keywords = createKeywords(request.getKeywords(), idCardId);
 
-        IdCard updateIdCard = idCard.updateIdCard(request.getProfileImageUrl(), request.getNickname(),
-            request.getNickname(), keywords);
+        IdCard updateIdCard =
+                idCard.updateIdCard(
+                        request.getProfileImageUrl(),
+                        request.getNickname(),
+                        request.getNickname(),
+                        keywords);
 
         return updateIdCard.getId();
     }
@@ -134,9 +135,11 @@ public class IdCardService {
     private void deleteKeywords(IdCard idCard) {
         List<Keyword> keywords = idCard.getKeywords();
 
-        List<DeleteImage> deleteImages = keywords.stream()
-            .filter(keyword -> keyword.getImagerUrl() != null)
-            .map(keyword -> DeleteImage.toEntity(keyword.getImagerUrl())).toList();
+        List<DeleteImage> deleteImages =
+                keywords.stream()
+                        .filter(keyword -> keyword.getImagerUrl() != null)
+                        .map(keyword -> DeleteImage.toEntity(keyword.getImagerUrl()))
+                        .toList();
 
         // deleteImage에 추가
         imageAdaptor.saveAll(deleteImages);
