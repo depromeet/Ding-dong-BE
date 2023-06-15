@@ -4,6 +4,8 @@ package com.dingdong.api.community.controller;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityIdCardsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
+import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
+import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,5 +35,11 @@ public class CommunityController {
     @GetMapping("/{communityId}")
     public CommunityDetailsResponse getCommunityDetails(@PathVariable Long communityId) {
         return new CommunityDetailsResponse();
+    }
+
+    @Operation(summary = "행성의 유저 주민증 조회 (유저 정보는 토큰으로)")
+    @GetMapping("/{communityId}/users/idCards")
+    public IdCardDetailsResponse getUserIdCardDetails(@PathVariable Long communityId) {
+        return IdCardDetailsResponse.from(new IdCardDetailsDto());
     }
 }
