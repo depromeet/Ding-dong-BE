@@ -3,6 +3,7 @@ package com.dingdong.api.idcard.controller;
 
 import com.dingdong.api.global.response.IdResponse;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
+import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
 import com.dingdong.api.idcard.controller.response.CommentCountResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
 import com.dingdong.api.idcard.service.IdCardService;
@@ -49,7 +50,7 @@ public class IdCardController {
     @Operation(summary = "주민증 수정", description = "주민증 수정 정보를 받아와 put 요청을 통해 덮어씁니다.")
     @PutMapping("/{idCardsId}")
     public IdResponse putIdCard(
-            @PathVariable Long idCardsId, @RequestBody @Valid CreateIdCardRequest body) {
-        return IdResponse.from(1L);
+            @PathVariable Long idCardsId, @RequestBody @Valid UpdateIdCardRequest body) {
+        return IdResponse.from(idCardService.updateIdCard(idCardsId, body));
     }
 }

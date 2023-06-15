@@ -6,6 +6,7 @@ import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.repository.IdCardRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @Adaptor
@@ -24,9 +25,7 @@ public class IdCardAdaptor {
         return idCardRepository.save(idCard);
     }
 
-    public IdCard findByUserAndCommunity(Long communityId, Long userId) {
-        return idCardRepository
-                .findByCommunityIdAndUserInfo_UserId(communityId, userId)
-                .orElse(null);
+    public Optional<IdCard> findByUserAndCommunity(Long communityId, Long userId) {
+        return idCardRepository.findByCommunityIdAndUserInfo_UserId(communityId, userId);
     }
 }
