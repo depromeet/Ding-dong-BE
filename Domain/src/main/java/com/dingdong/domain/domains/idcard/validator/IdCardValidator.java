@@ -6,6 +6,7 @@ import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.exception.IdCardErrorCode;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @Validator
@@ -15,9 +16,9 @@ public class IdCardValidator {
     private final IdCardAdaptor idCardAdaptor;
 
     public void isAlreadyCreateCommunityIdCard(Long communityId, Long userId) {
-        IdCard idCard = idCardAdaptor.findByUserAndCommunity(communityId, userId);
+        Optional<IdCard> idCard = idCardAdaptor.findByUserAndCommunity(communityId, userId);
 
-        if (idCard != null) {
+        if (idCard.isPresent()) {
             throw new BaseException(IdCardErrorCode.ALREADY_EXIST_ID_CARD);
         }
     }
