@@ -7,11 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
 public class IdCardDetailsDto {
     @Schema(description = "주민증 Id")
     private Long idCardId;
