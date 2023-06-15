@@ -17,6 +17,7 @@ import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.DeleteImage;
 import com.dingdong.domain.domains.user.domain.User;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,7 +84,7 @@ public class IdCardService {
                 idCard.updateIdCard(
                         request.getProfileImageUrl(),
                         request.getNickname(),
-                        request.getNickname(),
+                        request.getAboutMe(),
                         keywords);
 
         return updateIdCard.getId();
@@ -141,8 +142,9 @@ public class IdCardService {
 
         List<DeleteImage> deleteImages =
                 keywords.stream()
-                        .filter(keyword -> keyword.getImagerUrl() != null)
-                        .map(keyword -> DeleteImage.toEntity(keyword.getImagerUrl()))
+                        .map(Keyword::getImagerUrl)
+                        .filter(Objects::nonNull)
+                        .map(DeleteImage::toEntity)
                         .toList();
 
         // deleteImage에 추가
