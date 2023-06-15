@@ -42,4 +42,12 @@ public class UserInfo {
             Character character) {
         return new UserInfo(userId, profileImageUrl, nickname, aboutMe, character);
     }
+
+    public void updateUserInfo(String profileImageUrl, String nickname, String aboutMe) {
+        this.profileImageUrl = profileImageUrl;
+        this.nickname = nickname;
+        this.aboutMe = aboutMe;
+
+        return this;
+    }
 }

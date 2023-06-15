@@ -58,8 +58,14 @@ public class IdCard extends AbstractTimeStamp {
         return new IdCard(communityId, userInfo);
     }
 
+    public IdCard updateIdCard(String profileImageUrl, String nickname, String aboutMe, List<Keyword> keywords) {
+        this.userInfo.updateUserInfo(profileImageUrl, nickname, aboutMe);
+        updateKeywords(keywords);
+        return this;
+    }
+
     public void updateKeywords(List<Keyword> keywords) {
-        this.keywords = keywords;
+        this.keywords.addAll(keywords);
     }
 
     public String getNickname() {

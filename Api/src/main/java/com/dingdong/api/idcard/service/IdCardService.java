@@ -3,6 +3,7 @@ package com.dingdong.api.idcard.service;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
+import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
 import com.dingdong.api.idcard.dto.CreateKeywordDto;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
@@ -12,6 +13,8 @@ import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
+import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
+import com.dingdong.domain.domains.image.domain.DeleteImage;
 import com.dingdong.domain.domains.user.domain.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,8 @@ public class IdCardService {
     private final IdCardValidator idCardValidator;
 
     private final CommunityAdaptor communityAdaptor;
+
+    private final ImageAdaptor imageAdaptor;
 
     /** 주민증 세부 조회 */
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
@@ -62,6 +67,21 @@ public class IdCardService {
         saveIdCard.updateKeywords(createKeywords(request.getKeywords(), saveIdCard.getId()));
 
         return saveIdCard.getId();
+    }
+
+    /** 주민증 수정 */
+    @Transactional
+    public Long updateIdCard(Long idCardId, UpdateIdCardRequest request) {
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        deleteKeywords(idCard);
+
+        List<Keyword> keywords = createKeywords(request.getKeywords(), idCardId);
+
+        IdCard updateIdCard = idCard.updateIdCard(request.getProfileImageUrl(), request.getNickname(),
+            request.getNickname(), keywords);
+
+        return updateIdCard.getId();
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */
@@ -108,5 +128,20 @@ public class IdCardService {
                                         idCardId,
                                         keywordDto.getImageUrl()))
                 .toList();
+    }
+
+    /** keyword 리스트 삭제 */
+    private void deleteKeywords(IdCard idCard) {
+        List<Keyword> keywords = idCard.getKeywords();
+
+        List<DeleteImage> deleteImages = keywords.stream()
+            .filter(keyword -> keyword.getImagerUrl() != null)
+            .map(keyword -> DeleteImage.toEntity(keyword.getImagerUrl())).toList();
+
+        // deleteImage에 추가
+        imageAdaptor.saveAll(deleteImages);
+
+        // orphanRemoval 적용
+        keywords.clear();
     }
 }
