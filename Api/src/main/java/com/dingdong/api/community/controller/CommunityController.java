@@ -8,6 +8,7 @@ import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityIdCardsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
 import com.dingdong.api.community.service.CommunityService;
+import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
@@ -55,5 +56,11 @@ public class CommunityController {
     @GetMapping("/{communityId}")
     public CommunityDetailsResponse getCommunityDetails(@PathVariable Long communityId) {
         return CommunityDetailsResponse.from(communityService.getCommunityDetails(communityId));
+    }
+
+    @Operation(summary = "행성의 유저 주민증 조회 (유저 정보는 토큰으로)")
+    @GetMapping("/{communityId}/users/idCards")
+    public IdCardDetailsResponse getUserIdCardDetails(@PathVariable Long communityId) {
+        return IdCardDetailsResponse.from(communityService.getUserIdCardDetails(communityId));
     }
 }
