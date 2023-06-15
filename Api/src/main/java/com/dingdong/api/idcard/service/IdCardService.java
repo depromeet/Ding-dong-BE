@@ -63,6 +63,10 @@ public class IdCardService {
                         request.getNickname(),
                         request.getAboutMe());
 
+        List<Keyword> keywords = createKeywords(request.getKeywords(), saveIdCard.getId());
+
+        saveIdCard.updateKeywords(keywords);
+
         return saveIdCard.getId();
     }
 
