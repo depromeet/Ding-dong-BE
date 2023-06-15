@@ -47,7 +47,5 @@ public class UserInfo {
         this.profileImageUrl = profileImageUrl;
         this.nickname = nickname;
         this.aboutMe = aboutMe;
-
-        return this;
     }
 }
