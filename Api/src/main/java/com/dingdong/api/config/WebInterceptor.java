@@ -36,6 +36,7 @@ public class WebInterceptor implements HandlerInterceptor {
 
         ApplicationProperty applicationProperty = provider.getObject();
         String hostHeader = request.getHeader(HOST_HEADER);
+        log.info("host : {}", hostHeader);
 
         String loginRedirectUri = hostHeader.equals(localDomain) ? localRedirectUri : redirectUri;
         applicationProperty.setLoginRedirectUri(loginRedirectUri);

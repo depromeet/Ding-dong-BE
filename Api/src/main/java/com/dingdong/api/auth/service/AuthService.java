@@ -7,6 +7,7 @@ import com.dingdong.api.config.ApplicationProperty;
 import com.dingdong.core.jwt.JwtTokenProvider;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
+import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import com.dingdong.infrastructure.client.feign.KakaoApiFeignClient;
 import com.dingdong.infrastructure.client.feign.KakaoAuthFeignClient;
 import com.dingdong.infrastructure.client.feign.dto.request.KakaoAuthRequest;
@@ -25,6 +26,7 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final UserAdaptor userAdaptor;
 
     private final KakaoAuthFeignClient kakaoAuthFeignClient;
     private final KakaoApiFeignClient kakaoApiFeignClient;
@@ -57,6 +59,11 @@ public class AuthService {
                         .orElseGet(() -> createUser(kakaoUserInfoResponse));
 
         return createAuthResponse(user);
+    }
+
+    public AuthResponse reissue(String refreshToken) {
+        Long userId = jwtTokenProvider.parseRefreshToken(refreshToken);
+        return createAuthResponse(userAdaptor.findById(userId));
     }
 
     private User createUser(KakaoUserInfoResponse kakaoUserInfoResponse) {
