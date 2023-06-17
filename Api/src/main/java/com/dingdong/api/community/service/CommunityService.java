@@ -123,6 +123,5 @@ public class CommunityService {
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
-
     }
 }
