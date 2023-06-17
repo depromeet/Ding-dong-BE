@@ -2,18 +2,18 @@ package com.dingdong.api.auth.service;
 
 import static com.dingdong.domain.domains.user.domain.enums.GenderType.findGenderType;
 
+import com.dingdong.api.auth.controller.request.AuthRequest;
 import com.dingdong.api.auth.controller.response.AuthResponse;
-import com.dingdong.api.config.ApplicationProperty;
 import com.dingdong.core.jwt.JwtTokenProvider;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
+import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import com.dingdong.infrastructure.client.feign.KakaoApiFeignClient;
 import com.dingdong.infrastructure.client.feign.KakaoAuthFeignClient;
 import com.dingdong.infrastructure.client.feign.dto.request.KakaoAuthRequest;
 import com.dingdong.infrastructure.client.feign.dto.response.KakaoAuthResponse;
 import com.dingdong.infrastructure.client.feign.dto.response.KakaoUserInfoResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +25,7 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final UserAdaptor userAdaptor;
 
     private final KakaoAuthFeignClient kakaoAuthFeignClient;
     private final KakaoApiFeignClient kakaoApiFeignClient;
@@ -41,11 +42,11 @@ public class AuthService {
     @Value("${client.kakao.clientSecret}")
     private String clientSecret;
 
-    private final ObjectProvider<ApplicationProperty> provider;
-
     @Transactional
-    public AuthResponse loginKakao(String authCode) {
-        KakaoUserInfoResponse kakaoUserInfoResponse = getKakaoUserInfo(getKakaoAuthToken(authCode));
+    public AuthResponse loginKakao(AuthRequest request) {
+        KakaoUserInfoResponse kakaoUserInfoResponse =
+                getKakaoUserInfo(
+                        getKakaoAuthToken(request.getAuthCode(), request.getRedirectUri()));
 
         return saveUserAndGetToken(kakaoUserInfoResponse);
     }
@@ -57,6 +58,11 @@ public class AuthService {
                         .orElseGet(() -> createUser(kakaoUserInfoResponse));
 
         return createAuthResponse(user);
+    }
+
+    public AuthResponse reissue(String refreshToken) {
+        Long userId = jwtTokenProvider.parseRefreshToken(refreshToken);
+        return createAuthResponse(userAdaptor.findById(userId));
     }
 
     private User createUser(KakaoUserInfoResponse kakaoUserInfoResponse) {
@@ -77,14 +83,9 @@ public class AuthService {
                 jwtTokenProvider.getAccessTokenTTlSecond());
     }
 
-    private KakaoAuthResponse getKakaoAuthToken(String authCode) {
-        ApplicationProperty applicationProperty = provider.getObject();
+    private KakaoAuthResponse getKakaoAuthToken(String authCode, String redirectUri) {
         return kakaoAuthFeignClient.getKakaoAuth(
-                KakaoAuthRequest.createAuthFormData(
-                        authCode,
-                        clientId,
-                        clientSecret,
-                        applicationProperty.getLoginRedirectUri()));
+                KakaoAuthRequest.createAuthFormData(authCode, clientId, clientSecret, redirectUri));
     }
 
     private KakaoUserInfoResponse getKakaoUserInfo(KakaoAuthResponse response) {
