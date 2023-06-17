@@ -14,8 +14,13 @@ public class CommunityValidator {
     private final CommunityAdaptor communityAdaptor;
 
     public void verifyAdminUser(Long communityId, Long userId) {
-        if (!communityAdaptor.isAdminUser(communityId, userId)) {
+        if (!(isAdminUser(communityId, userId))) {
             throw new BaseException(CommunityErrorCode.NO_AUTHORITY_UPDATE_COMMUNITY);
         }
+    }
+
+    private boolean isAdminUser(Long communityId, Long userId) {
+        return communityAdaptor.findById(communityId).getAdmins().stream()
+                .anyMatch(c -> c.getUserId().equals(userId));
     }
 }

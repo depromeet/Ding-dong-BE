@@ -6,7 +6,6 @@ import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.community.domain.Admin;
 import com.dingdong.domain.domains.community.domain.Community;
-import com.dingdong.domain.domains.community.domain.CommunityImage;
 import com.dingdong.domain.domains.community.domain.enums.AdminRole;
 import com.dingdong.domain.domains.community.repository.AdminRepository;
 import com.dingdong.domain.domains.community.repository.CommunityRepository;
@@ -32,23 +31,11 @@ public class CommunityAdaptor {
     }
 
     public Community save(Community community, User user) {
-        addAdmin(community, user);
+        community.addAdmin(createAndSaveAdmin(user.getId()));
         return communityRepository.save(community);
     }
 
-    private void addAdmin(Community community, User user) {
-        community.getAdmins().add(createAdmin(user.getId()));
+    private Admin createAndSaveAdmin(Long userId) {
+        return adminRepository.save(Admin.toEntity(AdminRole.ADMIN, userId));
     }
-
-    private Admin createAdmin(Long userId) {
-        Admin admin = Admin.toEntity(AdminRole.ADMIN, userId);
-        return adminRepository.save(admin);
-    }
-
-    public boolean isAdminUser(Long communityId, Long userId) {
-        Community community = findById(communityId);
-        return community.getAdmins().stream().anyMatch(c -> c.getUserId().equals(userId));
-    }
-
-    public void update(String name, CommunityImage communityImage, String description) {}
 }

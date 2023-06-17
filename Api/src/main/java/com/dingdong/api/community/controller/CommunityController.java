@@ -45,7 +45,7 @@ public class CommunityController {
     @PostMapping
     public CommunityCodeResponse createCommunity(
             @RequestBody @Valid CreateCommunityRequest request) {
-        return communityService.createCommunity(request);
+        return CommunityCodeResponse.from(communityService.createCommunity(request));
     }
 
     @Operation(summary = "행성 꾸미기")

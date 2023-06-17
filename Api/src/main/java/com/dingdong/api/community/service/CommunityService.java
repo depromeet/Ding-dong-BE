@@ -4,7 +4,7 @@ import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_F
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.controller.response.CommunityCodeResponse;
+import com.dingdong.api.community.dto.CommunityCodeDto;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
 import com.dingdong.api.community.dto.CommunityListDto;
 import com.dingdong.api.global.helper.UserHelper;
@@ -35,7 +35,7 @@ public class CommunityService {
     private final IdCardAdaptor idCardAdaptor;
     private final UserAdaptor userAdaptor;
     private final UserHelper userHelper;
-    private final int MAX_RETRY = 10;
+    private static final int MAX_RETRY = 10;
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
         Community community = communityAdaptor.findById(communityId);
@@ -53,8 +53,8 @@ public class CommunityService {
 
     // 행성 만들기
     @Transactional
-    public CommunityCodeResponse createCommunity(CreateCommunityRequest request) {
-        return CommunityCodeResponse.from(
+    public CommunityCodeDto createCommunity(CreateCommunityRequest request) {
+        return CommunityCodeDto.from(
                 communityAdaptor.save(
                         createCommunityEntity(request.getName(), request.getLogoImageUrl()),
                         userHelper.getCurrentUser()));
@@ -63,7 +63,7 @@ public class CommunityService {
     // 행성 꾸미기
     @Transactional
     public Long updateCommunity(Long communityId, UpdateCommunityRequest request) {
-        Community community = findAndValidateCommunity(communityId);
+        Community community = findAndValidateAdminUserInCommunity(communityId);
         updateCommunityEntity(
                 community,
                 request.getName(),
@@ -73,7 +73,7 @@ public class CommunityService {
         return community.getId();
     }
 
-    public Community findAndValidateCommunity(Long communityId) {
+    private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
         // user 가 admin 인지 체크
         communityValidator.verifyAdminUser(communityId, currentUser.getId());
