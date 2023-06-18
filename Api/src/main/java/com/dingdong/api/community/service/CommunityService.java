@@ -6,6 +6,7 @@ import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.dto.CommunityCodeDto;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
+import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.dto.CommunityListDto;
 import com.dingdong.api.community.service.generator.CodeGenerator;
 import com.dingdong.api.community.service.generator.RandomCodeGenerator;
@@ -13,6 +14,7 @@ import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
 import com.dingdong.core.exception.BaseException;
+import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.Community;
 import com.dingdong.domain.domains.community.domain.CommunityImage;
@@ -23,6 +25,8 @@ import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,6 +107,17 @@ public class CommunityService {
         CommunityImage communityImage =
                 CommunityImage.createCommunityImage(logoImageUrl, coverImageUrl);
         community.updateCommunity(name, communityImage, description);
+
+    /** 행성의 모든 주민증 조회 */
+    public Slice<CommunityIdCardsDto> getCommunityIdCards(Long communityId, Pageable pageable) {
+        Slice<IdCard> idCards = idCardAdaptor.findIdCardByConditionInPage(communityId, pageable);
+
+        return SliceUtil.valueOf(
+                idCards.stream()
+                        .map(idCard -> CommunityIdCardsDto.of(idCard, idCard.getKeywords()))
+                        .toList(),
+                pageable);
+
     }
 
     /** 행성에 있는 해당 유저 주민증 상세 조회 */
