@@ -57,14 +57,28 @@ public class Community extends AbstractTimeStamp {
     }
 
     public String getLogoImageUrl() {
+        return this.communityImage.getLogoImageUrl();
+    }
+
+    public String getCoverImageUrl() {
         return Optional.ofNullable(communityImage)
                 .map(CommunityImage::getLogoImageUrl)
                 .orElse(null);
     }
 
-    public String getCoverImageUrl() {
-        return Optional.ofNullable(communityImage)
-                .map(CommunityImage::getCoverImageUrl)
-                .orElse(null);
+    public static Community createCommunity(
+            String name, String logoImageUrl, String invitationCode) {
+        CommunityImage communityImage = CommunityImage.createCommunityImage(logoImageUrl, null);
+        return Community.toEntity(name, communityImage, invitationCode);
+    }
+
+    public void updateCommunity(String name, CommunityImage communityImage, String description) {
+        this.name = name;
+        this.communityImage = communityImage;
+        this.description = description;
+    }
+
+    public void addAdmin(Admin admin) {
+        this.getAdmins().add(admin);
     }
 }

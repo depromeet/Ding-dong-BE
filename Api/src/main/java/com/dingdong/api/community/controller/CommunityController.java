@@ -7,6 +7,7 @@ import com.dingdong.api.community.controller.response.CommunityCodeResponse;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
 import com.dingdong.api.community.service.CommunityService;
+import com.dingdong.api.global.response.IdResponse;
 import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,13 +16,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "커뮤니티")
 @RestController
@@ -48,13 +43,16 @@ public class CommunityController {
     @PostMapping
     public CommunityCodeResponse createCommunity(
             @RequestBody @Valid CreateCommunityRequest request) {
-        return new CommunityCodeResponse();
+        return CommunityCodeResponse.from(communityService.createCommunity(request));
     }
 
     @Operation(summary = "행성 꾸미기")
-    @PatchMapping("/{communityId}")
-    public void updateCommunity(
-            @PathVariable Long communityId, @RequestBody @Valid UpdateCommunityRequest request) {}
+    @PutMapping("/{communityId}")
+    public IdResponse updateCommunity(
+            @PathVariable Long communityId, @RequestBody @Valid UpdateCommunityRequest request) {
+
+        return IdResponse.from(communityService.updateCommunity(communityId, request));
+    }
 
     @Operation(summary = "행성 세부 정보 조회")
     @GetMapping("/{communityId}")
