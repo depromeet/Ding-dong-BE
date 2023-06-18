@@ -107,6 +107,7 @@ public class CommunityService {
         CommunityImage communityImage =
                 CommunityImage.createCommunityImage(logoImageUrl, coverImageUrl);
         community.updateCommunity(name, communityImage, description);
+    }
 
     /** 행성의 모든 주민증 조회 */
     public Slice<CommunityIdCardsDto> getCommunityIdCards(Long communityId, Pageable pageable) {
@@ -117,7 +118,6 @@ public class CommunityService {
                         .map(idCard -> CommunityIdCardsDto.of(idCard, idCard.getKeywords()))
                         .toList(),
                 pageable);
-
     }
 
     /** 행성에 있는 해당 유저 주민증 상세 조회 */
