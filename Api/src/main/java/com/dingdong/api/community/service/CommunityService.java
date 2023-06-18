@@ -7,6 +7,8 @@ import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.dto.CommunityCodeDto;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
 import com.dingdong.api.community.dto.CommunityListDto;
+import com.dingdong.api.community.service.generator.CodeGenerator;
+import com.dingdong.api.community.service.generator.RandomCodeGenerator;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
@@ -21,7 +23,6 @@ import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,18 +87,11 @@ public class CommunityService {
 
     // 초대 코드 랜덤 생성
     private String createCommunityInvitationCode() {
-        String code = "";
-        for (int i = 0; i < MAX_RETRY; i++) {
-            code = generateRandomAlphanumericCode();
-            if (!communityAdaptor.isAlreadyExistInvitationCode(code)) {
-                break;
-            }
-        }
-        return code;
+        return generateRandomAlphanumericCode(new RandomCodeGenerator(communityAdaptor));
     }
 
-    private String generateRandomAlphanumericCode() {
-        return RandomStringUtils.randomAlphanumeric(6);
+    private String generateRandomAlphanumericCode(CodeGenerator codeGenerator) {
+        return codeGenerator.createCommunityInvitationCode(MAX_RETRY);
     }
 
     private void updateCommunityEntity(
