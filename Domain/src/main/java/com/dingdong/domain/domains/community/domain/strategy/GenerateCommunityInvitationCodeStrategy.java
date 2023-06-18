@@ -1,4 +1,4 @@
-package com.dingdong.api.community.service.generator;
+package com.dingdong.domain.domains.community.domain.strategy;
 
 
 import java.util.List;
