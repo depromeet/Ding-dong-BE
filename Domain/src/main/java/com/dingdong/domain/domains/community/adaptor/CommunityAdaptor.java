@@ -10,6 +10,7 @@ import com.dingdong.domain.domains.community.domain.enums.AdminRole;
 import com.dingdong.domain.domains.community.repository.AdminRepository;
 import com.dingdong.domain.domains.community.repository.CommunityRepository;
 import com.dingdong.domain.domains.user.domain.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 
 @Adaptor
@@ -18,6 +19,10 @@ public class CommunityAdaptor {
 
     private final CommunityRepository communityRepository;
     private final AdminRepository adminRepository;
+
+    public List<Community> findAll() {
+        return communityRepository.findAll();
+    }
 
     public Community findById(Long communityId) {
         return communityRepository

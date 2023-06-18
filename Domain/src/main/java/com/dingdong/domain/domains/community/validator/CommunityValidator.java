@@ -14,7 +14,7 @@ public class CommunityValidator {
     private final CommunityAdaptor communityAdaptor;
 
     public void verifyAdminUser(Long communityId, Long userId) {
-        if (!(isAdminUser(communityId, userId))) {
+        if (!isAdminUser(communityId, userId)) {
             throw new BaseException(CommunityErrorCode.NO_AUTHORITY_UPDATE_COMMUNITY);
         }
     }

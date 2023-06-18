@@ -8,8 +8,8 @@ import com.dingdong.api.community.dto.CommunityCodeDto;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.dto.CommunityListDto;
-import com.dingdong.api.community.service.generator.CodeGenerator;
-import com.dingdong.api.community.service.generator.RandomCodeGenerator;
+import com.dingdong.api.community.service.generator.GenerateCommunityInvitationCodeStrategy;
+import com.dingdong.api.community.service.generator.RandomCommunityCodeGeneratorStrategy;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
@@ -24,6 +24,7 @@ import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -40,7 +41,6 @@ public class CommunityService {
     private final IdCardAdaptor idCardAdaptor;
     private final UserAdaptor userAdaptor;
     private final UserHelper userHelper;
-    private static final int MAX_RETRY = 10;
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
         Community community = communityAdaptor.findById(communityId);
@@ -78,37 +78,6 @@ public class CommunityService {
         return community.getId();
     }
 
-    private Community findAndValidateAdminUserInCommunity(Long communityId) {
-        User currentUser = userHelper.getCurrentUser();
-        // user 가 admin 인지 체크
-        communityValidator.verifyAdminUser(communityId, currentUser.getId());
-        return communityAdaptor.findById(communityId);
-    }
-
-    private Community createCommunityEntity(String name, String logoImageUrl) {
-        return Community.createCommunity(name, logoImageUrl, createCommunityInvitationCode());
-    }
-
-    // 초대 코드 랜덤 생성
-    private String createCommunityInvitationCode() {
-        return generateRandomAlphanumericCode(new RandomCodeGenerator(communityValidator));
-    }
-
-    private String generateRandomAlphanumericCode(CodeGenerator codeGenerator) {
-        return codeGenerator.createCommunityInvitationCode(MAX_RETRY);
-    }
-
-    private void updateCommunityEntity(
-            Community community,
-            String name,
-            String logoImageUrl,
-            String coverImageUrl,
-            String description) {
-        CommunityImage communityImage =
-                CommunityImage.createCommunityImage(logoImageUrl, coverImageUrl);
-        community.updateCommunity(name, communityImage, description);
-    }
-
     /** 행성의 모든 주민증 조회 */
     public Slice<CommunityIdCardsDto> getCommunityIdCards(Long communityId, Pageable pageable) {
         Slice<IdCard> idCards = idCardAdaptor.findIdCardByConditionInPage(communityId, pageable);
@@ -132,5 +101,43 @@ public class CommunityService {
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
+    }
+
+    private Community findAndValidateAdminUserInCommunity(Long communityId) {
+        User currentUser = userHelper.getCurrentUser();
+        // user 가 admin 인지 체크
+        communityValidator.verifyAdminUser(communityId, currentUser.getId());
+        return communityAdaptor.findById(communityId);
+    }
+
+    private Community createCommunityEntity(String name, String logoImageUrl) {
+        return Community.createCommunity(name, logoImageUrl, createCommunityInvitationCode());
+    }
+
+    // 초대 코드 랜덤 생성
+    private String createCommunityInvitationCode() {
+        return generateRandomAlphanumericCode(new RandomCommunityCodeGeneratorStrategy());
+    }
+
+    private String generateRandomAlphanumericCode(
+            GenerateCommunityInvitationCodeStrategy strategy) {
+        return strategy.generate(getCommunityInvitationCodes());
+    }
+
+    private List<String> getCommunityInvitationCodes() {
+        return communityAdaptor.findAll().stream()
+                .map(Community::getInvitationCode)
+                .collect(Collectors.toList());
+    }
+
+    private void updateCommunityEntity(
+            Community community,
+            String name,
+            String logoImageUrl,
+            String coverImageUrl,
+            String description) {
+        CommunityImage communityImage =
+                CommunityImage.createCommunityImage(logoImageUrl, coverImageUrl);
+        community.updateCommunity(name, communityImage, description);
     }
 }
