@@ -8,6 +8,8 @@ import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.repository.IdCardRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @Adaptor
 @RequiredArgsConstructor
@@ -27,5 +29,9 @@ public class IdCardAdaptor {
 
     public Optional<IdCard> findByUserAndCommunity(Long communityId, Long userId) {
         return idCardRepository.findByCommunityIdAndUserInfo_UserId(communityId, userId);
+    }
+
+    public Slice<IdCard> findIdCardByConditionInPage(Long communityId, Pageable pageable) {
+        return idCardRepository.findIdCardByConditionInPage(communityId, pageable);
     }
 }
