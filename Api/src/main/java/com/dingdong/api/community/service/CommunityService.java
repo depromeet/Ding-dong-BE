@@ -91,7 +91,7 @@ public class CommunityService {
 
     // 초대 코드 랜덤 생성
     private String createCommunityInvitationCode() {
-        return generateRandomAlphanumericCode(new RandomCodeGenerator(communityAdaptor));
+        return generateRandomAlphanumericCode(new RandomCodeGenerator(communityValidator));
     }
 
     private String generateRandomAlphanumericCode(CodeGenerator codeGenerator) {

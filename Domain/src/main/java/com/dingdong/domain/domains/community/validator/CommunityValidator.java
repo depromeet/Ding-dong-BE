@@ -23,4 +23,8 @@ public class CommunityValidator {
         return communityAdaptor.findById(communityId).getAdmins().stream()
                 .anyMatch(c -> c.getUserId().equals(userId));
     }
+
+    public boolean isAlreadyExistInvitationCode(String code) {
+        return communityAdaptor.isAlreadyExistInvitationCode(code);
+    }
 }

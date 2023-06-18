@@ -1,16 +1,16 @@
 package com.dingdong.api.community.service.generator;
 
 
-import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
+import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class RandomCodeGenerator implements CodeGenerator {
 
-    private final CommunityAdaptor communityAdaptor;
+    private final CommunityValidator communityValidator;
     private static final int CODE_LENGTH = 6;
 
-    public RandomCodeGenerator(CommunityAdaptor communityAdaptor) {
-        this.communityAdaptor = communityAdaptor;
+    public RandomCodeGenerator(CommunityValidator communityValidator) {
+        this.communityValidator = communityValidator;
     }
 
     @Override
@@ -23,7 +23,7 @@ public class RandomCodeGenerator implements CodeGenerator {
         String code = "";
         for (int i = 0; i < MAX_RETRY; i++) {
             code = generate();
-            if (!communityAdaptor.isAlreadyExistInvitationCode(code)) {
+            if (!communityValidator.isAlreadyExistInvitationCode(code)) {
                 break;
             }
         }
