@@ -65,7 +65,7 @@ public class IdCardController {
     }
 
     @Operation(summary = "주민증 대댓글 달기")
-    @PostMapping("/{idCardsId}/comments/{commentId}/comment-replies")
+    @PostMapping("/{idCardsId}/comments/{commentId}/replies")
     public IdResponse postCommentReply(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
@@ -83,14 +83,13 @@ public class IdCardController {
     }
 
     @Operation(summary = "주민증 댓글 좋아요")
-    @PostMapping("/{idCardsId}/comments/{commentId}/comment-likes")
+    @PostMapping("/{idCardsId}/comments/{commentId}/likes")
     public IdResponse postCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
         return IdResponse.from(1L);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요")
-    @PostMapping(
-            "/{idCardsId}/comments/{commentId}/comments-replies/{commentReplyId}/comment-reply-likes")
+    @PostMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
     public IdResponse postCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
@@ -105,7 +104,7 @@ public class IdCardController {
     }
 
     @Operation(summary = "주민증 대댓글 삭제")
-    @DeleteMapping("/{idCardsId}/comments/{commentId}/comment-replies/{commentReplyId}")
+    @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}")
     public IdResponse deleteCommentReply(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
@@ -114,7 +113,7 @@ public class IdCardController {
     }
 
     @Operation(summary = "주민증 댓글 좋아요 취소")
-    @DeleteMapping("/{idCardsId}/comments/{commentId}/comment-likes/{commentLikeId}")
+    @DeleteMapping("/{idCardsId}/comments/{commentId}/likes/{commentLikeId}")
     public IdResponse deleteCommentLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
@@ -124,7 +123,7 @@ public class IdCardController {
 
     @Operation(summary = "주민증 대댓글 좋아요 취소")
     @DeleteMapping(
-            "/{idCardsId}/comments/{commentId}/comment-likes/{commentLikeId}/comment-reply-likes/{commentReplyLikeId}")
+            "/{idCardsId}/comments/{commentId}/likes/{commentLikeId}/reply-likes/{commentReplyLikeId}")
     public IdResponse deleteCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
