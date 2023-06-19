@@ -52,4 +52,8 @@ public class User extends AbstractTimeStamp {
     public static User toEntity(String email, GenderType genderType, String ageRange) {
         return new User(email, genderType, ageRange);
     }
+
+    public void joinCommunity(Community community) {
+        this.getCommunities().add(community);
+    }
 }
