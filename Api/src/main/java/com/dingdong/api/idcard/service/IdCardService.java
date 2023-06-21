@@ -2,6 +2,7 @@ package com.dingdong.api.idcard.service;
 
 
 import com.dingdong.api.global.helper.UserHelper;
+import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
 import com.dingdong.api.idcard.dto.CreateKeywordDto;
@@ -9,7 +10,9 @@ import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.Community;
+import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
+import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
@@ -36,6 +39,8 @@ public class IdCardService {
     private final CommunityAdaptor communityAdaptor;
 
     private final ImageAdaptor imageAdaptor;
+
+    private final CommentAdaptor commentAdaptor;
 
     /** 주민증 세부 조회 */
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
@@ -88,6 +93,19 @@ public class IdCardService {
                         keywords);
 
         return updateIdCard.getId();
+    }
+
+    /** 댓글 생성 */
+    @Transactional
+    public Long createComment(Long idCardId, CreateCommentRequest request) {
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        User currentUser = userHelper.getCurrentUser();
+
+        Comment comment =
+                Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
+
+        return commentAdaptor.save(comment).getId();
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */

@@ -61,7 +61,7 @@ public class IdCardController {
     @PostMapping("/{idCardsId}/comments")
     public IdResponse postComment(
             @PathVariable Long idCardsId, @RequestBody @Valid CreateCommentRequest body) {
-        return IdResponse.from(1L);
+        return IdResponse.from(idCardService.createComment(idCardsId, body));
     }
 
     @Operation(summary = "주민증 대댓글 달기")
