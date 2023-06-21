@@ -5,7 +5,6 @@ import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
-import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,15 +12,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NotificationDto {
 
-    @Schema(description = "알림 정보")
+    @Schema(description = "알림 종류")
     private NotificationType notificationType;
-
-    @Schema(description = "알림 세부 데이터")
-    private Map<String, Object> data;
 
     @Schema(description = "알림 상태")
     private NotificationStatus notificationStatus;
 
     @Schema(description = "알림 생성 시간")
     private LocalDateTime createdAt;
+
+    @Schema(description = "커뮤니티 정보")
+    private CommunityDto communityDto;
+
+    @Schema(description = "상대방 정보")
+    private UserDto userDto;
+
+    @Schema(description = "댓글 or 답글 정보")
+    private CommentDto commentDto;
 }

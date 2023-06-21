@@ -1,7 +1,6 @@
 package com.dingdong.api.notification.controller;
 
 
-import com.dingdong.api.notification.controller.response.NotificationCommunityResponse;
 import com.dingdong.api.notification.dto.NotificationDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +26,7 @@ public class NotificationController {
         return new SseEmitter();
     }
 
-    @Operation(summary = "알림 목록 조회", description = "로직 작업 후 세부 정보 확인 가능")
+    @Operation(summary = "알림 목록 조회")
     @GetMapping
     public NotificationDto getNotifications(
             @RequestParam(required = false, defaultValue = "null") Long communityId,
