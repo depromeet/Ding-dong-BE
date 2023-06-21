@@ -1,16 +1,19 @@
 package com.dingdong.api.image.service;
 
 
+import com.amazonaws.SdkClientException;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.DeleteImage;
 import com.dingdong.infrastructure.image.ImageHandler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -29,10 +32,13 @@ public class ImageService {
         List<DeleteImage> deleteImages = imageAdaptor.findAll();
 
         for (DeleteImage deleteImage : deleteImages) {
-            String imageUrl = deleteImage.getImageUrl();
-            /** 순서 보장 되어야 함 */
-            imageHandler.removeImage(imageUrl);
-            imageAdaptor.delete(deleteImage);
+            try {
+                /** 순서 보장 되어야 함 */
+                imageHandler.removeImage(deleteImage.getImageUrl());
+                imageAdaptor.delete(deleteImage);
+            } catch (SdkClientException e) {
+                log.error("ImageId: {}, errorMessage: {}", deleteImage.getId(), e.getMessage());
+            }
         }
     }
 }
