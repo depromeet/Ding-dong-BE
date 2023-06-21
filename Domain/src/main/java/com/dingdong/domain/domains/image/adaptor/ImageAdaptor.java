@@ -19,4 +19,12 @@ public class ImageAdaptor {
     public void saveAll(List<DeleteImage> deleteImages) {
         imageRepository.saveAll(deleteImages);
     }
+
+    public List<DeleteImage> findAll() {
+        return imageRepository.findAll();
+    }
+
+    public void delete(DeleteImage deleteImage) {
+        imageRepository.delete(deleteImage);
+    }
 }
