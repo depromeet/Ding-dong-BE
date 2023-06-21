@@ -90,11 +90,11 @@ public class IdCardController {
 
     @Operation(summary = "주민증 대댓글 좋아요")
     @PostMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
-    public IdResponse postCommentReplyLike(
+    public void postCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId) {
-        return IdResponse.from(1L);
+        idCardService.createCommentReplyLike(idCardsId, commentId, commentReplyId);
     }
 
     @Operation(summary = "주민증 댓글 삭제")

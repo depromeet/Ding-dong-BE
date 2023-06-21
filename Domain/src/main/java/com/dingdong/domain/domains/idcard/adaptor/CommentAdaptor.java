@@ -1,11 +1,15 @@
 package com.dingdong.domain.domains.idcard.adaptor;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_REPLY;
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
+import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.repository.CommentRepository;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -28,5 +32,14 @@ public class CommentAdaptor {
 
     public Slice<Comment> findCommentsByIdCard(Long idCardId, Pageable pageable) {
         return commentRepository.findCommentsByIdCardId(idCardId, pageable);
+    }
+
+    public CommentReply findCommentReply(Comment comment, Long commentReplyId) {
+        List<CommentReply> replies = comment.getReplies();
+
+        return replies.stream()
+                .filter(commentReply -> Objects.equals(commentReply.getId(), commentReplyId))
+                .findFirst()
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY));
     }
 }

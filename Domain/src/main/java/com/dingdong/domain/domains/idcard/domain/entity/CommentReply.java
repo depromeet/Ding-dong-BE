@@ -48,4 +48,8 @@ public class CommentReply extends AbstractTimeStamp {
             Long idCardId, Long commentId, Long userId, String content) {
         return new CommentReply(idCardId, commentId, userId, content);
     }
+
+    public void updateReplyLikes(CommentReplyLike commentReplyLike) {
+        replyLikes.add(commentReplyLike);
+    }
 }
