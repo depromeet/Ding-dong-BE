@@ -30,6 +30,7 @@ public class ImageService {
 
         for (DeleteImage deleteImage : deleteImages) {
             String imageUrl = deleteImage.getImageUrl();
+            /** 순서 보장 되어야 함 */
             imageHandler.removeImage(imageUrl);
             imageAdaptor.delete(deleteImage);
         }
