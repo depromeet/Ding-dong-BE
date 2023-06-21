@@ -1,6 +1,6 @@
-package com.dingdong.domain.domains.community.exception;
+package com.dingdong.domain.domains.user.exception;
 
-import static com.dingdong.core.consts.StaticVal.*;
+import static com.dingdong.core.consts.StaticVal.NOT_FOUND;
 
 import com.dingdong.core.annotation.ExplainError;
 import com.dingdong.core.dto.ErrorDetail;
@@ -12,11 +12,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum CommunityErrorCode implements BaseErrorCode {
-    @ExplainError("존재하지 않는 행성을 찾을 때 발생하는 오류입니다.")
-    NOT_FOUND_COMMUNITY(NOT_FOUND, "Community-404-1", "존재하지 않는 행성입니다."),
-    @ExplainError("관리자가 아닌 다른 사용자가 행성 꾸미기를 시도할 때 발생하는 오류입니다.")
-    NO_AUTHORITY_UPDATE_COMMUNITY(FORBIDDEN, "Community-403-1", "행성 수정 권한이 없습니다.");
+public enum UserErrorCode implements BaseErrorCode {
+    @ExplainError("존재하지 않는 사용자의 정보를 조회할 때 발생하는 오류입니다.")
+    NOT_FOUND_USER(NOT_FOUND, "User-404-1", "존재하지 않는 사용자입니다.");
 
     private final Integer statusCode;
     private final String errorCode;

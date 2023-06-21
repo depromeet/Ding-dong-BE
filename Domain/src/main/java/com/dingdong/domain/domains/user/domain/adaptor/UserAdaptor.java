@@ -1,6 +1,6 @@
 package com.dingdong.domain.domains.user.domain.adaptor;
 
-import static com.dingdong.core.exception.GlobalException.NOT_FOUND_USER;
+import static com.dingdong.domain.domains.user.exception.UserErrorCode.NOT_FOUND_USER;
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
