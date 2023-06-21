@@ -29,4 +29,7 @@ public class NotificationDto {
 
     @Schema(description = "댓글 or 답글 정보")
     private CommentDto commentDto;
+
+    @Schema(description = "주민증 정보")
+    private IdCardDto idCardDto;
 }
