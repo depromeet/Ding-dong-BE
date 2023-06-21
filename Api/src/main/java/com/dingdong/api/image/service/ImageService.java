@@ -1,7 +1,6 @@
 package com.dingdong.api.image.service;
 
 
-import com.amazonaws.SdkClientException;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.DeleteImage;
 import com.dingdong.infrastructure.image.ImageHandler;
@@ -27,18 +26,25 @@ public class ImageService {
 
     /** 사용하지 않는 이미지 S3에서 제거 스케쥴러 매일 00:00에 수행 */
     @Scheduled(cron = "0 0 0 * * *")
-    @Transactional
     public void deleteImage() {
         List<DeleteImage> deleteImages = imageAdaptor.findAll();
 
         for (DeleteImage deleteImage : deleteImages) {
             try {
-                /** 순서 보장 되어야 함 */
-                imageHandler.removeImage(deleteImage.getImageUrl());
-                imageAdaptor.delete(deleteImage);
-            } catch (SdkClientException e) {
+                removeImageFromS3(deleteImage);
+                deleteImageInDB(deleteImage);
+            } catch (RuntimeException e) {
                 log.error("ImageId: {}, errorMessage: {}", deleteImage.getId(), e.getMessage());
             }
         }
+    }
+
+    @Transactional
+    public void deleteImageInDB(DeleteImage deleteImage) {
+        imageAdaptor.delete(deleteImage);
+    }
+
+    private void removeImageFromS3(DeleteImage deleteImage) {
+        imageHandler.removeImage(deleteImage.getImageUrl());
     }
 }
