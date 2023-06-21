@@ -13,6 +13,7 @@ import com.dingdong.domain.domains.community.domain.Community;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
+import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
@@ -106,6 +107,26 @@ public class IdCardService {
                 Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
 
         return commentAdaptor.save(comment).getId();
+    }
+
+    @Transactional
+    public void createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
+        User currentUser = userHelper.getCurrentUser();
+
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Comment comment = commentAdaptor.findById(commentId);
+
+        idCardValidator.isValidIdCardComment(idCard, comment);
+
+        CommentReply commentReply =
+                CommentReply.toEntity(
+                        idCard.getId(),
+                        comment.getId(),
+                        currentUser.getId(),
+                        request.getContents());
+
+        comment.updateReplies(commentReply);
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */

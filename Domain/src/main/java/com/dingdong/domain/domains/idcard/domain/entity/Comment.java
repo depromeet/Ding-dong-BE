@@ -47,4 +47,8 @@ public class Comment extends AbstractTimeStamp {
     public static Comment toEntity(Long idCardId, Long userId, String content) {
         return new Comment(idCardId, userId, content);
     }
+
+    public void updateReplies(CommentReply commentReply) {
+        replies.add(commentReply);
+    }
 }
