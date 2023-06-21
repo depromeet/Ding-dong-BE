@@ -15,9 +15,11 @@ import com.dingdong.domain.domains.community.domain.Community;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
+import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
+import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.DeleteImage;
@@ -40,6 +42,8 @@ public class IdCardService {
     private final IdCardAdaptor idCardAdaptor;
 
     private final IdCardValidator idCardValidator;
+
+    private final CommentValidator commentValidator;
 
     private final CommunityAdaptor communityAdaptor;
 
@@ -155,6 +159,20 @@ public class IdCardService {
                                                 currentUser.getId()))
                         .toList(),
                 pageable);
+    }
+
+    public void createCommentLike(Long idCardId, Long commentId) {
+        User currentUser = userHelper.getCurrentUser();
+
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Comment comment = commentAdaptor.findById(commentId);
+
+        idCardValidator.isValidIdCardComment(idCard, comment);
+
+        commentValidator.isExistCommentLike(comment, currentUser.getId());
+
+        comment.updateLikes(CommentLike.toEntity(comment.getId(), currentUser.getId()));
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */

@@ -8,7 +8,6 @@ import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
 import com.dingdong.api.idcard.controller.response.CommentCountResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
-import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -80,13 +79,13 @@ public class IdCardController {
     @GetMapping("/{idCardsId}/comments")
     public SliceResponse getComments(
             @PathVariable Long idCardsId, @PageableDefault Pageable pageable) {
-        return new CommentDto();
+        return SliceResponse.from(idCardService.getComments(idCardsId, pageable));
     }
 
     @Operation(summary = "주민증 댓글 좋아요")
     @PostMapping("/{idCardsId}/comments/{commentId}/likes")
-    public IdResponse postCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
-        return IdResponse.from(1L);
+    public void postCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
+        idCardService.createCommentLike(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요")
