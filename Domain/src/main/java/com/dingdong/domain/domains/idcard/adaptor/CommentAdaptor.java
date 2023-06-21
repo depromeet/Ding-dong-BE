@@ -7,6 +7,8 @@ import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 @Adaptor
 @RequiredArgsConstructor
@@ -22,5 +24,9 @@ public class CommentAdaptor {
         return commentRepository
                 .findById(commentId)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
+    }
+
+    public Slice<Comment> findCommentsByIdCard(Long idCardId, Pageable pageable) {
+        return commentRepository.findCommentsByIdCardId(idCardId, pageable);
     }
 }

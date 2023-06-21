@@ -5,9 +5,11 @@ import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
+import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.dto.CreateKeywordDto;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
+import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.Community;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
@@ -23,6 +25,8 @@ import com.dingdong.domain.domains.user.domain.User;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -127,6 +131,30 @@ public class IdCardService {
                         request.getContents());
 
         comment.updateReplies(commentReply);
+    }
+
+    public Slice<CommentDto> getComments(Long idCardId, Pageable pageable) {
+        User currentUser = userHelper.getCurrentUser();
+
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Slice<Comment> comments = commentAdaptor.findCommentsByIdCard(idCard.getId(), pageable);
+
+        // comment 작성한 userInfo 가져오는 좋은 방법 아는분은 알려주세요...
+        return SliceUtil.valueOf(
+                comments.stream()
+                        .map(
+                                comment ->
+                                        CommentDto.of(
+                                                comment,
+                                                idCardAdaptor
+                                                        .findByCommunityIdAndUserId(
+                                                                idCard.getCommunityId(),
+                                                                comment.getUserId())
+                                                        .getUserInfo(),
+                                                currentUser.getId()))
+                        .toList(),
+                pageable);
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */

@@ -2,6 +2,7 @@ package com.dingdong.api.idcard.controller;
 
 
 import com.dingdong.api.global.response.IdResponse;
+import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,12 +76,10 @@ public class IdCardController {
         idCardService.createCommentReply(idCardsId, commentId, body);
     }
 
-    @Operation(
-            summary = "주민증 댓글 조회",
-            description =
-                    "스키마 전달 작업 중에는 sliceResponse로 묶인걸 보여줄 수가 없어서 해당 result가 페이지네이션으로 묶인다고 생각하시면 됩니당")
+    @Operation(summary = "주민증 댓글 조회")
     @GetMapping("/{idCardsId}/comments")
-    public CommentDto getComments(@PathVariable Long idCardsId) {
+    public SliceResponse getComments(
+            @PathVariable Long idCardsId, @PageableDefault Pageable pageable) {
         return new CommentDto();
     }
 
