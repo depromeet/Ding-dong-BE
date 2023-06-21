@@ -34,10 +34,4 @@ public class NotificationController {
             @PageableDefault Pageable pageable) {
         return new NotificationDto();
     }
-
-    @Operation(summary = "알림 행성 목록 조회")
-    @GetMapping("/communities")
-    public NotificationCommunityResponse getNotificationCommunities() {
-        return new NotificationCommunityResponse();
-    }
 }
