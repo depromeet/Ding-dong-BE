@@ -2,6 +2,9 @@ package com.dingdong.domain.domains.idcard.validator;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.ALREADY_EXIST_COMMENT_LIKE;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.ALREADY_EXIST_COMMENT_REPLY_LIKE;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_LIKE_USER;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_REPLY;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_REPLY_LIKE_USER;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_REPLY_USER;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_USER;
 
@@ -46,6 +49,12 @@ public class CommentValidator {
         }
     }
 
+    public void isValidCommentReply(Comment comment, CommentReply commentReply) {
+        if (!Objects.equals(comment.getId(), commentReply.getId())) {
+            throw new BaseException(NOT_VALID_COMMENT_REPLY);
+        }
+    }
+
     public void isValidCommentUser(Comment comment, Long userId) {
         if (!Objects.equals(comment.getUserId(), userId)) {
             throw new BaseException(NOT_VALID_COMMENT_USER);
@@ -55,6 +64,18 @@ public class CommentValidator {
     public void isValidCommentReplyUser(CommentReply commentReply, Long userId) {
         if (!Objects.equals(commentReply.getUserId(), userId)) {
             throw new BaseException(NOT_VALID_COMMENT_REPLY_USER);
+        }
+    }
+
+    public void isValidCommentLikeUser(CommentLike commentLike, Long userId) {
+        if (!Objects.equals(commentLike.getUserId(), userId)) {
+            throw new BaseException(NOT_VALID_COMMENT_LIKE_USER);
+        }
+    }
+
+    public void isValidCommentReplyLikeUser(CommentReplyLike commentReplyLike, Long userId) {
+        if (!Objects.equals(commentReplyLike.getUserId(), userId)) {
+            throw new BaseException(NOT_VALID_COMMENT_REPLY_LIKE_USER);
         }
     }
 }

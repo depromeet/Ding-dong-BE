@@ -108,9 +108,9 @@ public class IdCardService {
     /** 댓글 생성 */
     @Transactional
     public Long createComment(Long idCardId, CreateCommentRequest request) {
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
         User currentUser = userHelper.getCurrentUser();
+
+        IdCard idCard = idCardAdaptor.findById(idCardId);
 
         Comment comment =
                 Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
@@ -118,26 +118,21 @@ public class IdCardService {
         return commentAdaptor.save(comment).getId();
     }
 
+    /** 대댓글 생성 */
     @Transactional
     public void createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
         User currentUser = userHelper.getCurrentUser();
 
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment = commentAdaptor.findById(commentId);
-
-        idCardValidator.isValidIdCardComment(idCard, comment);
+        Comment comment = getComment(idCardId, commentId);
 
         CommentReply commentReply =
                 CommentReply.toEntity(
-                        idCard.getId(),
-                        comment.getId(),
-                        currentUser.getId(),
-                        request.getContents());
+                        idCardId, comment.getId(), currentUser.getId(), request.getContents());
 
         comment.updateReplies(commentReply);
     }
 
+    /** 댓글 조회 */
     public Slice<CommentDto> getComments(Long idCardId, Pageable pageable) {
         User currentUser = userHelper.getCurrentUser();
 
@@ -162,32 +157,24 @@ public class IdCardService {
                 pageable);
     }
 
+    /** 댓글 좋아요 생성 */
     @Transactional
     public void createCommentLike(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
 
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment = commentAdaptor.findById(commentId);
-
-        idCardValidator.isValidIdCardComment(idCard, comment);
+        Comment comment = getComment(idCardId, commentId);
 
         commentValidator.isExistCommentLike(comment, currentUser.getId());
 
         comment.updateLikes(CommentLike.toEntity(comment.getId(), currentUser.getId()));
     }
 
+    /** 대댓글 좋아요 생성 */
     @Transactional
     public void createCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
 
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment = commentAdaptor.findById(commentId);
-
-        idCardValidator.isValidIdCardComment(idCard, comment);
-
-        CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
+        CommentReply commentReply = getCommentReply(idCardId, commentId, commentReplyId);
 
         commentValidator.isExistCommentReplyLike(commentReply, currentUser.getId());
 
@@ -195,15 +182,12 @@ public class IdCardService {
                 CommentReplyLike.toEntity(commentReplyId, currentUser.getId()));
     }
 
+    /** 댓글 삭제 */
     @Transactional
     public void deleteComment(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
 
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment = commentAdaptor.findById(commentId);
-
-        idCardValidator.isValidIdCardComment(idCard, comment);
+        Comment comment = getComment(idCardId, commentId);
 
         commentValidator.isValidCommentUser(comment, currentUser.getId());
 
@@ -211,21 +195,48 @@ public class IdCardService {
         commentAdaptor.deleteComment(comment);
     }
 
+    /** 대댓글 삭제 */
     @Transactional
     public void deleteCommentReply(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
 
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment = commentAdaptor.findById(commentId);
-
-        idCardValidator.isValidIdCardComment(idCard, comment);
+        Comment comment = getComment(idCardId, commentId);
 
         CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
 
         commentValidator.isValidCommentReplyUser(commentReply, currentUser.getId());
 
         comment.deleteReply(commentReply);
+    }
+
+    /** 댓글 좋아요 취소 */
+    @Transactional
+    public void deleteCommentLike(Long idCardId, Long commentId, Long commentLikeId) {
+        User currentUser = userHelper.getCurrentUser();
+
+        Comment comment = getComment(idCardId, commentId);
+
+        CommentLike commentLike = commentAdaptor.findCommentLike(comment, commentLikeId);
+
+        commentValidator.isValidCommentLikeUser(commentLike, currentUser.getId());
+
+        comment.deleteLike(commentLike);
+    }
+
+    /** 대댓글 좋아요 취소 */
+    @Transactional
+    public void deleteCommentReplyLike(
+            Long idCardId, Long commentId, Long commentReplyId, Long commentReplyLikeId) {
+        User currentUser = userHelper.getCurrentUser();
+
+        CommentReply commentReply = getCommentReply(idCardId, commentId, commentReplyId);
+
+        CommentReplyLike commentReplyLike =
+                commentAdaptor.findCommentReplyLike(commentReply, commentReplyLikeId);
+
+        commentValidator.isValidCommentReplyLikeUser(commentReplyLike, currentUser.getId());
+
+        commentReply.deleteLike(commentReplyLike);
     }
 
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */
@@ -290,5 +301,25 @@ public class IdCardService {
 
         // orphanRemoval 적용
         keywords.clear();
+    }
+
+    private Comment getComment(Long idCardId, Long commentId) {
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Comment comment = commentAdaptor.findById(commentId);
+
+        idCardValidator.isValidIdCardComment(idCard, comment);
+
+        return comment;
+    }
+
+    private CommentReply getCommentReply(Long idCardId, Long commentId, Long commentReplyId) {
+        Comment comment = getComment(idCardId, commentId);
+
+        CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
+
+        commentValidator.isValidCommentReply(comment, commentReply);
+
+        return commentReply;
     }
 }

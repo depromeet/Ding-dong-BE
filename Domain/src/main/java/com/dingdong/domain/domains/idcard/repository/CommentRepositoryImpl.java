@@ -2,8 +2,6 @@ package com.dingdong.domain.domains.idcard.repository;
 
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
-import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReply.commentReply;
-import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
@@ -23,10 +21,6 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
         List<Comment> comments =
                 queryFactory
                         .selectFrom(comment)
-                        .leftJoin(idCard)
-                        .on(idCard.id.eq(comment.idCardId))
-                        .leftJoin(comment.replies, commentReply)
-                        .fetchJoin()
                         .leftJoin(comment.likes, commentLike)
                         .fetchJoin()
                         .where(comment.idCardId.eq(idCardId))

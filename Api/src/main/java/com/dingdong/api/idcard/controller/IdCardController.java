@@ -114,21 +114,22 @@ public class IdCardController {
 
     @Operation(summary = "주민증 댓글 좋아요 취소")
     @DeleteMapping("/{idCardsId}/comments/{commentId}/likes/{commentLikeId}")
-    public IdResponse deleteCommentLike(
+    public void deleteCommentLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentLikeId) {
-        return IdResponse.from(1L);
+        idCardService.deleteCommentLike(idCardsId, commentId, commentLikeId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요 취소")
     @DeleteMapping(
             "/{idCardsId}/comments/{commentId}/likes/{commentLikeId}/reply-likes/{commentReplyLikeId}")
-    public IdResponse deleteCommentReplyLike(
+    public void deleteCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentLikeId,
             @PathVariable Long commentReplyLikeId) {
-        return IdResponse.from(1L);
+        idCardService.deleteCommentReplyLike(
+                idCardsId, commentId, commentLikeId, commentReplyLikeId);
     }
 }

@@ -1,12 +1,16 @@
 package com.dingdong.domain.domains.idcard.adaptor;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_LIKE;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_REPLY;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_REPLY_LIKE;
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
+import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
+import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
 import com.dingdong.domain.domains.idcard.repository.CommentRepository;
 import java.util.List;
 import java.util.Objects;
@@ -45,5 +49,27 @@ public class CommentAdaptor {
 
     public void deleteComment(Comment comment) {
         commentRepository.delete(comment);
+    }
+
+    public CommentLike findCommentLike(Comment comment, Long commentLikeId) {
+        List<CommentLike> likes = comment.getLikes();
+
+        return likes.stream()
+                .filter(commentLike -> Objects.equals(commentLike.getId(), commentLikeId))
+                .findFirst()
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_LIKE));
+    }
+
+    public CommentReplyLike findCommentReplyLike(
+            CommentReply commentReply, Long commentReplyLikeId) {
+        List<CommentReplyLike> replyLikes = commentReply.getReplyLikes();
+
+        return replyLikes.stream()
+                .filter(
+                        commentReplyLike ->
+                                Objects.equals(
+                                        commentReplyLike.getCommentReplyId(), commentReplyLikeId))
+                .findFirst()
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY_LIKE));
     }
 }

@@ -21,7 +21,12 @@ public enum IdCardErrorCode implements BaseErrorCode {
     NOT_FOUND_COMMENT_LIKE(NOT_FOUND, "CommentLike-404-1", "존재하지 않는 댓글 좋아요입니다."),
     NOT_FOUND_COMMENT_REPLY(NOT_FOUND, "CommentReply-404-1", "존재하지 않는 대댓글입니다."),
     NOT_VALID_COMMENT_USER(BAD_REQUEST, "Comment-400-1", "해당 유저가 작성한 댓글이 아닙니다."),
-    NOT_VALID_COMMENT_REPLY_USER(BAD_REQUEST, "CommentReply-400-2", "해당 유저가 작성한 대댓글이 아닙니다.");
+    NOT_VALID_COMMENT_REPLY_USER(BAD_REQUEST, "CommentReply-400-2", "해당 유저가 작성한 대댓글이 아닙니다."),
+    NOT_VALID_COMMENT_LIKE_USER(BAD_REQUEST, "CommentLike-400-2", "해당 유저가 누른 댓글 좋아요가 아닙니다."),
+    NOT_VALID_COMMENT_REPLY_LIKE_USER(
+            BAD_REQUEST, "CommentReplyLike-400-2", "해당 유저가 누른 대댓글 좋아요가 아닙니다."),
+    NOT_VALID_COMMENT_REPLY(BAD_REQUEST, "Comment-400-2", "해당 댓글의 대댓글이 아닙니다."),
+    NOT_FOUND_COMMENT_REPLY_LIKE(NOT_FOUND, "CommentReplyLike-404-1", "존재하지 않는 대댓글 좋아요입니다.");
 
     private final Integer statusCode;
     private final String errorCode;
