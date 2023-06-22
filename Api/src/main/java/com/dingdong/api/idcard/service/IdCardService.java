@@ -61,6 +61,13 @@ public class IdCardService {
         return IdCardDetailsDto.of(idCard, keywordDtos);
     }
 
+    /** 댓글 개수 조회 */
+    public int getCommentCount(Long idCardId) {
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        return commentAdaptor.findAllByIdCard(idCard.getId()).size();
+    }
+
     /** 주민증 생성 */
     @Transactional
     public Long createIdCard(CreateIdCardRequest request) {
@@ -318,7 +325,7 @@ public class IdCardService {
 
         CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
 
-        commentValidator.isValidCommentReply(comment, commentReply);
+        commentValidator.isValidCommentReply(commentReply, comment.getId());
 
         return commentReply;
     }

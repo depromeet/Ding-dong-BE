@@ -49,8 +49,8 @@ public class CommentValidator {
         }
     }
 
-    public void isValidCommentReply(Comment comment, CommentReply commentReply) {
-        if (!Objects.equals(comment.getId(), commentReply.getId())) {
+    public void isValidCommentReply(CommentReply commentReply, Long commentId) {
+        if (!Objects.equals(commentReply.getCommentId(), commentId)) {
             throw new BaseException(NOT_VALID_COMMENT_REPLY);
         }
     }

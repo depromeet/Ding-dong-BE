@@ -67,9 +67,12 @@ public class CommentAdaptor {
         return replyLikes.stream()
                 .filter(
                         commentReplyLike ->
-                                Objects.equals(
-                                        commentReplyLike.getCommentReplyId(), commentReplyLikeId))
+                                Objects.equals(commentReplyLike.getId(), commentReplyLikeId))
                 .findFirst()
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY_LIKE));
+    }
+
+    public List<Comment> findAllByIdCard(Long idCardId) {
+        return commentRepository.findAllByIdCardId(idCardId);
     }
 }

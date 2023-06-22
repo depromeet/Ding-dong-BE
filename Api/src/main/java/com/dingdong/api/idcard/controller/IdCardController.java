@@ -43,7 +43,7 @@ public class IdCardController {
     @Operation(summary = "댓글 갯수 조회")
     @GetMapping("/{idCardsId}/comment-count")
     public CommentCountResponse getCommentCount(@PathVariable Long idCardsId) {
-        return new CommentCountResponse();
+        return CommentCountResponse.from(idCardService.getCommentCount(idCardsId));
     }
 
     @Operation(summary = "주민증 생성")
@@ -123,13 +123,13 @@ public class IdCardController {
 
     @Operation(summary = "주민증 대댓글 좋아요 취소")
     @DeleteMapping(
-            "/{idCardsId}/comments/{commentId}/likes/{commentLikeId}/reply-likes/{commentReplyLikeId}")
+            "/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes/{commentReplyLikeId}")
     public void deleteCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
-            @PathVariable Long commentLikeId,
+            @PathVariable Long commentReplyId,
             @PathVariable Long commentReplyLikeId) {
         idCardService.deleteCommentReplyLike(
-                idCardsId, commentId, commentLikeId, commentReplyLikeId);
+                idCardsId, commentId, commentReplyId, commentReplyLikeId);
     }
 }
