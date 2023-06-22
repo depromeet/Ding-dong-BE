@@ -42,4 +42,8 @@ public class CommentAdaptor {
                 .findFirst()
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY));
     }
+
+    public void deleteComment(Comment comment) {
+        commentRepository.delete(comment);
+    }
 }

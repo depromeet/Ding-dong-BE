@@ -195,6 +195,39 @@ public class IdCardService {
                 CommentReplyLike.toEntity(commentReplyId, currentUser.getId()));
     }
 
+    @Transactional
+    public void deleteComment(Long idCardId, Long commentId) {
+        User currentUser = userHelper.getCurrentUser();
+
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Comment comment = commentAdaptor.findById(commentId);
+
+        idCardValidator.isValidIdCardComment(idCard, comment);
+
+        commentValidator.isValidCommentUser(comment, currentUser.getId());
+
+        // Todo: softdelete 적용하면 교체 예정
+        commentAdaptor.deleteComment(comment);
+    }
+
+    @Transactional
+    public void deleteCommentReply(Long idCardId, Long commentId, Long commentReplyId) {
+        User currentUser = userHelper.getCurrentUser();
+
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Comment comment = commentAdaptor.findById(commentId);
+
+        idCardValidator.isValidIdCardComment(idCard, comment);
+
+        CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
+
+        commentValidator.isValidCommentReplyUser(commentReply, currentUser.getId());
+
+        comment.deleteReply(commentReply);
+    }
+
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */
     private Community findAndValidateCommunity(Long communityId, Long currentUserId) {
         // community validation

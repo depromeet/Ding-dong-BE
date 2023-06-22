@@ -99,17 +99,17 @@ public class IdCardController {
 
     @Operation(summary = "주민증 댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}")
-    public IdResponse deleteComment(@PathVariable Long idCardsId, @PathVariable Long commentId) {
-        return IdResponse.from(1L);
+    public void deleteComment(@PathVariable Long idCardsId, @PathVariable Long commentId) {
+        idCardService.deleteComment(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}")
-    public IdResponse deleteCommentReply(
+    public void deleteCommentReply(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId) {
-        return IdResponse.from(1L);
+        idCardService.deleteCommentReply(idCardsId, commentId, commentReplyId);
     }
 
     @Operation(summary = "주민증 댓글 좋아요 취소")

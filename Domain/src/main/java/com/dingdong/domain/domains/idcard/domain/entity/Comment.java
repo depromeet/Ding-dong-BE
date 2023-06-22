@@ -55,4 +55,8 @@ public class Comment extends AbstractTimeStamp {
     public void updateLikes(CommentLike commentLike) {
         likes.add(commentLike);
     }
+
+    public void deleteReply(CommentReply commentReply) {
+        replies.remove(commentReply);
+    }
 }

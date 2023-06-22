@@ -2,6 +2,8 @@ package com.dingdong.domain.domains.idcard.validator;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.ALREADY_EXIST_COMMENT_LIKE;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.ALREADY_EXIST_COMMENT_REPLY_LIKE;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_REPLY_USER;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_COMMENT_USER;
 
 import com.dingdong.core.annotation.Validator;
 import com.dingdong.core.exception.BaseException;
@@ -41,6 +43,18 @@ public class CommentValidator {
 
         if (isExist) {
             throw new BaseException(ALREADY_EXIST_COMMENT_REPLY_LIKE);
+        }
+    }
+
+    public void isValidCommentUser(Comment comment, Long userId) {
+        if (!Objects.equals(comment.getUserId(), userId)) {
+            throw new BaseException(NOT_VALID_COMMENT_USER);
+        }
+    }
+
+    public void isValidCommentReplyUser(CommentReply commentReply, Long userId) {
+        if (!Objects.equals(commentReply.getUserId(), userId)) {
+            throw new BaseException(NOT_VALID_COMMENT_REPLY_USER);
         }
     }
 }
