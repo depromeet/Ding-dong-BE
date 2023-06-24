@@ -2,6 +2,7 @@ package com.dingdong.api.community.service;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
 
+import com.dingdong.api.community.controller.request.CreateCommunityNameRequest;
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
@@ -58,6 +59,7 @@ public class CommunityService {
     // 행성 만들기
     @Transactional
     public Long createCommunity(CreateCommunityRequest request) {
+        validateCommunityName(request.getName());
         return communityAdaptor
                 .save(
                         createCommunityEntity(request.getName(), request.getLogoImageUrl()),
@@ -101,6 +103,14 @@ public class CommunityService {
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
+    }
+
+    public void checkDuplicatedName(CreateCommunityNameRequest request) {
+        validateCommunityName(request.getName());
+    }
+
+    private void validateCommunityName(String name) {
+        communityValidator.isAlreadyExistCommunityName(name);
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {

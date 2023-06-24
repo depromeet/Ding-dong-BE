@@ -1,6 +1,7 @@
 package com.dingdong.api.community.controller;
 
 
+import com.dingdong.api.community.controller.request.CreateCommunityNameRequest;
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
@@ -62,5 +63,11 @@ public class CommunityController {
     @GetMapping("/{communityId}/users/idCards")
     public IdCardDetailsResponse getUserIdCardDetails(@PathVariable Long communityId) {
         return IdCardDetailsResponse.from(communityService.getUserIdCardDetails(communityId));
+    }
+
+    @Operation(summary = "행성 이름 중복 체크")
+    @PostMapping("/check")
+    public void checkDuplicatedName(@RequestBody @Valid CreateCommunityNameRequest request) {
+        communityService.checkDuplicatedName(request);
     }
 }

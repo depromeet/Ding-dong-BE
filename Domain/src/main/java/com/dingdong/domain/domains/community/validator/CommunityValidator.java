@@ -27,4 +27,10 @@ public class CommunityValidator {
     public boolean isAlreadyExistInvitationCode(String code) {
         return communityAdaptor.isAlreadyExistInvitationCode(code);
     }
+
+    public void isAlreadyExistCommunityName(String name) {
+        if (communityAdaptor.isAlreadyExistCommunityName(name)) {
+            throw new BaseException(CommunityErrorCode.ALREADY_EXIST_COMMUNITY_NAME);
+        }
+    }
 }
