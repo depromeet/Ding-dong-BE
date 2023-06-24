@@ -2,22 +2,15 @@ package com.dingdong.api.idcard.service;
 
 
 import com.dingdong.api.global.helper.UserHelper;
-import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
-import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.dto.CreateKeywordDto;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
-import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.Community;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
-import com.dingdong.domain.domains.idcard.domain.entity.Comment;
-import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
-import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
-import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
 import com.dingdong.domain.domains.idcard.validator.CommentValidator;
@@ -28,8 +21,6 @@ import com.dingdong.domain.domains.user.domain.User;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -112,140 +103,6 @@ public class IdCardService {
         return updateIdCard.getId();
     }
 
-    /** 댓글 생성 */
-    @Transactional
-    public Long createComment(Long idCardId, CreateCommentRequest request) {
-        User currentUser = userHelper.getCurrentUser();
-
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment =
-                Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
-
-        return commentAdaptor.save(comment).getId();
-    }
-
-    /** 대댓글 생성 */
-    @Transactional
-    public void createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
-        User currentUser = userHelper.getCurrentUser();
-
-        Comment comment = getComment(idCardId, commentId);
-
-        CommentReply commentReply =
-                CommentReply.toEntity(
-                        idCardId, comment.getId(), currentUser.getId(), request.getContents());
-
-        comment.updateReplies(commentReply);
-    }
-
-    /** 댓글 조회 */
-    public Slice<CommentDto> getComments(Long idCardId, Pageable pageable) {
-        User currentUser = userHelper.getCurrentUser();
-
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Slice<Comment> comments = commentAdaptor.findCommentsByIdCard(idCard.getId(), pageable);
-
-        // comment 작성한 userInfo 가져오는 좋은 방법 아는분은 알려주세요...
-        return SliceUtil.valueOf(
-                comments.stream()
-                        .map(
-                                comment ->
-                                        CommentDto.of(
-                                                comment,
-                                                idCardAdaptor
-                                                        .findByCommunityIdAndUserId(
-                                                                idCard.getCommunityId(),
-                                                                comment.getUserId())
-                                                        .getUserInfo(),
-                                                currentUser.getId()))
-                        .toList(),
-                pageable);
-    }
-
-    /** 댓글 좋아요 생성 */
-    @Transactional
-    public void createCommentLike(Long idCardId, Long commentId) {
-        User currentUser = userHelper.getCurrentUser();
-
-        Comment comment = getComment(idCardId, commentId);
-
-        commentValidator.isExistCommentLike(comment, currentUser.getId());
-
-        comment.updateLikes(CommentLike.toEntity(comment.getId(), currentUser.getId()));
-    }
-
-    /** 대댓글 좋아요 생성 */
-    @Transactional
-    public void createCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
-        User currentUser = userHelper.getCurrentUser();
-
-        CommentReply commentReply = getCommentReply(idCardId, commentId, commentReplyId);
-
-        commentValidator.isExistCommentReplyLike(commentReply, currentUser.getId());
-
-        commentReply.updateReplyLikes(
-                CommentReplyLike.toEntity(commentReplyId, currentUser.getId()));
-    }
-
-    /** 댓글 삭제 */
-    @Transactional
-    public void deleteComment(Long idCardId, Long commentId) {
-        User currentUser = userHelper.getCurrentUser();
-
-        Comment comment = getComment(idCardId, commentId);
-
-        commentValidator.isValidCommentUser(comment, currentUser.getId());
-
-        // Todo: softdelete 적용하면 교체 예정
-        commentAdaptor.deleteComment(comment);
-    }
-
-    /** 대댓글 삭제 */
-    @Transactional
-    public void deleteCommentReply(Long idCardId, Long commentId, Long commentReplyId) {
-        User currentUser = userHelper.getCurrentUser();
-
-        Comment comment = getComment(idCardId, commentId);
-
-        CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
-
-        commentValidator.isValidCommentReplyUser(commentReply, currentUser.getId());
-
-        comment.deleteReply(commentReply);
-    }
-
-    /** 댓글 좋아요 취소 */
-    @Transactional
-    public void deleteCommentLike(Long idCardId, Long commentId, Long commentLikeId) {
-        User currentUser = userHelper.getCurrentUser();
-
-        Comment comment = getComment(idCardId, commentId);
-
-        CommentLike commentLike = commentAdaptor.findCommentLike(comment, commentLikeId);
-
-        commentValidator.isValidCommentLikeUser(commentLike, currentUser.getId());
-
-        comment.deleteLike(commentLike);
-    }
-
-    /** 대댓글 좋아요 취소 */
-    @Transactional
-    public void deleteCommentReplyLike(
-            Long idCardId, Long commentId, Long commentReplyId, Long commentReplyLikeId) {
-        User currentUser = userHelper.getCurrentUser();
-
-        CommentReply commentReply = getCommentReply(idCardId, commentId, commentReplyId);
-
-        CommentReplyLike commentReplyLike =
-                commentAdaptor.findCommentReplyLike(commentReply, commentReplyLikeId);
-
-        commentValidator.isValidCommentReplyLikeUser(commentReplyLike, currentUser.getId());
-
-        commentReply.deleteLike(commentReplyLike);
-    }
-
     /** idCard 생성 시 커뮤니티 찾고 해당 커뮤니티에 유저가 주민증을 만들었는지 여부 검사 */
     private Community findAndValidateCommunity(Long communityId, Long currentUserId) {
         // community validation
@@ -308,25 +165,5 @@ public class IdCardService {
 
         // orphanRemoval 적용
         keywords.clear();
-    }
-
-    private Comment getComment(Long idCardId, Long commentId) {
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        Comment comment = commentAdaptor.findById(commentId);
-
-        idCardValidator.isValidIdCardComment(idCard, comment);
-
-        return comment;
-    }
-
-    private CommentReply getCommentReply(Long idCardId, Long commentId, Long commentReplyId) {
-        Comment comment = getComment(idCardId, commentId);
-
-        CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
-
-        commentValidator.isValidCommentReply(commentReply, comment.getId());
-
-        return commentReply;
     }
 }

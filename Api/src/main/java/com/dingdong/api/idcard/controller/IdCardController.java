@@ -8,6 +8,7 @@ import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
 import com.dingdong.api.idcard.controller.response.CommentCountResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
+import com.dingdong.api.idcard.service.CommentService;
 import com.dingdong.api.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -33,6 +34,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class IdCardController {
 
     private final IdCardService idCardService;
+
+    private final CommentService commentService;
 
     @Operation(summary = "주민증 세부 조회")
     @GetMapping("/{idCardsId}")
@@ -63,7 +66,7 @@ public class IdCardController {
     @PostMapping("/{idCardsId}/comments")
     public IdResponse postComment(
             @PathVariable Long idCardsId, @RequestBody @Valid CreateCommentRequest body) {
-        return IdResponse.from(idCardService.createComment(idCardsId, body));
+        return IdResponse.from(commentService.createComment(idCardsId, body));
     }
 
     @Operation(summary = "주민증 대댓글 달기")
@@ -72,20 +75,20 @@ public class IdCardController {
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @RequestBody @Valid CreateCommentRequest body) {
-        idCardService.createCommentReply(idCardsId, commentId, body);
+        commentService.createCommentReply(idCardsId, commentId, body);
     }
 
     @Operation(summary = "주민증 댓글 조회")
     @GetMapping("/{idCardsId}/comments")
     public SliceResponse getComments(
             @PathVariable Long idCardsId, @PageableDefault Pageable pageable) {
-        return SliceResponse.from(idCardService.getComments(idCardsId, pageable));
+        return SliceResponse.from(commentService.getComments(idCardsId, pageable));
     }
 
     @Operation(summary = "주민증 댓글 좋아요")
     @PostMapping("/{idCardsId}/comments/{commentId}/likes")
     public void postCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
-        idCardService.createCommentLike(idCardsId, commentId);
+        commentService.createCommentLike(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요")
@@ -94,13 +97,13 @@ public class IdCardController {
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId) {
-        idCardService.createCommentReplyLike(idCardsId, commentId, commentReplyId);
+        commentService.createCommentReplyLike(idCardsId, commentId, commentReplyId);
     }
 
     @Operation(summary = "주민증 댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}")
     public void deleteComment(@PathVariable Long idCardsId, @PathVariable Long commentId) {
-        idCardService.deleteComment(idCardsId, commentId);
+        commentService.deleteComment(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 삭제")
@@ -109,7 +112,7 @@ public class IdCardController {
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId) {
-        idCardService.deleteCommentReply(idCardsId, commentId, commentReplyId);
+        commentService.deleteCommentReply(idCardsId, commentId, commentReplyId);
     }
 
     @Operation(summary = "주민증 댓글 좋아요 취소")
@@ -118,7 +121,7 @@ public class IdCardController {
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentLikeId) {
-        idCardService.deleteCommentLike(idCardsId, commentId, commentLikeId);
+        commentService.deleteCommentLike(idCardsId, commentId, commentLikeId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요 취소")
@@ -129,7 +132,7 @@ public class IdCardController {
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId,
             @PathVariable Long commentReplyLikeId) {
-        idCardService.deleteCommentReplyLike(
+        commentService.deleteCommentReplyLike(
                 idCardsId, commentId, commentReplyId, commentReplyLikeId);
     }
 }
