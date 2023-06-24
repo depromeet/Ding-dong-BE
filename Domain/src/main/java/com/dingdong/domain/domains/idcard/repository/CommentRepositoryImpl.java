@@ -2,9 +2,11 @@ package com.dingdong.domain.domains.idcard.repository;
 
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
+import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 
 import com.dingdong.domain.common.util.SliceUtil;
-import com.dingdong.domain.domains.idcard.domain.entity.Comment;
+import com.dingdong.domain.domains.idcard.domain.vo.CommentVo;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +19,15 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Comment> findCommentsByIdCardId(Long idCardId, Pageable pageable) {
-        List<Comment> comments =
+    public Slice<CommentVo> findCommentsByIdCardId(Long idCardId, Pageable pageable) {
+        List<CommentVo> comments =
                 queryFactory
-                        .selectFrom(comment)
+                        .select(Projections.constructor(CommentVo.class, comment, idCard))
+                        .from(comment)
                         .leftJoin(comment.likes, commentLike)
                         .fetchJoin()
+                        .join(idCard)
+                        .on(idCard.id.eq(comment.idCardId))
                         .where(comment.idCardId.eq(idCardId))
                         .orderBy(comment.id.desc())
                         .offset(pageable.getOffset())

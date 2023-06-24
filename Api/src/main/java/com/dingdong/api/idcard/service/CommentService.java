@@ -12,6 +12,7 @@ import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
+import com.dingdong.domain.domains.idcard.domain.vo.CommentVo;
 import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.user.domain.User;
@@ -69,20 +70,15 @@ public class CommentService {
 
         IdCard idCard = idCardAdaptor.findById(idCardId);
 
-        Slice<Comment> comments = commentAdaptor.findCommentsByIdCard(idCard.getId(), pageable);
+        Slice<CommentVo> comments = commentAdaptor.findCommentsByIdCard(idCard.getId(), pageable);
 
-        // comment 작성한 userInfo 가져오는 좋은 방법 아는분은 알려주세요...
         return SliceUtil.valueOf(
                 comments.stream()
                         .map(
-                                comment ->
+                                commentVo ->
                                         CommentDto.of(
-                                                comment,
-                                                idCardAdaptor
-                                                        .findByCommunityIdAndUserId(
-                                                                idCard.getCommunityId(),
-                                                                comment.getUserId())
-                                                        .getUserInfo(),
+                                                commentVo.getComment(),
+                                                commentVo.getUserInfo(),
                                                 currentUser.getId()))
                         .toList(),
                 pageable);
@@ -122,8 +118,7 @@ public class CommentService {
 
         commentValidator.isValidCommentUser(comment, currentUser.getId());
 
-        // Todo: softdelete 적용하면 교체 예정
-        commentAdaptor.deleteComment(comment);
+        comment.delete();
     }
 
     /** 대댓글 삭제 */

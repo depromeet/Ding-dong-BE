@@ -11,6 +11,7 @@ import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
+import com.dingdong.domain.domains.idcard.domain.vo.CommentVo;
 import com.dingdong.domain.domains.idcard.repository.CommentRepository;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class CommentAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
     }
 
-    public Slice<Comment> findCommentsByIdCard(Long idCardId, Pageable pageable) {
+    public Slice<CommentVo> findCommentsByIdCard(Long idCardId, Pageable pageable) {
         return commentRepository.findCommentsByIdCardId(idCardId, pageable);
     }
 
@@ -45,10 +46,6 @@ public class CommentAdaptor {
                 .filter(commentReply -> Objects.equals(commentReply.getId(), commentReplyId))
                 .findFirst()
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY));
-    }
-
-    public void deleteComment(Comment comment) {
-        commentRepository.delete(comment);
     }
 
     public CommentLike findCommentLike(Comment comment, Long commentLikeId) {
