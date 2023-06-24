@@ -41,14 +41,15 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                                         comment.content,
                                         idCard.id))
                         .from(notification)
-                        .where(notification.userId.eq(userId))
+                        .where(
+                                notification.userId.eq(userId),
+                                notification.createdAt.after(fiveWeeksAgo))
                         .join(community)
                         .on(community.id.eq(notification.content.communityId))
                         .join(idCard)
                         .on(idCard.userInfo.userId.eq(notification.content.fromUserId))
                         .join(comment)
                         .on(notification.content.commentId.eq(comment.id))
-                        .where(notification.createdAt.after(fiveWeeksAgo))
                         .orderBy(notification.id.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
