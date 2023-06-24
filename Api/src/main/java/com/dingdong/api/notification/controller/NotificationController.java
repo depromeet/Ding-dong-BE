@@ -32,7 +32,7 @@ public class NotificationController {
     }
 
     @Operation(summary = "알림 읽음 처리")
-    @GetMapping("/{notificationId}/read")
+    @PutMapping("/{notificationId}/read")
     public void readNotification(@PathVariable Long notificationId) {}
 
     @Operation(summary = "알림 목록 조회")
