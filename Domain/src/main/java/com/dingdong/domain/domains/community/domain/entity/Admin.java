@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.community.domain;
+package com.dingdong.domain.domains.community.domain.entity;
 
 
 import com.dingdong.domain.domains.community.domain.enums.AdminRole;
