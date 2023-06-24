@@ -15,7 +15,7 @@ public enum CharacterType {
 
     public static CharacterType findCharacterType(String type) {
         return Arrays.stream(values())
-                .filter(c -> c.name().equals(type))
+                .filter(c -> c.name().equals(type.toUpperCase()))
                 .findAny()
                 .orElseThrow(() -> new BaseException(NOT_FOUND_CHARACTER_TYPE));
     }

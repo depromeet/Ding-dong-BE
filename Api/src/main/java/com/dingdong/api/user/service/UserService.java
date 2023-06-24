@@ -27,8 +27,6 @@ public class UserService {
     public void saveUserCharacter(UserCharacterRequest request) {
         userHelper
                 .getCurrentUser()
-                .updateCharacter(
-                        Character.toEntity(
-                                findCharacterType(request.getCharacter().toUpperCase())));
+                .updateCharacter(Character.toEntity(findCharacterType(request.getCharacter())));
     }
 }
