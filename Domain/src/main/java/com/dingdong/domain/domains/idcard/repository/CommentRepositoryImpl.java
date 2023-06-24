@@ -1,5 +1,6 @@
 package com.dingdong.domain.domains.idcard.repository;
 
+import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
@@ -28,7 +29,7 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                         .fetchJoin()
                         .join(idCard)
                         .on(idCard.id.eq(comment.idCardId))
-                        .where(comment.idCardId.eq(idCardId))
+                        .where(comment.idCardId.eq(idCardId), comment.isDeleted.eq(N))
                         .orderBy(comment.id.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)

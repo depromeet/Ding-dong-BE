@@ -137,30 +137,26 @@ public class CommentService {
 
     /** 댓글 좋아요 취소 */
     @Transactional
-    public void deleteCommentLike(Long idCardId, Long commentId, Long commentLikeId) {
+    public void deleteCommentLike(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
 
         Comment comment = getComment(idCardId, commentId);
 
-        CommentLike commentLike = commentAdaptor.findCommentLike(comment, commentLikeId);
-
-        commentValidator.isValidCommentLikeUser(commentLike, currentUser.getId());
+        CommentLike commentLike =
+                commentAdaptor.findCommentLikeByUserId(comment, currentUser.getId());
 
         comment.deleteLike(commentLike);
     }
 
     /** 대댓글 좋아요 취소 */
     @Transactional
-    public void deleteCommentReplyLike(
-            Long idCardId, Long commentId, Long commentReplyId, Long commentReplyLikeId) {
+    public void deleteCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
 
         CommentReply commentReply = getCommentReply(idCardId, commentId, commentReplyId);
 
         CommentReplyLike commentReplyLike =
-                commentAdaptor.findCommentReplyLike(commentReply, commentReplyLikeId);
-
-        commentValidator.isValidCommentReplyLikeUser(commentReplyLike, currentUser.getId());
+                commentAdaptor.findCommentReplyLike(commentReply, currentUser.getId());
 
         commentReply.deleteLike(commentReplyLike);
     }

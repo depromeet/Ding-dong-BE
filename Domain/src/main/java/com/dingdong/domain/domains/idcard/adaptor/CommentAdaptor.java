@@ -1,5 +1,6 @@
 package com.dingdong.domain.domains.idcard.adaptor;
 
+import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_LIKE;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_REPLY;
@@ -31,7 +32,7 @@ public class CommentAdaptor {
 
     public Comment findById(Long commentId) {
         return commentRepository
-                .findById(commentId)
+                .findByIdAndIsDeleted(commentId, N)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
     }
 
@@ -48,28 +49,27 @@ public class CommentAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY));
     }
 
-    public CommentLike findCommentLike(Comment comment, Long commentLikeId) {
+    public CommentLike findCommentLikeByUserId(Comment comment, Long currentUserId) {
         List<CommentLike> likes = comment.getLikes();
 
         return likes.stream()
-                .filter(commentLike -> Objects.equals(commentLike.getId(), commentLikeId))
+                .filter(commentLike -> Objects.equals(commentLike.getUserId(), currentUserId))
                 .findFirst()
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_LIKE));
     }
 
-    public CommentReplyLike findCommentReplyLike(
-            CommentReply commentReply, Long commentReplyLikeId) {
+    public CommentReplyLike findCommentReplyLike(CommentReply commentReply, Long currentUserId) {
         List<CommentReplyLike> replyLikes = commentReply.getReplyLikes();
 
         return replyLikes.stream()
                 .filter(
                         commentReplyLike ->
-                                Objects.equals(commentReplyLike.getId(), commentReplyLikeId))
+                                Objects.equals(commentReplyLike.getUserId(), currentUserId))
                 .findFirst()
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY_LIKE));
     }
 
     public List<Comment> findAllByIdCard(Long idCardId) {
-        return commentRepository.findAllByIdCardId(idCardId);
+        return commentRepository.findAllByIdCardIdAndIsDeleted(idCardId, N);
     }
 }

@@ -116,23 +116,17 @@ public class IdCardController {
     }
 
     @Operation(summary = "주민증 댓글 좋아요 취소")
-    @DeleteMapping("/{idCardsId}/comments/{commentId}/likes/{commentLikeId}")
-    public void deleteCommentLike(
-            @PathVariable Long idCardsId,
-            @PathVariable Long commentId,
-            @PathVariable Long commentLikeId) {
-        commentService.deleteCommentLike(idCardsId, commentId, commentLikeId);
+    @DeleteMapping("/{idCardsId}/comments/{commentId}/likes")
+    public void deleteCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
+        commentService.deleteCommentLike(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요 취소")
-    @DeleteMapping(
-            "/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes/{commentReplyLikeId}")
+    @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
     public void deleteCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
-            @PathVariable Long commentReplyId,
-            @PathVariable Long commentReplyLikeId) {
-        commentService.deleteCommentReplyLike(
-                idCardsId, commentId, commentReplyId, commentReplyLikeId);
+            @PathVariable Long commentReplyId) {
+        commentService.deleteCommentReplyLike(idCardsId, commentId, commentReplyId);
     }
 }
