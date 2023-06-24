@@ -1,6 +1,6 @@
 package com.dingdong.api.global.helper;
 
-import static com.dingdong.core.exception.GlobalException.NOT_FOUND_USER;
+import static com.dingdong.domain.domains.user.exception.UserErrorCode.NOT_FOUND_USER;
 
 import com.dingdong.api.config.security.SecurityUtils;
 import com.dingdong.core.annotation.Helper;

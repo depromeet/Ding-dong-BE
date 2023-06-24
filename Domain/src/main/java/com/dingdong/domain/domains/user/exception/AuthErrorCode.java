@@ -1,9 +1,10 @@
-package com.dingdong.core.exception;
+package com.dingdong.domain.domains.user.exception;
 
-import static com.dingdong.core.consts.StaticVal.*;
+import static com.dingdong.core.consts.StaticVal.UNAUTHORIZED;
 
 import com.dingdong.core.annotation.ExplainError;
 import com.dingdong.core.dto.ErrorDetail;
+import com.dingdong.core.exception.BaseErrorCode;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -11,19 +12,15 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum GlobalException implements BaseErrorCode {
-    EXAMPLE_ERROR(BAD_REQUEST, "400-0", "에러 예시 입니다."),
-    INTERNAL_SERVER_ERROR(SERVER_ERROR, "500-1", "서버 내부 오류입니다."),
+public enum AuthErrorCode implements BaseErrorCode {
+    @ExplainError("인증에 사용되는 액세스 토큰이 만료되었을 때 발생하는 오류입니다.")
     EXPIRED_TOKEN_ERROR(UNAUTHORIZED, "401-1", "토큰이 만료되었습니다."),
+    @ExplainError("인증에 사용되는 토큰의 정보가 올바르지 않을 때 발생하는 오류입니다.")
     INVALID_TOKEN_ERROR(UNAUTHORIZED, "401-2", "올바르지 않은 토큰입니다."),
+    @ExplainError("액세스 토큰을 재발급 받기 위한 리프레시 토큰이 만료되었을 때 발생하는 오류입니다.")
     EXPIRED_REFRESH_TOKEN_ERROR(UNAUTHORIZED, "401-3", "리프레시 토큰이 만료되었습니다."),
-    NOT_VALID_ACCESS_TOKEN_ERROR(UNAUTHORIZED, "401-4", "알맞은 accessToken 을 넣어주세요."),
-    SECURITY_CONTEXT_NOT_FOUND_ERROR(SERVER_ERROR, "500-2", "Security Context 에러입니다."),
-    FEIGN_SERVER_ERROR(BAD_REQUEST, "400-0", "Feign 요청 시 외부 서버 오류입니다."),
-    OUTER_SERVER_UNAUTHORIZED_EXCEPTION(UNAUTHORIZED, "Feign-401-1", "외부 서버 401 오류입니다."),
-    OUTER_SERVER_FORBIDDEN_EXCEPTION(FORBIDDEN, "Feign-403-1", "외부 서버 403 오류입니다."),
-    OUTER_SERVER_BAD_REQUEST_EXCEPTION(BAD_REQUEST, "Feign-400-1", "외부 서버 400 오류입니다."),
-    OUTER_SERVER_EXPIRED_TOKEN_EXCEPTION(BAD_REQUEST, "Feign-400-2", "외부 서버 토큰 만료 오류입니다.");
+    @ExplainError("인증에 사용되는 토큰이 헤더에 존재하지 않을 때 발생하는 오류입니다.")
+    NOT_VALID_ACCESS_TOKEN_ERROR(UNAUTHORIZED, "401-4", "알맞은 accessToken 을 넣어주세요.");
 
     private final Integer statusCode;
     private final String errorCode;

@@ -3,8 +3,11 @@ package com.dingdong.domain.domains.idcard.exception;
 import static com.dingdong.core.consts.StaticVal.BAD_REQUEST;
 import static com.dingdong.core.consts.StaticVal.NOT_FOUND;
 
+import com.dingdong.core.annotation.ExplainError;
 import com.dingdong.core.dto.ErrorDetail;
 import com.dingdong.core.exception.BaseErrorCode;
+import java.lang.reflect.Field;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,7 +15,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum IdCardErrorCode implements BaseErrorCode {
     /** 주민증 Aggregate 관련 에러 코드 */
+    @ExplainError("존재하지 않는 사용자의 주민증을 조회할 때 발생하는 오류입니다.")
     NOT_FOUND_ID_CARD(NOT_FOUND, "IdCard-404-1", "존재하지 않는 주민증입니다."),
+    @ExplainError("이미 주민증을 등록한 사용자가 주민증 생성을 시도할 때 발생하는 오류입니다.")
     ALREADY_EXIST_ID_CARD(BAD_REQUEST, "IdCard-400-1", "이미 해당 커뮤니티에 주민증을 등록했습니다.");
 
     private final Integer statusCode;
@@ -22,5 +27,12 @@ public enum IdCardErrorCode implements BaseErrorCode {
     @Override
     public ErrorDetail getErrorDetail() {
         return ErrorDetail.of(statusCode, errorCode, reason);
+    }
+
+    @Override
+    public String getExplainError() throws NoSuchFieldException {
+        Field field = this.getClass().getField(this.name());
+        ExplainError annotation = field.getAnnotation(ExplainError.class);
+        return Objects.nonNull(annotation) ? annotation.value() : this.getReason();
     }
 }
