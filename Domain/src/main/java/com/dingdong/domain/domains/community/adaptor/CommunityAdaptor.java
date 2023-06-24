@@ -30,13 +30,13 @@ public class CommunityAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMUNITY));
     }
 
-    // 이미 존재하는 초대 코드인지 체크
     public boolean isAlreadyExistInvitationCode(String invitationCode) {
         return communityRepository.existsCommunityByInvitationCode(invitationCode);
     }
 
     public Community save(Community community, User user) {
         community.addAdmin(createAndSaveAdmin(user.getId()));
+        user.joinCommunity(community);
         return communityRepository.save(community);
     }
 

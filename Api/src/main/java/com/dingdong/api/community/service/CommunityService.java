@@ -105,7 +105,6 @@ public class CommunityService {
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
-        // user 가 admin 인지 체크
         communityValidator.verifyAdminUser(communityId, currentUser.getId());
         return communityAdaptor.findById(communityId);
     }
@@ -114,7 +113,6 @@ public class CommunityService {
         return Community.createCommunity(name, logoImageUrl, createCommunityInvitationCode());
     }
 
-    // 초대 코드 랜덤 생성
     private String createCommunityInvitationCode() {
         return generateRandomAlphanumericCode(new RandomCommunityCodeGeneratorStrategy());
     }
