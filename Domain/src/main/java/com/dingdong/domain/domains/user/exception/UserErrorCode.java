@@ -14,7 +14,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserErrorCode implements BaseErrorCode {
     @ExplainError("존재하지 않는 사용자의 정보를 조회할 때 발생하는 오류입니다.")
-    NOT_FOUND_USER(NOT_FOUND, "User-404-1", "존재하지 않는 사용자입니다.");
+    NOT_FOUND_USER(NOT_FOUND, "User-404-1", "존재하지 않는 사용자입니다."),
+    @ExplainError("온보딩 캐릭터 정보 저장 시 존재하지 않는 캐릭터 정보를 저장할 때 발생하는 오류입니다.")
+    NOT_FOUND_CHARACTER_TYPE(NOT_FOUND, "User-404-2", "존재하지 않는 캐릭터 타입입니다.");
 
     private final Integer statusCode;
     private final String errorCode;

@@ -1,14 +1,13 @@
 package com.dingdong.api.user.controller;
 
 
+import com.dingdong.api.user.controller.request.UserCharacterRequest;
 import com.dingdong.api.user.controller.response.UserProfileResponse;
 import com.dingdong.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "유저")
 @RestController
@@ -22,5 +21,11 @@ public class UserController {
     @GetMapping("/profile")
     public UserProfileResponse getUserProfile() {
         return UserProfileResponse.from(userService.getUserProfile());
+    }
+
+    @Operation(summary = "온보딩 캐릭터 정보 저장")
+    @PostMapping("/character")
+    public void saveUserCharacter(@RequestBody UserCharacterRequest request) {
+        userService.saveUserCharacter(request);
     }
 }
