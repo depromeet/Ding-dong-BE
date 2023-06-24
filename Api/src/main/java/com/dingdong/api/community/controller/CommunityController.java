@@ -3,7 +3,6 @@ package com.dingdong.api.community.controller;
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.controller.response.CommunityCodeResponse;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
 import com.dingdong.api.community.service.CommunityService;
@@ -41,9 +40,8 @@ public class CommunityController {
 
     @Operation(summary = "행성 만들기")
     @PostMapping
-    public CommunityCodeResponse createCommunity(
-            @RequestBody @Valid CreateCommunityRequest request) {
-        return CommunityCodeResponse.from(communityService.createCommunity(request));
+    public IdResponse createCommunity(@RequestBody @Valid CreateCommunityRequest request) {
+        return IdResponse.from(communityService.createCommunity(request));
     }
 
     @Operation(summary = "행성 꾸미기")
