@@ -1,7 +1,6 @@
 package com.dingdong.api.community.controller;
 
 
-import com.dingdong.api.community.controller.request.CreateCommunityNameRequest;
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
@@ -66,8 +65,8 @@ public class CommunityController {
     }
 
     @Operation(summary = "행성 이름 중복 체크 (중복될 경우 : true / 중복되지 않을 경우 : false)")
-    @PostMapping("/check")
-    public boolean checkDuplicatedName(@RequestBody @Valid CreateCommunityNameRequest request) {
-        return communityService.checkDuplicatedName(request);
+    @GetMapping("/check")
+    public boolean checkDuplicatedName(@RequestParam String name) {
+        return communityService.checkDuplicatedName(name);
     }
 }
