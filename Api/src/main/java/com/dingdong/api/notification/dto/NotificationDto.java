@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NotificationDto {
 
+    @Schema(description = "알림 고유값")
+    private Long notificationId;
+
     @Schema(description = "알림 종류")
     private NotificationType notificationType;
 
