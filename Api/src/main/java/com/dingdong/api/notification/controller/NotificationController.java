@@ -1,6 +1,7 @@
 package com.dingdong.api.notification.controller;
 
 
+import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.notification.dto.NotificationDto;
 import com.dingdong.api.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -32,12 +34,12 @@ public class NotificationController {
     }
 
     @Operation(summary = "알림 읽음 처리")
-    @GetMapping("/{notificationId}/read")
+    @PutMapping("/{notificationId}/read")
     public void readNotification(@PathVariable Long notificationId) {}
 
     @Operation(summary = "알림 목록 조회")
     @GetMapping
-    public NotificationDto getNotifications(@PageableDefault Pageable pageable) {
-        return new NotificationDto();
+    public SliceResponse<NotificationDto> getNotifications(@PageableDefault Pageable pageable) {
+        return SliceResponse.from(notificationService.getNotifications(pageable));
     }
 }

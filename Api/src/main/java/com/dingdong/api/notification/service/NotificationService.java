@@ -2,8 +2,15 @@ package com.dingdong.api.notification.service;
 
 
 import com.dingdong.api.global.helper.UserHelper;
+import com.dingdong.api.notification.dto.NotificationDto;
+import com.dingdong.domain.common.util.SliceUtil;
+import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
+import com.dingdong.domain.domains.notification.repository.NotificationRepository;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -15,6 +22,7 @@ public class NotificationService {
 
     private final EmitterRepository emitterRepository;
     private final UserHelper userHelper;
+    private final NotificationRepository notificationRepository;
 
     /** 클라이언트가 구독을 위해 호출하는 메서드. */
     public SseEmitter subscribe() {
@@ -69,5 +77,18 @@ public class NotificationService {
         emitter.onTimeout(() -> emitterRepository.deleteById(id));
 
         return emitter;
+    }
+
+    public Slice<NotificationDto> getNotifications(Pageable pageable) {
+        //        Long userId = userHelper.getCurrentUserId();
+
+        Long userId = 1L;
+        Slice<NotificationVO> notificationByConditionInPage =
+                notificationRepository.findNotificationByConditionInPage(userId, pageable);
+
+        List<NotificationDto> notificationDtos =
+                notificationByConditionInPage.stream().map(NotificationDto::from).toList();
+
+        return SliceUtil.valueOf(notificationDtos, notificationByConditionInPage.getPageable());
     }
 }
