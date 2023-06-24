@@ -105,12 +105,12 @@ public class CommunityService {
         return IdCardDetailsDto.of(idCard, keywordDtos);
     }
 
-    public void checkDuplicatedName(CreateCommunityNameRequest request) {
-        validateCommunityName(request.getName());
+    public boolean checkDuplicatedName(CreateCommunityNameRequest request) {
+        return communityAdaptor.isAlreadyExistCommunityName(request.getName());
     }
 
     private void validateCommunityName(String name) {
-        communityValidator.isAlreadyExistCommunityName(name);
+        communityValidator.verifyCommunityName(name);
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {

@@ -65,9 +65,9 @@ public class CommunityController {
         return IdCardDetailsResponse.from(communityService.getUserIdCardDetails(communityId));
     }
 
-    @Operation(summary = "행성 이름 중복 체크")
+    @Operation(summary = "행성 이름 중복 체크 (중복될 경우 : true / 중복되지 않을 경우 : false)")
     @PostMapping("/check")
-    public void checkDuplicatedName(@RequestBody @Valid CreateCommunityNameRequest request) {
-        communityService.checkDuplicatedName(request);
+    public boolean checkDuplicatedName(@RequestBody @Valid CreateCommunityNameRequest request) {
+        return communityService.checkDuplicatedName(request);
     }
 }
