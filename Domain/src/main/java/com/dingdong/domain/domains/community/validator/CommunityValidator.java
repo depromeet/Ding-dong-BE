@@ -1,5 +1,7 @@
 package com.dingdong.domain.domains.community.validator;
 
+import static com.dingdong.domain.domains.community.exception.CommunityErrorCode.MAX_LIMIT_COMMUNITY_NAME;
+import static com.dingdong.domain.domains.community.exception.CommunityErrorCode.MIN_LIMIT_COMMUNITY_NAME;
 
 import com.dingdong.core.annotation.Validator;
 import com.dingdong.core.exception.BaseException;
@@ -26,5 +28,16 @@ public class CommunityValidator {
 
     public boolean isAlreadyExistInvitationCode(String code) {
         return communityAdaptor.isAlreadyExistInvitationCode(code);
+    }
+
+    public void validateDuplicatedCommunityName(String name) {
+        if (communityAdaptor.isAlreadyExistCommunityName(name)) {
+            throw new BaseException(CommunityErrorCode.ALREADY_EXIST_COMMUNITY_NAME);
+        }
+    }
+
+    public void validateCommunityNameSize(String name) {
+        if (name.length() < 1) throw new BaseException(MIN_LIMIT_COMMUNITY_NAME);
+        if (name.length() > 16) throw new BaseException(MAX_LIMIT_COMMUNITY_NAME);
     }
 }

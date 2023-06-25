@@ -3,14 +3,15 @@ package com.dingdong.api.community.controller;
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.controller.response.CommunityCodeResponse;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
+import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.service.CommunityService;
 import com.dingdong.api.global.response.IdResponse;
 import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "access-token")
 @Tag(name = "커뮤니티")
 @RestController
 @RequestMapping("/communities")
@@ -34,16 +36,15 @@ public class CommunityController {
 
     @Operation(summary = "행성의 모든 주민증 목록 조회")
     @GetMapping("/{communityId}/idCards")
-    public SliceResponse getCommunityIdCards(
+    public SliceResponse<CommunityIdCardsDto> getCommunityIdCards(
             @PathVariable Long communityId, @PageableDefault Pageable pageable) {
         return SliceResponse.from(communityService.getCommunityIdCards(communityId, pageable));
     }
 
     @Operation(summary = "행성 만들기")
     @PostMapping
-    public CommunityCodeResponse createCommunity(
-            @RequestBody @Valid CreateCommunityRequest request) {
-        return CommunityCodeResponse.from(communityService.createCommunity(request));
+    public IdResponse createCommunity(@RequestBody @Valid CreateCommunityRequest request) {
+        return IdResponse.from(communityService.createCommunity(request));
     }
 
     @Operation(summary = "행성 꾸미기")
@@ -64,5 +65,11 @@ public class CommunityController {
     @GetMapping("/{communityId}/users/idCards")
     public IdCardDetailsResponse getUserIdCardDetails(@PathVariable Long communityId) {
         return IdCardDetailsResponse.from(communityService.getUserIdCardDetails(communityId));
+    }
+
+    @Operation(summary = "행성 이름 중복 체크 (중복될 경우 : true / 중복되지 않을 경우 : false)")
+    @GetMapping("/check")
+    public boolean checkDuplicatedName(@RequestParam String name) {
+        return communityService.checkDuplicatedName(name);
     }
 }

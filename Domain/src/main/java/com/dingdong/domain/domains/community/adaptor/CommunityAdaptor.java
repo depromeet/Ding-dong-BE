@@ -4,8 +4,8 @@ import static com.dingdong.domain.domains.community.exception.CommunityErrorCode
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
-import com.dingdong.domain.domains.community.domain.Admin;
-import com.dingdong.domain.domains.community.domain.Community;
+import com.dingdong.domain.domains.community.domain.entity.Admin;
+import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.community.domain.enums.AdminRole;
 import com.dingdong.domain.domains.community.repository.AdminRepository;
 import com.dingdong.domain.domains.community.repository.CommunityRepository;
@@ -30,17 +30,21 @@ public class CommunityAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMUNITY));
     }
 
-    // 이미 존재하는 초대 코드인지 체크
     public boolean isAlreadyExistInvitationCode(String invitationCode) {
         return communityRepository.existsCommunityByInvitationCode(invitationCode);
     }
 
     public Community save(Community community, User user) {
         community.addAdmin(createAndSaveAdmin(user.getId()));
+        user.joinCommunity(community);
         return communityRepository.save(community);
     }
 
     private Admin createAndSaveAdmin(Long userId) {
         return adminRepository.save(Admin.toEntity(AdminRole.ADMIN, userId));
+    }
+
+    public boolean isAlreadyExistCommunityName(String name) {
+        return communityRepository.existsCommunityByName(name);
     }
 }

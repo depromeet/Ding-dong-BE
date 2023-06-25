@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.idcard.domain.vo;
+package com.dingdong.domain.domains.idcard.domain.model;
 
 
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
@@ -15,4 +15,12 @@ public class Character {
 
     @Enumerated(EnumType.STRING)
     private CharacterType characterType;
+
+    private Character(CharacterType characterType) {
+        this.characterType = characterType;
+    }
+
+    public static Character toEntity(CharacterType characterType) {
+        return new Character(characterType);
+    }
 }

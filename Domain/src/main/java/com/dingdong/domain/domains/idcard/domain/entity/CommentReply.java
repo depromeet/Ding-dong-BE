@@ -1,6 +1,8 @@
 package com.dingdong.domain.domains.idcard.domain.entity;
 
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_COMMENT_REPLY_LIKE;
 
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.esotericsoftware.kryo.serializers.FieldSerializer.NotNull;
 import java.util.ArrayList;
@@ -47,5 +49,15 @@ public class CommentReply extends AbstractTimeStamp {
     public static CommentReply toEntity(
             Long idCardId, Long commentId, Long userId, String content) {
         return new CommentReply(idCardId, commentId, userId, content);
+    }
+
+    public void updateReplyLikes(CommentReplyLike commentReplyLike) {
+        replyLikes.add(commentReplyLike);
+    }
+
+    public void deleteLike(CommentReplyLike commentReplyLike) {
+        if (!replyLikes.remove(commentReplyLike)) {
+            throw new BaseException(NOT_FOUND_COMMENT_REPLY_LIKE);
+        }
     }
 }

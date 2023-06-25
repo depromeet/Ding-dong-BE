@@ -1,7 +1,7 @@
 package com.dingdong.api.community.dto;
 
 
-import com.dingdong.domain.domains.community.domain.Community;
+import com.dingdong.domain.domains.community.domain.entity.Community;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +27,9 @@ public class CommunityDetailsDto {
     @Schema(description = "소개 글")
     private String description;
 
+    @Schema(description = "행성 초대 코드")
+    private String invitationCode;
+
     public static CommunityDetailsDto of(Community community, int idCardCount) {
         return CommunityDetailsDto.builder()
                 .communityId(community.getId())
@@ -35,6 +38,7 @@ public class CommunityDetailsDto {
                 .title(community.getName())
                 .idCardCount(idCardCount)
                 .description(community.getDescription())
+                .invitationCode(community.getInvitationCode())
                 .build();
     }
 }

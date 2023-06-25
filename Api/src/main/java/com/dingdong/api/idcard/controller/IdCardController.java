@@ -2,18 +2,21 @@ package com.dingdong.api.idcard.controller;
 
 
 import com.dingdong.api.global.response.IdResponse;
+import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
 import com.dingdong.api.idcard.controller.request.UpdateIdCardRequest;
 import com.dingdong.api.idcard.controller.response.CommentCountResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
-import com.dingdong.api.idcard.dto.CommentDto;
+import com.dingdong.api.idcard.service.CommentService;
 import com.dingdong.api.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +35,8 @@ public class IdCardController {
 
     private final IdCardService idCardService;
 
+    private final CommentService commentService;
+
     @Operation(summary = "주민증 세부 조회")
     @GetMapping("/{idCardsId}")
     public IdCardDetailsResponse getIdCardDetails(@PathVariable Long idCardsId) {
@@ -41,7 +46,7 @@ public class IdCardController {
     @Operation(summary = "댓글 갯수 조회")
     @GetMapping("/{idCardsId}/comment-count")
     public CommentCountResponse getCommentCount(@PathVariable Long idCardsId) {
-        return new CommentCountResponse();
+        return CommentCountResponse.from(idCardService.getCommentCount(idCardsId));
     }
 
     @Operation(summary = "주민증 생성")
@@ -61,74 +66,67 @@ public class IdCardController {
     @PostMapping("/{idCardsId}/comments")
     public IdResponse postComment(
             @PathVariable Long idCardsId, @RequestBody @Valid CreateCommentRequest body) {
-        return IdResponse.from(1L);
+        return IdResponse.from(commentService.createComment(idCardsId, body));
     }
 
     @Operation(summary = "주민증 대댓글 달기")
     @PostMapping("/{idCardsId}/comments/{commentId}/replies")
-    public IdResponse postCommentReply(
+    public void postCommentReply(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @RequestBody @Valid CreateCommentRequest body) {
-        return IdResponse.from(1L);
+        commentService.createCommentReply(idCardsId, commentId, body);
     }
 
-    @Operation(
-            summary = "주민증 댓글 조회",
-            description =
-                    "스키마 전달 작업 중에는 sliceResponse로 묶인걸 보여줄 수가 없어서 해당 result가 페이지네이션으로 묶인다고 생각하시면 됩니당")
+    @Operation(summary = "주민증 댓글 조회")
     @GetMapping("/{idCardsId}/comments")
-    public CommentDto getComments(@PathVariable Long idCardsId) {
-        return new CommentDto();
+    public SliceResponse getComments(
+            @PathVariable Long idCardsId, @PageableDefault Pageable pageable) {
+        return SliceResponse.from(commentService.getComments(idCardsId, pageable));
     }
 
     @Operation(summary = "주민증 댓글 좋아요")
     @PostMapping("/{idCardsId}/comments/{commentId}/likes")
-    public IdResponse postCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
-        return IdResponse.from(1L);
+    public void postCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
+        commentService.createCommentLike(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요")
     @PostMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
-    public IdResponse postCommentReplyLike(
+    public void postCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId) {
-        return IdResponse.from(1L);
+        commentService.createCommentReplyLike(idCardsId, commentId, commentReplyId);
     }
 
     @Operation(summary = "주민증 댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}")
-    public IdResponse deleteComment(@PathVariable Long idCardsId, @PathVariable Long commentId) {
-        return IdResponse.from(1L);
+    public void deleteComment(@PathVariable Long idCardsId, @PathVariable Long commentId) {
+        commentService.deleteComment(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}")
-    public IdResponse deleteCommentReply(
+    public void deleteCommentReply(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @PathVariable Long commentReplyId) {
-        return IdResponse.from(1L);
+        commentService.deleteCommentReply(idCardsId, commentId, commentReplyId);
     }
 
     @Operation(summary = "주민증 댓글 좋아요 취소")
-    @DeleteMapping("/{idCardsId}/comments/{commentId}/likes/{commentLikeId}")
-    public IdResponse deleteCommentLike(
-            @PathVariable Long idCardsId,
-            @PathVariable Long commentId,
-            @PathVariable Long commentLikeId) {
-        return IdResponse.from(1L);
+    @DeleteMapping("/{idCardsId}/comments/{commentId}/likes")
+    public void deleteCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
+        commentService.deleteCommentLike(idCardsId, commentId);
     }
 
     @Operation(summary = "주민증 대댓글 좋아요 취소")
-    @DeleteMapping(
-            "/{idCardsId}/comments/{commentId}/likes/{commentLikeId}/reply-likes/{commentReplyLikeId}")
-    public IdResponse deleteCommentReplyLike(
+    @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
+    public void deleteCommentReplyLike(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
-            @PathVariable Long commentLikeId,
-            @PathVariable Long commentReplyLikeId) {
-        return IdResponse.from(1L);
+            @PathVariable Long commentReplyId) {
+        commentService.deleteCommentReplyLike(idCardsId, commentId, commentReplyId);
     }
 }

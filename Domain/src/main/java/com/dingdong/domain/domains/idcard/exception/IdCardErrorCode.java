@@ -18,7 +18,20 @@ public enum IdCardErrorCode implements BaseErrorCode {
     @ExplainError("존재하지 않는 사용자의 주민증을 조회할 때 발생하는 오류입니다.")
     NOT_FOUND_ID_CARD(NOT_FOUND, "IdCard-404-1", "존재하지 않는 주민증입니다."),
     @ExplainError("이미 주민증을 등록한 사용자가 주민증 생성을 시도할 때 발생하는 오류입니다.")
-    ALREADY_EXIST_ID_CARD(BAD_REQUEST, "IdCard-400-1", "이미 해당 커뮤니티에 주민증을 등록했습니다.");
+    ALREADY_EXIST_ID_CARD(BAD_REQUEST, "IdCard-400-1", "이미 해당 커뮤니티에 주민증을 등록했습니다."),
+    NOT_FOUND_COMMENT(NOT_FOUND, "Comment-404-1", "존재하지 않는 댓글입니다."),
+    NOT_VALID_ID_CARD_COMMENT(BAD_REQUEST, "IdCard-400-2", "해당 주민증의 댓글이 아닙니다."),
+    ALREADY_EXIST_COMMENT_LIKE(BAD_REQUEST, "CommentLike-400-1", "이미 댓글에 좋아요를 눌렀습니다."),
+    ALREADY_EXIST_COMMENT_REPLY_LIKE(BAD_REQUEST, "CommentReplyLike-400-1", "이미 대댓글에 좋아요를 눌렀습니다."),
+    NOT_FOUND_COMMENT_LIKE(NOT_FOUND, "CommentLike-404-1", "존재하지 않는 댓글 좋아요입니다."),
+    NOT_FOUND_COMMENT_REPLY(NOT_FOUND, "CommentReply-404-1", "존재하지 않는 대댓글입니다."),
+    NOT_VALID_COMMENT_USER(BAD_REQUEST, "Comment-400-1", "해당 유저가 작성한 댓글이 아닙니다."),
+    NOT_VALID_COMMENT_REPLY_USER(BAD_REQUEST, "CommentReply-400-2", "해당 유저가 작성한 대댓글이 아닙니다."),
+    NOT_VALID_COMMENT_LIKE_USER(BAD_REQUEST, "CommentLike-400-2", "해당 유저가 누른 댓글 좋아요가 아닙니다."),
+    NOT_VALID_COMMENT_REPLY_LIKE_USER(
+            BAD_REQUEST, "CommentReplyLike-400-2", "해당 유저가 누른 대댓글 좋아요가 아닙니다."),
+    NOT_VALID_COMMENT_REPLY(BAD_REQUEST, "Comment-400-2", "해당 댓글의 대댓글이 아닙니다."),
+    NOT_FOUND_COMMENT_REPLY_LIKE(NOT_FOUND, "CommentReplyLike-404-1", "존재하지 않는 대댓글 좋아요입니다.");
 
     private final Integer statusCode;
     private final String errorCode;
