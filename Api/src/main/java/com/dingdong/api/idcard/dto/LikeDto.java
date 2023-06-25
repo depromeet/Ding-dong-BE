@@ -17,7 +17,7 @@ public class LikeDto {
     private final Long likeCount;
 
     @Schema(description = "접속 유저가 좋아요를 눌렀는지 여부 => true면 하트 색칠", example = "true")
-    private final Boolean isLikedByCurrentUser;
+    private final boolean isLikedByCurrentUser;
 
     public static LikeDto ofCommentLike(List<CommentLike> commentLikes, Long userId) {
         return LikeDto.builder()

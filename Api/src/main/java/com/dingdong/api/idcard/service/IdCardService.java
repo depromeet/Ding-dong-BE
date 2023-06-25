@@ -9,9 +9,11 @@ import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
+import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
+import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.entity.DeleteImage;
@@ -33,9 +35,13 @@ public class IdCardService {
 
     private final IdCardValidator idCardValidator;
 
+    private final CommentValidator commentValidator;
+
     private final CommunityAdaptor communityAdaptor;
 
     private final ImageAdaptor imageAdaptor;
+
+    private final CommentAdaptor commentAdaptor;
 
     /** 주민증 세부 조회 */
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
@@ -44,6 +50,13 @@ public class IdCardService {
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
+    }
+
+    /** 댓글 개수 조회 */
+    public int getCommentCount(Long idCardId) {
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        return commentAdaptor.findAllByIdCard(idCard.getId()).size();
     }
 
     /** 주민증 생성 */
