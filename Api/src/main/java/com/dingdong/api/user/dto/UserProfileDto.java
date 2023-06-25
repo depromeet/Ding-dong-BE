@@ -1,6 +1,7 @@
 package com.dingdong.api.user.dto;
 
 
+import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import com.dingdong.domain.domains.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ public class UserProfileDto {
     private String gender;
     private String ageRange;
     private String profileImageUrl;
+    private CharacterType characterType;
 
     public static UserProfileDto from(User user) {
         return UserProfileDto.builder()
@@ -21,6 +23,7 @@ public class UserProfileDto {
                 .gender(user.getGenderType().name())
                 .ageRange(user.getAgeRange())
                 .profileImageUrl(null)
+                .characterType(user.getUserCharacterType())
                 .build();
     }
 }
