@@ -2,7 +2,7 @@ package com.dingdong.api.image.service;
 
 
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
-import com.dingdong.domain.domains.image.domain.DeleteImage;
+import com.dingdong.domain.domains.image.domain.entity.DeleteImage;
 import com.dingdong.infrastructure.image.ImageHandler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

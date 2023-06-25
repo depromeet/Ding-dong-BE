@@ -5,7 +5,7 @@ import static com.dingdong.domain.domains.idcard.domain.enums.CharacterType.find
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.user.controller.request.UserCharacterRequest;
 import com.dingdong.api.user.dto.UserProfileDto;
-import com.dingdong.domain.domains.idcard.domain.vo.Character;
+import com.dingdong.domain.domains.idcard.domain.model.Character;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

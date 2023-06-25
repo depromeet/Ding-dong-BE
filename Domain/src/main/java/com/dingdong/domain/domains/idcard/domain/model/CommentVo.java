@@ -3,6 +3,7 @@ package com.dingdong.domain.domains.idcard.domain.vo;
 
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
+import com.dingdong.domain.domains.idcard.domain.model.UserInfo;
 import lombok.Getter;
 
 @Getter

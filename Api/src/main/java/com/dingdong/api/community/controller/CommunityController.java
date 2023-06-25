@@ -6,6 +6,7 @@ import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.controller.response.CommunityCodeResponse;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
+import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.service.CommunityService;
 import com.dingdong.api.global.response.IdResponse;
 import com.dingdong.api.global.response.SliceResponse;
@@ -36,7 +37,7 @@ public class CommunityController {
 
     @Operation(summary = "행성의 모든 주민증 목록 조회")
     @GetMapping("/{communityId}/idCards")
-    public SliceResponse getCommunityIdCards(
+    public SliceResponse<CommunityIdCardsDto> getCommunityIdCards(
             @PathVariable Long communityId, @PageableDefault Pageable pageable) {
         return SliceResponse.from(communityService.getCommunityIdCards(communityId, pageable));
     }

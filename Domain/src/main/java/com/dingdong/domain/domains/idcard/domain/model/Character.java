@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.idcard.domain.vo;
+package com.dingdong.domain.domains.idcard.domain.model;
 
 
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
