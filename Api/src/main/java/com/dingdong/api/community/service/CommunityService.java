@@ -58,7 +58,7 @@ public class CommunityService {
     // 행성 만들기
     @Transactional
     public Long createCommunity(CreateCommunityRequest request) {
-        validateCommunityName(request.getName());
+        communityValidator.validateDuplicatedCommunityName(request.getName());
         return communityAdaptor
                 .save(
                         createCommunityEntity(request.getName(), request.getLogoImageUrl()),
@@ -107,10 +107,6 @@ public class CommunityService {
     public boolean checkDuplicatedName(String name) {
         communityValidator.validateCommunityNameSize(name);
         return communityAdaptor.isAlreadyExistCommunityName(name);
-    }
-
-    private void validateCommunityName(String name) {
-        communityValidator.validateDuplicatedCommunityName(name);
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
