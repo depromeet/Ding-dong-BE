@@ -4,7 +4,6 @@ import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_F
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.dto.CommunityCodeDto;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.dto.CommunityListDto;
@@ -58,11 +57,13 @@ public class CommunityService {
 
     // 행성 만들기
     @Transactional
-    public CommunityCodeDto createCommunity(CreateCommunityRequest request) {
-        return CommunityCodeDto.from(
-                communityAdaptor.save(
+    public Long createCommunity(CreateCommunityRequest request) {
+        communityValidator.validateDuplicatedCommunityName(request.getName());
+        return communityAdaptor
+                .save(
                         createCommunityEntity(request.getName(), request.getLogoImageUrl()),
-                        userHelper.getCurrentUser()));
+                        userHelper.getCurrentUser())
+                .getId();
     }
 
     // 행성 꾸미기
@@ -101,6 +102,11 @@ public class CommunityService {
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
         return IdCardDetailsDto.of(idCard, keywordDtos);
+    }
+
+    public boolean checkDuplicatedName(String name) {
+        communityValidator.validateCommunityNameSize(name);
+        return communityAdaptor.isAlreadyExistCommunityName(name);
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {

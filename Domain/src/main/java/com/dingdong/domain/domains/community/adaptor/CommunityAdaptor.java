@@ -43,4 +43,8 @@ public class CommunityAdaptor {
     private Admin createAndSaveAdmin(Long userId) {
         return adminRepository.save(Admin.toEntity(AdminRole.ADMIN, userId));
     }
+
+    public boolean isAlreadyExistCommunityName(String name) {
+        return communityRepository.existsCommunityByName(name);
+    }
 }

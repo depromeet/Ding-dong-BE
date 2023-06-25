@@ -13,6 +13,9 @@ import lombok.Getter;
 @Builder
 public class CommentDto {
 
+    @Schema(description = "주민증 id", example = "1")
+    private final Long idCardId;
+
     @Schema(description = "댓글 id", example = "1")
     private final Long commentId;
 
@@ -33,6 +36,7 @@ public class CommentDto {
 
     public static CommentDto of(Comment comment, UserInfo userInfo, Long currentUserId) {
         return CommentDto.builder()
+                .idCardId(comment.getIdCardId())
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .writerInfo(UserInfoDto.from(userInfo))
