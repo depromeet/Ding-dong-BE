@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.notification.domain.vo;
+package com.dingdong.domain.domains.notification.domain.model;
 
 
 import javax.persistence.Embeddable;

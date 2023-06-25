@@ -4,8 +4,8 @@ import static com.dingdong.domain.domains.community.exception.CommunityErrorCode
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
-import com.dingdong.domain.domains.community.domain.Admin;
-import com.dingdong.domain.domains.community.domain.Community;
+import com.dingdong.domain.domains.community.domain.entity.Admin;
+import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.community.domain.enums.AdminRole;
 import com.dingdong.domain.domains.community.repository.AdminRepository;
 import com.dingdong.domain.domains.community.repository.CommunityRepository;

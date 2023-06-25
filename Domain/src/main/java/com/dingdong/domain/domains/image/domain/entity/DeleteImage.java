@@ -1,4 +1,4 @@
-package com.dingdong.domain.domains.image.domain;
+package com.dingdong.domain.domains.image.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;

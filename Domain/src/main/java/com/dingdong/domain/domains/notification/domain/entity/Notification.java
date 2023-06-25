@@ -4,7 +4,7 @@ package com.dingdong.domain.domains.notification.domain.entity;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
-import com.dingdong.domain.domains.notification.domain.vo.NotificationContent;
+import com.dingdong.domain.domains.notification.domain.model.NotificationContent;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
