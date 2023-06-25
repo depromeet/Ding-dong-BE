@@ -4,14 +4,16 @@ package com.dingdong.api.notification.service;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.notification.dto.NotificationDto;
 import com.dingdong.domain.common.util.SliceUtil;
+import com.dingdong.domain.domains.notification.adaptor.NotificationAdaptor;
+import com.dingdong.domain.domains.notification.domain.entity.Notification;
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
-import com.dingdong.domain.domains.notification.repository.NotificationRepository;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
@@ -22,7 +24,7 @@ public class NotificationService {
 
     private final EmitterRepository emitterRepository;
     private final UserHelper userHelper;
-    private final NotificationRepository notificationRepository;
+    private final NotificationAdaptor notificationAdaptor;
 
     /** 클라이언트가 구독을 위해 호출하는 메서드. */
     public SseEmitter subscribe() {
@@ -83,11 +85,25 @@ public class NotificationService {
         Long userId = userHelper.getCurrentUserId();
 
         Slice<NotificationVO> notificationByConditionInPage =
-                notificationRepository.findNotificationByConditionInPage(userId, pageable);
+                notificationAdaptor.findNotificationByConditionInPage(userId, pageable);
 
         List<NotificationDto> notificationDtos =
                 notificationByConditionInPage.stream().map(NotificationDto::from).toList();
 
         return SliceUtil.valueOf(notificationDtos, notificationByConditionInPage.getPageable());
+    }
+
+    @Transactional
+    public void readNotification(Long notificationId) {
+        Notification notification = notificationAdaptor.findById(notificationId);
+        Long userId = userHelper.getCurrentUserId();
+
+        notification.read(userId);
+    }
+
+    public boolean existsUnreadNotifications() {
+        Long userId = userHelper.getCurrentUserId();
+
+        return notificationAdaptor.existsUnreadNotifications(userId);
     }
 }

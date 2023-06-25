@@ -35,11 +35,19 @@ public class NotificationController {
 
     @Operation(summary = "알림 읽음 처리")
     @PutMapping("/{notificationId}/read")
-    public void readNotification(@PathVariable Long notificationId) {}
+    public void readNotification(@PathVariable Long notificationId) {
+        notificationService.readNotification(notificationId);
+    }
 
     @Operation(summary = "알림 목록 조회")
     @GetMapping
     public SliceResponse<NotificationDto> getNotifications(@PageableDefault Pageable pageable) {
         return SliceResponse.from(notificationService.getNotifications(pageable));
+    }
+
+    @Operation(summary = "미확인 알림 존재 여부")
+    @GetMapping("/unread")
+    public boolean existsUnreadNotifications() {
+        return notificationService.existsUnreadNotifications();
     }
 }
