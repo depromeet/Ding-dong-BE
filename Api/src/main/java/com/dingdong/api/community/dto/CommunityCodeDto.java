@@ -1,7 +1,7 @@
 package com.dingdong.api.community.dto;
 
 
-import com.dingdong.domain.domains.community.domain.Community;
+import com.dingdong.domain.domains.community.domain.entity.Community;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;

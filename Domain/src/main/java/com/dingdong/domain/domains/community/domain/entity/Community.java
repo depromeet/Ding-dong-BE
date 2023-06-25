@@ -1,7 +1,8 @@
-package com.dingdong.domain.domains.community.domain;
+package com.dingdong.domain.domains.community.domain.entity;
 
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
+import com.dingdong.domain.domains.community.domain.model.CommunityImage;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import java.util.ArrayList;
 import java.util.List;

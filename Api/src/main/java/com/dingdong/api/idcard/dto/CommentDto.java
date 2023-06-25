@@ -2,7 +2,7 @@ package com.dingdong.api.idcard.dto;
 
 
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
-import com.dingdong.domain.domains.idcard.domain.vo.UserInfo;
+import com.dingdong.domain.domains.idcard.domain.model.UserInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Timestamp;
 import java.util.List;
