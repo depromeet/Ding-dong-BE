@@ -6,7 +6,7 @@ import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.comm
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 
 import com.dingdong.domain.common.util.SliceUtil;
-import com.dingdong.domain.domains.idcard.domain.vo.CommentVo;
+import com.dingdong.domain.domains.idcard.domain.model.CommentVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
