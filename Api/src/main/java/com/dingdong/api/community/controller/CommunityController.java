@@ -11,6 +11,7 @@ import com.dingdong.api.global.response.IdResponse;
 import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.idcard.controller.response.IdCardDetailsResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "access-token")
 @Tag(name = "커뮤니티")
 @RestController
 @RequestMapping("/communities")

@@ -34,4 +34,10 @@ public class IdCardAdaptor {
     public Slice<IdCard> findIdCardByConditionInPage(Long communityId, Pageable pageable) {
         return idCardRepository.findIdCardByConditionInPage(communityId, pageable);
     }
+
+    public IdCard findByCommunityIdAndUserId(Long communityId, Long userId) {
+        return idCardRepository
+                .findByCommunityIdAndUserInfo_UserId(communityId, userId)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
+    }
 }
