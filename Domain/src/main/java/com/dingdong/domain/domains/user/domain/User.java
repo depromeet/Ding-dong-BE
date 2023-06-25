@@ -3,10 +3,12 @@ package com.dingdong.domain.domains.user.domain;
 
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.community.domain.Community;
+import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import com.dingdong.domain.domains.idcard.domain.vo.Character;
 import com.dingdong.domain.domains.user.domain.enums.GenderType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -51,5 +53,17 @@ public class User extends AbstractTimeStamp {
 
     public static User toEntity(String email, GenderType genderType, String ageRange) {
         return new User(email, genderType, ageRange);
+    }
+
+    public void joinCommunity(Community community) {
+        this.getCommunities().add(community);
+    }
+
+    public void updateCharacter(Character character) {
+        this.character = character;
+    }
+
+    public CharacterType getUserCharacterType() {
+        return Optional.ofNullable(character).map(Character::getCharacterType).orElse(null);
     }
 }
