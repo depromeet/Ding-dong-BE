@@ -1,6 +1,8 @@
 package com.dingdong.domain.domains.notification.domain.entity;
 
+import static com.dingdong.domain.domains.notification.exception.NotificationErrorCode.NO_AUTHORITY_UPDATE_NOTIFICATION;
 
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
@@ -39,4 +41,11 @@ public class Notification extends AbstractTimeStamp {
     @Enumerated(EnumType.STRING)
     @NotNull
     private NotificationStatus notificationStatus;
+
+    public void read(Long userId) {
+        if (this.userId != userId) {
+            throw new BaseException(NO_AUTHORITY_UPDATE_NOTIFICATION);
+        }
+        this.notificationStatus = NotificationStatus.READ;
+    }
 }
