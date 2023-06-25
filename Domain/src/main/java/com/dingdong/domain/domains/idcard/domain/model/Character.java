@@ -15,4 +15,12 @@ public class Character {
 
     @Enumerated(EnumType.STRING)
     private CharacterType characterType;
+
+    private Character(CharacterType characterType) {
+        this.characterType = characterType;
+    }
+
+    public static Character toEntity(CharacterType characterType) {
+        return new Character(characterType);
+    }
 }
