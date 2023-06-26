@@ -5,6 +5,7 @@ import com.dingdong.core.annotation.ApiErrorCodeExample;
 import com.dingdong.core.exception.GlobalException;
 import com.dingdong.domain.domains.community.exception.CommunityErrorCode;
 import com.dingdong.domain.domains.idcard.exception.IdCardErrorCode;
+import com.dingdong.domain.domains.notification.exception.NotificationErrorCode;
 import com.dingdong.domain.domains.user.exception.AuthErrorCode;
 import com.dingdong.domain.domains.user.exception.UserErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,4 +45,9 @@ public class ExampleController {
     @Operation(summary = "주민증 도메인 관련 에러 코드")
     @ApiErrorCodeExample(IdCardErrorCode.class)
     public void getIdCardErrorCode() {}
+
+    @GetMapping("/notifications")
+    @Operation(summary = "알림 도메인 관련 에러 코드")
+    @ApiErrorCodeExample(NotificationErrorCode.class)
+    public void getNotificationErrorCode() {}
 }
