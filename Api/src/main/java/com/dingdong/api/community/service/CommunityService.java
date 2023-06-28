@@ -114,11 +114,20 @@ public class CommunityService {
         return communityAdaptor.findByInvitationCode(code).getId();
     }
 
+    @Transactional
     public void joinCommunity(JoinCommunityRequest request) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(request.getCommunityId());
         communityValidator.isAlreadyJoinCommunity(user, community.getId());
         user.joinCommunity(community);
+    }
+
+    @Transactional
+    public void leaveCommunity(Long communityId) {
+        User user = userHelper.getCurrentUser();
+        Community community = communityAdaptor.findById(communityId);
+        communityValidator.isJoinCommunity(user, communityId);
+        user.getCommunities().remove(community);
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {

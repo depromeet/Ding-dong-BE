@@ -85,4 +85,10 @@ public class CommunityController {
     public void joinCommunity(@RequestBody JoinCommunityRequest request) {
         communityService.joinCommunity(request);
     }
+
+    @Operation(summary = "행성 떠나기")
+    @GetMapping("/leave/{communityId}")
+    public void leaveCommunity(@PathVariable Long communityId) {
+        communityService.leaveCommunity(communityId);
+    }
 }

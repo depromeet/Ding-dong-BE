@@ -46,4 +46,10 @@ public class CommunityValidator {
             throw new BaseException(ALREADY_JOIN_COMMUNITY);
         }
     }
+
+    public void isJoinCommunity(User user, Long communityId) {
+        if (user.getCommunities().stream().noneMatch(c -> c.getId().equals(communityId))) {
+            throw new BaseException(NOT_JOIN_COMMUNITY);
+        }
+    }
 }
