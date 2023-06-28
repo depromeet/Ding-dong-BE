@@ -11,6 +11,7 @@ public class StaticVal {
     public static final String BEARER = "Bearer ";
 
     public static final Integer OK = 200;
+    public static final Integer REDIRECTION = 300;
     /*
     에러 코드 관련 static 변수들
      */

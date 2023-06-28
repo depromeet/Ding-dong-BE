@@ -2,6 +2,7 @@ package com.dingdong.api.community.controller;
 
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
+import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
@@ -77,5 +78,11 @@ public class CommunityController {
     @GetMapping("validate")
     public IdResponse validateInvitationCode(@RequestParam String code) {
         return IdResponse.from(communityService.validateInvitationCode(code));
+    }
+
+    @Operation(summary = "행성 가입하기")
+    @PostMapping("/join")
+    public void joinCommunity(@RequestBody JoinCommunityRequest request) {
+        communityService.joinCommunity(request);
     }
 }

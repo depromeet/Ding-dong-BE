@@ -22,7 +22,11 @@ public enum CommunityErrorCode implements BaseErrorCode {
     @ExplainError("행성 이름이 최소 길이인 1글자 미만일 때 발생하는 오류입니다.")
     MIN_LIMIT_COMMUNITY_NAME(BAD_REQUEST, "Community-400-2", "행성 이름 최소 길이는 1글자입니다."),
     @ExplainError("행성 이름이 최대 길이인 16글자를 초과할 때 발생하는 오류입니다.")
-    MAX_LIMIT_COMMUNITY_NAME(BAD_REQUEST, "Community-400-3", "행성 이름 최대 길이는 16글자입니다.");
+    MAX_LIMIT_COMMUNITY_NAME(BAD_REQUEST, "Community-400-3", "행성 이름 최대 길이는 16글자입니다."),
+    @ExplainError("이미 가입된 행성에 가입 시도를 할 때 발생하는 오류입니다.")
+    ALREADY_JOIN_COMMUNITY(REDIRECTION, "Community-300-1", "이미 가입된 행성입니다."),
+    @ExplainError("가입하지 않은 행성에서 행성 떠나기를 시도할 때 발샐하는 오류입니다.")
+    NOT_JOIN_COMMUNITY(BAD_REQUEST, "Community-400-4", "가입하지 않은 행성입니다.");
 
     private final Integer statusCode;
     private final String errorCode;
