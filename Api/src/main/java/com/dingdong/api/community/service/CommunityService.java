@@ -109,6 +109,10 @@ public class CommunityService {
         return communityAdaptor.isAlreadyExistCommunityName(name);
     }
 
+    public Long validateInvitationCode(String code) {
+        return communityAdaptor.findByInvitationCode(code).getId();
+    }
+
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
         communityValidator.verifyAdminUser(communityId, currentUser.getId());

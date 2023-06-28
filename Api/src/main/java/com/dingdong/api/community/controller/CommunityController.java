@@ -72,4 +72,10 @@ public class CommunityController {
     public boolean checkDuplicatedName(@RequestParam String name) {
         return communityService.checkDuplicatedName(name);
     }
+
+    @Operation(summary = "행성 초대 코드 검사 (유효한 초대코드일 경우 : 행성 ID 응답 / 유효하지 않을 경우 : Error)")
+    @GetMapping("validate")
+    public IdResponse validateInvitationCode(@RequestParam String code) {
+        return IdResponse.from(communityService.validateInvitationCode(code));
+    }
 }
