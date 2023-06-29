@@ -12,6 +12,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationListener;
 import org.springframework.core.env.Environment;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableFeignClients
 @EntityScan("com.dingdong.domain")
@@ -25,6 +26,7 @@ import org.springframework.core.env.Environment;
                     .ContextRegionProviderAutoConfiguration.class
         })
 @Slf4j
+@EnableAsync
 public class DingdongApiApplication implements ApplicationListener<ApplicationReadyEvent> {
 
     private final Environment environment;
