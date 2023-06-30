@@ -87,8 +87,8 @@ public class CommunityController {
     }
 
     @Operation(summary = "행성 떠나기")
-    @PutMapping("/{communityId}/leave")
-    public void leaveCommunity(@PathVariable Long communityId) {
-        communityService.leaveCommunity(communityId);
+    @PutMapping("/{communityId}/withdrawal")
+    public void withdrawCommunity(@PathVariable Long communityId) {
+        communityService.withdrawCommunity(communityId);
     }
 }

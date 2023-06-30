@@ -123,7 +123,7 @@ public class CommunityService {
     }
 
     @Transactional
-    public void leaveCommunity(Long communityId) {
+    public void withdrawCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
         communityValidator.isExistInCommunity(user, communityId);
