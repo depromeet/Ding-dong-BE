@@ -126,7 +126,7 @@ public class CommunityService {
     public void leaveCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
-        communityValidator.isJoinCommunity(user, communityId);
+        communityValidator.isExistInCommunity(user, communityId);
         user.getCommunities().remove(community);
     }
 

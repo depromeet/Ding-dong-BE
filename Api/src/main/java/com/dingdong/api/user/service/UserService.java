@@ -6,7 +6,6 @@ import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.user.controller.request.UserCharacterRequest;
 import com.dingdong.api.user.dto.UserProfileDto;
 import com.dingdong.domain.domains.idcard.domain.model.Character;
-import com.dingdong.domain.domains.user.domain.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,7 @@ public class UserService {
     private final UserHelper userHelper;
 
     public UserProfileDto getUserProfile() {
-        User user = userHelper.getCurrentUser();
-        return UserProfileDto.from(user, user.getCharacter() != null);
+        return UserProfileDto.from(userHelper.getCurrentUser());
     }
 
     @Transactional

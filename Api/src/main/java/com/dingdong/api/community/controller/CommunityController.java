@@ -75,19 +75,19 @@ public class CommunityController {
     }
 
     @Operation(summary = "행성 초대 코드 검사 (유효한 초대코드일 경우 : 행성 ID 응답 / 유효하지 않을 경우 : Error)")
-    @GetMapping("validate")
+    @GetMapping("/validate")
     public IdResponse validateInvitationCode(@RequestParam String code) {
         return IdResponse.from(communityService.validateInvitationCode(code));
     }
 
     @Operation(summary = "행성 가입하기")
     @PostMapping("/join")
-    public void joinCommunity(@RequestBody JoinCommunityRequest request) {
+    public void joinCommunity(@RequestBody @Valid JoinCommunityRequest request) {
         communityService.joinCommunity(request);
     }
 
     @Operation(summary = "행성 떠나기")
-    @GetMapping("/leave/{communityId}")
+    @PutMapping("/{communityId}/leave")
     public void leaveCommunity(@PathVariable Long communityId) {
         communityService.leaveCommunity(communityId);
     }
