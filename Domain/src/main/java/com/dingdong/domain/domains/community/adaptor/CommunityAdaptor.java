@@ -47,4 +47,10 @@ public class CommunityAdaptor {
     public boolean isAlreadyExistCommunityName(String name) {
         return communityRepository.existsCommunityByName(name);
     }
+
+    public Community findByInvitationCode(String code) {
+        return communityRepository
+                .findByInvitationCode(code)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_COMMUNITY));
+    }
 }

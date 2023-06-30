@@ -3,6 +3,7 @@ package com.dingdong.api.community.service;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
+import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
@@ -107,6 +108,26 @@ public class CommunityService {
     public boolean checkDuplicatedName(String name) {
         communityValidator.validateCommunityNameSize(name);
         return communityAdaptor.isAlreadyExistCommunityName(name);
+    }
+
+    public Long validateInvitationCode(String code) {
+        return communityAdaptor.findByInvitationCode(code).getId();
+    }
+
+    @Transactional
+    public void joinCommunity(JoinCommunityRequest request) {
+        User user = userHelper.getCurrentUser();
+        Community community = communityAdaptor.findById(request.getCommunityId());
+        communityValidator.isAlreadyJoinCommunity(user, community.getId());
+        user.joinCommunity(community);
+    }
+
+    @Transactional
+    public void withdrawCommunity(Long communityId) {
+        User user = userHelper.getCurrentUser();
+        Community community = communityAdaptor.findById(communityId);
+        communityValidator.isExistInCommunity(user, communityId);
+        user.getCommunities().remove(community);
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {

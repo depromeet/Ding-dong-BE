@@ -2,6 +2,7 @@ package com.dingdong.api.community.controller;
 
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
+import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
@@ -71,5 +72,23 @@ public class CommunityController {
     @GetMapping("/check")
     public boolean checkDuplicatedName(@RequestParam String name) {
         return communityService.checkDuplicatedName(name);
+    }
+
+    @Operation(summary = "행성 초대 코드 검사 (유효한 초대코드일 경우 : 행성 ID 응답 / 유효하지 않을 경우 : Error)")
+    @GetMapping("/validate")
+    public IdResponse validateInvitationCode(@RequestParam String code) {
+        return IdResponse.from(communityService.validateInvitationCode(code));
+    }
+
+    @Operation(summary = "행성 가입하기")
+    @PostMapping("/join")
+    public void joinCommunity(@RequestBody @Valid JoinCommunityRequest request) {
+        communityService.joinCommunity(request);
+    }
+
+    @Operation(summary = "행성 떠나기")
+    @PutMapping("/{communityId}/withdrawal")
+    public void withdrawCommunity(@PathVariable Long communityId) {
+        communityService.withdrawCommunity(communityId);
     }
 }

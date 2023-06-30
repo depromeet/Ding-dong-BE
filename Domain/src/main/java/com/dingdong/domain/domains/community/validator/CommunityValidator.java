@@ -1,12 +1,12 @@
 package com.dingdong.domain.domains.community.validator;
 
-import static com.dingdong.domain.domains.community.exception.CommunityErrorCode.MAX_LIMIT_COMMUNITY_NAME;
-import static com.dingdong.domain.domains.community.exception.CommunityErrorCode.MIN_LIMIT_COMMUNITY_NAME;
+import static com.dingdong.domain.domains.community.exception.CommunityErrorCode.*;
 
 import com.dingdong.core.annotation.Validator;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.exception.CommunityErrorCode;
+import com.dingdong.domain.domains.user.domain.User;
 import lombok.RequiredArgsConstructor;
 
 @Validator
@@ -39,5 +39,17 @@ public class CommunityValidator {
     public void validateCommunityNameSize(String name) {
         if (name.length() < 1) throw new BaseException(MIN_LIMIT_COMMUNITY_NAME);
         if (name.length() > 16) throw new BaseException(MAX_LIMIT_COMMUNITY_NAME);
+    }
+
+    public void isAlreadyJoinCommunity(User user, Long communityId) {
+        if (user.getCommunities().stream().anyMatch(c -> c.getId().equals(communityId))) {
+            throw new BaseException(ALREADY_JOIN_COMMUNITY);
+        }
+    }
+
+    public void isExistInCommunity(User user, Long communityId) {
+        if (user.getCommunities().stream().noneMatch(c -> c.getId().equals(communityId))) {
+            throw new BaseException(NOT_JOIN_COMMUNITY);
+        }
     }
 }
