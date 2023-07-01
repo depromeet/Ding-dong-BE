@@ -31,4 +31,8 @@ public class NotificationAdaptor {
         return notificationRepository.existsByUserIdAndNotificationStatus(
                 userId, NotificationStatus.UNREAD);
     }
+
+    public void save(Notification notification) {
+        notificationRepository.save(notification);
+    }
 }

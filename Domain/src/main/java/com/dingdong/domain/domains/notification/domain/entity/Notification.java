@@ -40,12 +40,32 @@ public class Notification extends AbstractTimeStamp {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private NotificationStatus notificationStatus;
+    private NotificationStatus notificationStatus = NotificationStatus.UNREAD;
 
     public void read(Long userId) {
         if (this.userId != userId) {
             throw new BaseException(NO_AUTHORITY_UPDATE_NOTIFICATION);
         }
         this.notificationStatus = NotificationStatus.READ;
+    }
+
+    private Notification(
+            Long userId, NotificationType notificationType, NotificationContent content) {
+        this.userId = userId;
+        this.notificationType = notificationType;
+        this.content = content;
+    }
+
+    public static Notification create(
+            Long userId,
+            NotificationType notificationType,
+            NotificationContent notificationContent) {
+        return new Notification(
+                userId,
+                notificationType,
+                NotificationContent.create(
+                        notificationContent.getCommunityId(),
+                        notificationContent.getFromUserId(),
+                        notificationContent.getCommentId()));
     }
 }
