@@ -71,14 +71,11 @@ public class AuthService {
 
     public void logout(String token) {
         String parseToken = validateAndParseToken(token);
-        Long leftAccessTokenTTlSecond = jwtTokenProvider.getLeftAccessTokenTTlSecond(parseToken);
+        Long leftAccessTokenTTlSecond = jwtTokenProvider.getLeftAccessTokenTTLSecond(parseToken);
 
-        System.out.println("token = " + parseToken);
         redisTemplate
                 .opsForValue()
                 .set(parseToken, "logout", leftAccessTokenTTlSecond, TimeUnit.MILLISECONDS);
-        String s = redisTemplate.opsForValue().get(parseToken);
-        System.out.println("s = " + s);
     }
 
     private User createUser(KakaoUserInfoResponse kakaoUserInfoResponse) {
@@ -110,9 +107,8 @@ public class AuthService {
     }
 
     private String validateAndParseToken(String token) {
-        if (token != null && token.length() > BEARER.length() && token.startsWith(BEARER)) {
-            return token.substring(BEARER.length());
-        }
-        return null;
+        return (token != null && token.startsWith(BEARER))
+                ? token.substring(BEARER.length())
+                : null;
     }
 }

@@ -130,7 +130,7 @@ public class CommunityService {
         user.getCommunities().remove(community);
     }
 
-    public Boolean checkUserMakeIdCard(Long communityId) {
+    public boolean checkForUserIdCardInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
         return idCardAdaptor

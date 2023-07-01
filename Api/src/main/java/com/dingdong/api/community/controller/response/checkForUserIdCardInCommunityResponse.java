@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CheckUserMakeIdCardInCommunityResponse {
+public class checkForUserIdCardInCommunityResponse {
 
     @Schema(description = "커뮤니티 Id")
     private final Long communityId;
@@ -15,9 +15,10 @@ public class CheckUserMakeIdCardInCommunityResponse {
     @Schema(description = "유저가 행성에 주민증이 있는지 여부")
     private final boolean isUserMakeIdCard;
 
-    public static CheckUserMakeIdCardInCommunityResponse of(
-            Long communityId, Boolean isUserMakeIdCard) {
-        return CheckUserMakeIdCardInCommunityResponse.builder()
+    public static checkForUserIdCardInCommunityResponse of(
+            Long communityId, boolean isUserMakeIdCard) {
+        return checkForUserIdCardInCommunityResponse
+                .builder()
                 .communityId(communityId)
                 .isUserMakeIdCard(isUserMakeIdCard)
                 .build();

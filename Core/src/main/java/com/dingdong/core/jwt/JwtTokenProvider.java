@@ -118,7 +118,7 @@ public class JwtTokenProvider {
         return jwtProperties.getAccessExp();
     }
 
-    public Long getLeftAccessTokenTTlSecond(String token) {
+    public Long getLeftAccessTokenTTLSecond(String token) {
         return getJws(token).getBody().getExpiration().getTime();
     }
 }
