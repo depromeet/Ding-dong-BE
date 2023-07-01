@@ -1,5 +1,6 @@
 package com.dingdong.api.auth.service;
 
+import static com.dingdong.core.consts.StaticVal.BEARER;
 import static com.dingdong.domain.domains.user.domain.enums.GenderType.findGenderType;
 
 import com.dingdong.api.auth.controller.request.AuthRequest;
@@ -13,8 +14,10 @@ import com.dingdong.infrastructure.client.feign.KakaoAuthFeignClient;
 import com.dingdong.infrastructure.client.feign.dto.request.KakaoAuthRequest;
 import com.dingdong.infrastructure.client.feign.dto.response.KakaoAuthResponse;
 import com.dingdong.infrastructure.client.feign.dto.response.KakaoUserInfoResponse;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final UserAdaptor userAdaptor;
+    private final RedisTemplate<String, String> redisTemplate;
 
     private final KakaoAuthFeignClient kakaoAuthFeignClient;
     private final KakaoApiFeignClient kakaoApiFeignClient;
@@ -65,6 +69,18 @@ public class AuthService {
         return createAuthResponse(userAdaptor.findById(userId));
     }
 
+    public void logout(String token) {
+        String parseToken = validateAndParseToken(token);
+        Long leftAccessTokenTTlSecond = jwtTokenProvider.getLeftAccessTokenTTlSecond(parseToken);
+
+        System.out.println("token = " + parseToken);
+        redisTemplate
+                .opsForValue()
+                .set(parseToken, "logout", leftAccessTokenTTlSecond, TimeUnit.MILLISECONDS);
+        String s = redisTemplate.opsForValue().get(parseToken);
+        System.out.println("s = " + s);
+    }
+
     private User createUser(KakaoUserInfoResponse kakaoUserInfoResponse) {
         User user =
                 User.toEntity(
@@ -91,5 +107,12 @@ public class AuthService {
     private KakaoUserInfoResponse getKakaoUserInfo(KakaoAuthResponse response) {
         return kakaoApiFeignClient.getKakaoUserInfo(
                 response.toAccessToken(response.getAccessToken()));
+    }
+
+    private String validateAndParseToken(String token) {
+        if (token != null && token.length() > BEARER.length() && token.startsWith(BEARER)) {
+            return token.substring(BEARER.length());
+        }
+        return null;
     }
 }
