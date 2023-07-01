@@ -5,11 +5,13 @@ import com.dingdong.api.user.controller.request.UserCharacterRequest;
 import com.dingdong.api.user.controller.response.UserProfileResponse;
 import com.dingdong.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "유저")
+@SecurityRequirement(name = "access-token")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")

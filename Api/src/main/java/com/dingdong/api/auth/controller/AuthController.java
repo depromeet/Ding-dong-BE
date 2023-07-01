@@ -5,11 +5,13 @@ import com.dingdong.api.auth.controller.request.AuthRequest;
 import com.dingdong.api.auth.controller.response.AuthResponse;
 import com.dingdong.api.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "로그인/회원가입")
+@Tag(name = "인증관련 컨트롤러")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
@@ -27,5 +29,13 @@ public class AuthController {
     @GetMapping("/login/reissue")
     public AuthResponse reissue(@RequestHeader(value = "REFRESH_TOKEN") String refreshToken) {
         return authService.reissue(refreshToken);
+    }
+
+    @SecurityRequirement(name = "access-token")
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logouts")
+    public void logout(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        authService.logout(token);
     }
 }

@@ -12,7 +12,7 @@ spring:
     password: ${MYSQL_PASSWORD}
     username: ${MYSQL_USERNAME}
   jpa:
-    show-sql: ${SHOW_SQL:true}
+    show-sql: ${SHOW_SQL:false}
     properties:
       hibernate:
         format_sql: ${FORMAT_SQL:true}
