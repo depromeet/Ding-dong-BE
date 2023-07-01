@@ -4,6 +4,7 @@ package com.dingdong.api.community.controller;
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
+import com.dingdong.api.community.controller.response.CheckUserMakeIdCardInCommunityResponse;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
@@ -90,5 +91,13 @@ public class CommunityController {
     @PutMapping("/{communityId}/withdrawal")
     public void withdrawCommunity(@PathVariable Long communityId) {
         communityService.withdrawCommunity(communityId);
+    }
+
+    @Operation(summary = "행성에 내 주민증이 있는지 조회")
+    @GetMapping("/{communityId}/users")
+    public CheckUserMakeIdCardInCommunityResponse checkUserMakeIdCardInCommunity(
+            @PathVariable Long communityId) {
+        return CheckUserMakeIdCardInCommunityResponse.of(
+                communityId, communityService.checkUserMakeIdCard(communityId));
     }
 }

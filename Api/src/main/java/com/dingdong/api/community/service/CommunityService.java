@@ -130,6 +130,14 @@ public class CommunityService {
         user.getCommunities().remove(community);
     }
 
+    public Boolean checkUserMakeIdCard(Long communityId) {
+        User currentUser = userHelper.getCurrentUser();
+        Community community = communityAdaptor.findById(communityId);
+        return idCardAdaptor
+                .findByUserAndCommunity(community.getId(), currentUser.getId())
+                .isPresent();
+    }
+
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
         communityValidator.verifyAdminUser(communityId, currentUser.getId());
