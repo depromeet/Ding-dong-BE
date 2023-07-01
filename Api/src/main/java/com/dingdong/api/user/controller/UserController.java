@@ -7,6 +7,7 @@ import com.dingdong.api.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class UserController {
 
     @Operation(summary = "온보딩 캐릭터 정보 저장")
     @PostMapping("/character")
-    public void saveUserCharacter(@RequestBody UserCharacterRequest request) {
+    public void saveUserCharacter(@RequestBody @NotNull UserCharacterRequest request) {
         userService.saveUserCharacter(request);
     }
 
