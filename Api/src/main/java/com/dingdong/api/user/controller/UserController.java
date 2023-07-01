@@ -30,4 +30,10 @@ public class UserController {
     public void saveUserCharacter(@RequestBody UserCharacterRequest request) {
         userService.saveUserCharacter(request);
     }
+
+    @Operation(summary = "온보딩 캐릭터 정보 초기화")
+    @PutMapping("/character")
+    public void removeUserCharacter() {
+        userService.removeUserCharacter();
+    }
 }
