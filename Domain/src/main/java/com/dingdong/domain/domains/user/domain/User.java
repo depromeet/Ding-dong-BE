@@ -1,6 +1,9 @@
 package com.dingdong.domain.domains.user.domain;
 
+import static com.dingdong.domain.common.consts.Status.N;
+import static com.dingdong.domain.common.consts.Status.Y;
 
+import com.dingdong.domain.common.consts.Status;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
@@ -42,6 +45,9 @@ public class User extends AbstractTimeStamp {
 
     @Embedded private Character character;
 
+    @Enumerated(EnumType.STRING)
+    private Status isDeleted;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<Community> communities = new ArrayList<>();
 
@@ -49,6 +55,7 @@ public class User extends AbstractTimeStamp {
         this.email = email;
         this.genderType = genderType;
         this.ageRange = ageRange;
+        this.isDeleted = N;
     }
 
     public static User toEntity(String email, GenderType genderType, String ageRange) {
@@ -65,5 +72,9 @@ public class User extends AbstractTimeStamp {
 
     public CharacterType getUserCharacterType() {
         return Optional.ofNullable(character).map(Character::getCharacterType).orElse(null);
+    }
+
+    public void withdraw() {
+        this.isDeleted = Y;
     }
 }

@@ -53,4 +53,8 @@ public class CommunityAdaptor {
                 .findByInvitationCode(code)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMUNITY));
     }
+
+    public boolean existsAdminByUserId(Long userId) {
+        return adminRepository.existsByUserId(userId);
+    }
 }

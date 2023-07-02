@@ -30,4 +30,10 @@ public class UserController {
     public void saveUserCharacter(@RequestBody UserCharacterRequest request) {
         userService.saveUserCharacter(request);
     }
+
+    @Operation(summary = "유저 탈퇴")
+    @DeleteMapping
+    public void deleteUser() {
+        userService.deleteUser();
+    }
 }
