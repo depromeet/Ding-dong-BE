@@ -84,4 +84,8 @@ public class Community extends AbstractTimeStamp {
     public void addAdmin(Admin admin) {
         this.getAdmins().add(admin);
     }
+
+    public void addIdCard(IdCard idCard) {
+        this.getIdCards().add(idCard);
+    }
 }

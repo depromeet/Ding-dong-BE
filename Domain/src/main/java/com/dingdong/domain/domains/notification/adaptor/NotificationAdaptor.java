@@ -8,6 +8,7 @@ import com.dingdong.domain.domains.notification.domain.entity.Notification;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import com.dingdong.domain.domains.notification.repository.NotificationRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -30,6 +31,14 @@ public class NotificationAdaptor {
     public boolean existsUnreadNotifications(Long userId) {
         return notificationRepository.existsByUserIdAndNotificationStatus(
                 userId, NotificationStatus.UNREAD);
+    }
+
+    public List<Notification> findByUserId(Long userId) {
+        return notificationRepository.findAllByUserId(userId);
+    }
+
+    public void deleteAll(List<Notification> notifications) {
+        notificationRepository.deleteAllInBatch(notifications);
     }
 
     public void save(Notification notification) {

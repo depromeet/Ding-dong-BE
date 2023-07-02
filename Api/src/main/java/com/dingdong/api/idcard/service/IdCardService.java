@@ -77,6 +77,8 @@ public class IdCardService {
                         request.getNickname(),
                         request.getAboutMe());
 
+        community.addIdCard(saveIdCard);
+
         List<Keyword> keywords = createKeywords(request.getKeywords(), saveIdCard.getId());
 
         saveIdCard.updateKeywords(keywords);
