@@ -103,7 +103,7 @@ public class CommunityController {
     }
 
     @Operation(summary = "현재 본인이 속한 행성 내 정보 조회")
-    @GetMapping("/{communityId}/myInfo")
+    @GetMapping("/{communityId}/my-info")
     public MyInfoInCommunityResponse getMyInfoInCommunity(@PathVariable Long communityId) {
         return MyInfoInCommunityResponse.from(communityService.getMyInfoInCommunity(communityId));
     }

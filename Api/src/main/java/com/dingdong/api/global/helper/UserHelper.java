@@ -1,5 +1,6 @@
 package com.dingdong.api.global.helper;
 
+import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.domains.user.exception.UserErrorCode.NOT_FOUND_USER;
 
 import com.dingdong.api.config.security.SecurityUtils;
@@ -21,7 +22,7 @@ public class UserHelper {
 
     public User getCurrentUser() {
         return userRepository
-                .findById(getCurrentUserId())
+                .findByIdAndIsDeleted(getCurrentUserId(), N)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_USER));
     }
 }
