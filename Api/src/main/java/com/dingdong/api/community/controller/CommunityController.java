@@ -4,9 +4,10 @@ package com.dingdong.api.community.controller;
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
+import com.dingdong.api.community.controller.response.CheckForUserIdCardInCommunityResponse;
 import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
 import com.dingdong.api.community.controller.response.CommunityListResponse;
-import com.dingdong.api.community.controller.response.checkForUserIdCardInCommunityResponse;
+import com.dingdong.api.community.controller.response.MyInfoInCommunityResponse;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.service.CommunityService;
 import com.dingdong.api.global.response.IdResponse;
@@ -95,9 +96,15 @@ public class CommunityController {
 
     @Operation(summary = "행성에 내 주민증이 있는지 조회")
     @GetMapping("/{communityId}/users")
-    public checkForUserIdCardInCommunityResponse checkForUserIdCardInCommunity(
+    public CheckForUserIdCardInCommunityResponse checkForUserIdCardInCommunity(
             @PathVariable Long communityId) {
-        return checkForUserIdCardInCommunityResponse.of(
+        return CheckForUserIdCardInCommunityResponse.of(
                 communityId, communityService.checkForUserIdCardInCommunity(communityId));
+    }
+
+    @Operation(summary = "현재 본인이 속한 행성 내 정보 조회")
+    @GetMapping("/{communityId}/myInfo")
+    public MyInfoInCommunityResponse getMyInfoInCommunity(@PathVariable Long communityId) {
+        return MyInfoInCommunityResponse.from(communityService.getMyInfoInCommunity(communityId));
     }
 }
