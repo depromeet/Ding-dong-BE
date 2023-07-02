@@ -8,6 +8,7 @@ import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
 import com.dingdong.api.community.dto.CommunityDetailsDto;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.dto.CommunityListDto;
+import com.dingdong.api.community.dto.MyInfoInCommunityDto;
 import com.dingdong.api.community.service.generator.RandomCommunityCodeGeneratorStrategy;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
@@ -136,6 +137,19 @@ public class CommunityService {
         return idCardAdaptor
                 .findByUserAndCommunity(community.getId(), currentUser.getId())
                 .isPresent();
+    }
+
+    public MyInfoInCommunityDto getMyInfoInCommunity(Long communityId) {
+        User user = userHelper.getCurrentUser();
+        communityValidator.isExistInCommunity(user, communityId);
+
+        IdCard idCard =
+                idCardAdaptor
+                        .findByUserAndCommunity(communityId, user.getId())
+                        .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
+
+        return MyInfoInCommunityDto.of(
+                user.getId(), idCard.getNickname(), idCard.getProfileImageUrl());
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
