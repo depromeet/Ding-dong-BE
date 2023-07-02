@@ -57,4 +57,8 @@ public class CommunityAdaptor {
     public boolean existsAdminByUserId(Long userId) {
         return adminRepository.existsByUserId(userId);
     }
+
+    public int getUserCount(Long communityId) {
+        return communityRepository.userCountByCommunityId(communityId);
+    }
 }
