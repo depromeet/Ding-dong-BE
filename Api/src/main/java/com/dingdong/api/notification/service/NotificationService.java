@@ -6,10 +6,13 @@ import com.dingdong.api.notification.dto.NotificationDto;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.notification.adaptor.NotificationAdaptor;
 import com.dingdong.domain.domains.notification.domain.entity.Notification;
+import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
+import com.dingdong.domain.domains.notification.domain.model.NotificationContent;
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class NotificationService {
     // 기본 타임아웃 설정
     private static final Long DEFAULT_TIMEOUT = 60L * 1000 * 60;
@@ -25,6 +29,7 @@ public class NotificationService {
     private final EmitterRepository emitterRepository;
     private final UserHelper userHelper;
     private final NotificationAdaptor notificationAdaptor;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     /** 클라이언트가 구독을 위해 호출하는 메서드. */
     public SseEmitter subscribe() {
@@ -35,12 +40,6 @@ public class NotificationService {
         return emitter;
     }
 
-    /**
-     * 서버의 이벤트를 클라이언트에게 보내는 메서드 다른 서비스 로직에서 이 메서드를 사용해 데이터를 Object event에 넣고 전송하면 된다.
-     *
-     * @param userId - 메세지를 전송할 사용자의 아이디.
-     * @param event - 전송할 이벤트 객체.
-     */
     public void notify(Long userId, Object event) {
         sendNotification(userId, event);
     }
@@ -55,7 +54,7 @@ public class NotificationService {
         SseEmitter emitter = emitterRepository.get(id);
         if (emitter != null) {
             try {
-                emitter.send(SseEmitter.event().id(String.valueOf(id)).data(data));
+                emitter.send(SseEmitter.event().id(String.valueOf(id)).name("sse").data(data));
             } catch (IOException exception) {
                 emitterRepository.deleteById(id);
                 emitter.completeWithError(exception);
@@ -105,5 +104,13 @@ public class NotificationService {
         Long userId = userHelper.getCurrentUserId();
 
         return notificationAdaptor.existsUnreadNotifications(userId);
+    }
+
+    @Transactional
+    public void createAndPublishNotification(
+            Long userId, NotificationType type, NotificationContent content) {
+        Notification notification = Notification.create(userId, type, content);
+        notificationAdaptor.save(notification);
+        applicationEventPublisher.publishEvent(notification);
     }
 }

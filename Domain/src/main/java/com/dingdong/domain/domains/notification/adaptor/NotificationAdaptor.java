@@ -40,4 +40,8 @@ public class NotificationAdaptor {
     public void deleteAll(List<Notification> notifications) {
         notificationRepository.deleteAllInBatch(notifications);
     }
+
+    public void save(Notification notification) {
+        notificationRepository.save(notification);
+    }
 }
