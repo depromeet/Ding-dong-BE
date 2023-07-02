@@ -29,4 +29,9 @@ public class UserService {
                 .getCurrentUser()
                 .updateCharacter(Character.toEntity(findCharacterType(request.getCharacter())));
     }
+
+    @Transactional
+    public void removeUserCharacter() {
+        userHelper.getCurrentUser().updateCharacter(null);
+    }
 }
