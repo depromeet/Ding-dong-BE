@@ -141,6 +141,7 @@ public class CommunityService {
 
     public MyInfoInCommunityDto getMyInfoInCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
+        communityValidator.isExistCommunity(communityId);
         communityValidator.isExistInCommunity(user, communityId);
 
         IdCard idCard =

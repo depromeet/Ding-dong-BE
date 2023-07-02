@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommunityRepository extends JpaRepository<Community, Long> {
-    boolean existsCommunityByInvitationCode(String invitationCode);
-
     boolean existsCommunityByName(String name);
 
     Optional<Community> findByInvitationCode(String invitationCode);
+
+    boolean existsCommunityById(Long id);
 }
