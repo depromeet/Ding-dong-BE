@@ -12,7 +12,6 @@ import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.service.CommentService;
 import com.dingdong.api.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@SecurityRequirement(name = "access-token")
+// @SecurityRequirement(name = "access-token")
 @Tag(name = "주민증")
 @RestController
 @RequestMapping("/id-cards")
@@ -72,11 +71,11 @@ public class IdCardController {
 
     @Operation(summary = "주민증 대댓글 달기")
     @PostMapping("/{idCardsId}/comments/{commentId}/replies")
-    public void postCommentReply(
+    public IdResponse postCommentReply(
             @PathVariable Long idCardsId,
             @PathVariable Long commentId,
             @RequestBody @Valid CreateCommentRequest body) {
-        commentService.createCommentReply(idCardsId, commentId, body);
+        return IdResponse.from(commentService.createCommentReply(idCardsId, commentId, body));
     }
 
     @Operation(summary = "주민증 댓글 조회")

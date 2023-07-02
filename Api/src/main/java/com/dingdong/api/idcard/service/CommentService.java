@@ -67,24 +67,28 @@ public class CommentService {
 
     /** 대댓글 생성 */
     @Transactional
-    public void createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
-        User currentUser = userHelper.getCurrentUser();
+    public Long createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
+        Long currentUserId = 1L;
         IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = getComment(idCardId, commentId);
 
-        validUserIdCardInCommunity(currentUser.getId(), idCard.getCommunityId());
+        validUserIdCardInCommunity(currentUserId, idCard.getCommunityId());
 
         CommentReply commentReply =
                 CommentReply.toEntity(
-                        idCardId, comment.getId(), currentUser.getId(), request.getContents());
+                        idCardId, comment.getId(), currentUserId, request.getContents());
+        comment.addReply(commentReply);
+        commentAdaptor.save(comment);
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(comment),
                 NotificationType.COMMENT_REPLY,
                 NotificationContent.create(
-                        idCard.getCommunityId(), currentUser.getId(), commentReply.getId()));
+                        idCard.getCommunityId(),
+                        currentUserId,
+                        comment.latestCommentReply().getId()));
 
-        comment.updateReplies(commentReply);
+        return comment.latestCommentReply().getId();
     }
 
     /** 댓글 조회 */
@@ -126,7 +130,7 @@ public class CommentService {
                 NotificationContent.create(
                         idCard.getCommunityId(), currentUser.getId(), comment.getId()));
 
-        comment.updateLikes(CommentLike.toEntity(comment.getId(), currentUser.getId()));
+        comment.addLike(CommentLike.toEntity(comment.getId(), currentUser.getId()));
     }
 
     /** 대댓글 좋아요 생성 */
