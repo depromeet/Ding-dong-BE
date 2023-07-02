@@ -37,7 +37,7 @@ public class UserController {
     public void deleteUser() {
         userService.deleteUser();
     }
-  
+
     @Operation(summary = "온보딩 캐릭터 정보 초기화 (Swagger 개발용 API)")
     @PutMapping("/character")
     public void removeUserCharacter() {

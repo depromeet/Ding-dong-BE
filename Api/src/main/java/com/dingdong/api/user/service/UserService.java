@@ -91,7 +91,7 @@ public class UserService {
         List<String> profileImages = idCards.stream().map(IdCard::getProfileImageUrl).toList();
         imageAdaptor.saveAll(profileImages.stream().map(DeleteImage::toEntity).toList());
     }
-  
+
     public void removeUserCharacter() {
         userHelper.getCurrentUser().updateCharacter(null);
     }
