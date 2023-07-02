@@ -142,6 +142,7 @@ public class CommunityService {
     public MyInfoInCommunityDto getMyInfoInCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
         communityValidator.isExistInCommunity(user, communityId);
+        Community community = communityAdaptor.findById(communityId);
 
         IdCard idCard =
                 idCardAdaptor
@@ -149,7 +150,10 @@ public class CommunityService {
                         .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
 
         return MyInfoInCommunityDto.of(
-                user.getId(), idCard.getNickname(), idCard.getProfileImageUrl());
+                user.getId(),
+                idCard.getNickname(),
+                idCard.getProfileImageUrl(),
+                community.isAdmin(user.getId()));
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
