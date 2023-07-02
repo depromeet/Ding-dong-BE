@@ -1,10 +1,12 @@
 package com.dingdong.api.idcard.service;
 
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_EXIST_ID_CARD_IN_COMMUNITY;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.notification.service.NotificationService;
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
@@ -49,6 +51,8 @@ public class CommentService {
 
         IdCard idCard = idCardAdaptor.findById(idCardId);
 
+        validUserIdCardInCommunity(currentUser.getId(), idCard.getCommunityId());
+
         Comment comment =
                 Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
 
@@ -67,6 +71,8 @@ public class CommentService {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = getComment(idCardId, commentId);
+
+        validUserIdCardInCommunity(currentUser.getId(), idCard.getCommunityId());
 
         CommentReply commentReply =
                 CommentReply.toEntity(
@@ -112,6 +118,8 @@ public class CommentService {
 
         IdCard idCard = idCardAdaptor.findById(idCardId);
 
+        validUserIdCardInCommunity(currentUser.getId(), idCard.getCommunityId());
+
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(comment),
                 NotificationType.COMMENT_LIKE,
@@ -131,6 +139,8 @@ public class CommentService {
         commentValidator.isExistCommentReplyLike(commentReply, currentUser.getId());
 
         IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        validUserIdCardInCommunity(currentUser.getId(), idCard.getCommunityId());
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(commentReply),
@@ -228,5 +238,11 @@ public class CommentService {
     private Long getNotificationTargetUserId(CommentReply commentReply) {
         Comment comment = commentAdaptor.findById(commentReply.getId());
         return comment.getUserId();
+    }
+
+    private void validUserIdCardInCommunity(Long userId, Long communityId) {
+        idCardAdaptor
+                .findByUserAndCommunity(communityId, userId)
+                .orElseThrow(() -> new BaseException(NOT_EXIST_ID_CARD_IN_COMMUNITY));
     }
 }
