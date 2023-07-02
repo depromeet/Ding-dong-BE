@@ -12,6 +12,7 @@ import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.service.CommentService;
 import com.dingdong.api.idcard.service.IdCardService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// @SecurityRequirement(name = "access-token")
+@SecurityRequirement(name = "access-token")
 @Tag(name = "주민증")
 @RestController
 @RequestMapping("/id-cards")
