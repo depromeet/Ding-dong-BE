@@ -94,11 +94,12 @@ public class CommunityService {
 
     /** 행성에 있는 해당 유저 주민증 상세 조회 */
     public IdCardDetailsDto getUserIdCardDetails(Long communityId) {
-        Long currentUserId = userHelper.getCurrentUserId();
+        User currentUser = userHelper.getCurrentUser();
+        communityValidator.isExistInCommunity(currentUser, communityId);
 
         IdCard idCard =
                 idCardAdaptor
-                        .findByUserAndCommunity(communityId, currentUserId)
+                        .findByUserAndCommunity(communityId, currentUser.getId())
                         .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
@@ -155,6 +156,7 @@ public class CommunityService {
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
+        communityValidator.isExistInCommunity(currentUser, communityId);
         communityValidator.verifyAdminUser(communityId, currentUser.getId());
         return communityAdaptor.findById(communityId);
     }
