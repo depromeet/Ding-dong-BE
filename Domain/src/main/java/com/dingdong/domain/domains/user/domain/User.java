@@ -75,6 +75,7 @@ public class User extends AbstractTimeStamp {
     }
 
     public void withdraw() {
+        this.communities.clear();
         this.isDeleted = Y;
     }
 }
