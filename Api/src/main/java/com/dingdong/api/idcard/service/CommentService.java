@@ -50,10 +50,7 @@ public class CommentService {
         IdCard idCard = idCardAdaptor.findById(idCardId);
 
         Comment comment =
-                Comment.toEntity(
-                        idCard.getUserInfo().getUserId(),
-                        currentUser.getId(),
-                        request.getContents());
+                Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(idCard),
