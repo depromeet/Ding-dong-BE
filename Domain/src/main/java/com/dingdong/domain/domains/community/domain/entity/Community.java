@@ -88,4 +88,12 @@ public class Community extends AbstractTimeStamp {
     public void addIdCard(IdCard idCard) {
         this.getIdCards().add(idCard);
     }
+
+    public boolean isAdmin(Long userId) {
+        if (this.getAdmins().isEmpty()) {
+            return false;
+        }
+
+        return this.getAdmins().stream().anyMatch(admin -> admin.getUserId().equals(userId));
+    }
 }
