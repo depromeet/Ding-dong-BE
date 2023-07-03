@@ -102,6 +102,7 @@ public class Community extends AbstractTimeStamp {
     private static String getCommunityDefaultDescription() {
         return COMMUNITY_DEFAULT_DESCRIPTION;
     }
+
     public boolean isAdmin(Long userId) {
         if (this.getAdmins().isEmpty()) {
             return false;
