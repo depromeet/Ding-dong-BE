@@ -62,22 +62,22 @@ public class Comment extends AbstractTimeStamp {
         return new Comment(idCardId, userId, content);
     }
 
-    public void updateReplies(CommentReply commentReply) {
-        replies.add(commentReply);
+    public void addReply(CommentReply commentReply) {
+        this.replies.add(commentReply);
     }
 
-    public void updateLikes(CommentLike commentLike) {
-        likes.add(commentLike);
+    public void addLike(CommentLike commentLike) {
+        this.likes.add(commentLike);
     }
 
     public void deleteReply(CommentReply commentReply) {
-        if (!replies.remove(commentReply)) {
+        if (!this.replies.remove(commentReply)) {
             throw new BaseException(NOT_FOUND_COMMENT_REPLY);
         }
     }
 
     public void deleteLike(CommentLike commentLike) {
-        if (!likes.remove(commentLike)) {
+        if (!this.likes.remove(commentLike)) {
             throw new BaseException(NOT_FOUND_COMMENT_LIKE);
         }
     }
@@ -86,5 +86,12 @@ public class Comment extends AbstractTimeStamp {
         this.likes.clear();
         this.replies.clear();
         this.isDeleted = Y;
+    }
+
+    public CommentReply latestCommentReply() {
+        if (this.replies.isEmpty()) {
+            return null;
+        }
+        return this.replies.get(this.replies.size() - 1);
     }
 }
