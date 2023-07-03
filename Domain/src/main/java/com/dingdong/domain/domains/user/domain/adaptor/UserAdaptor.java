@@ -4,8 +4,8 @@ import static com.dingdong.domain.domains.user.exception.UserErrorCode.NOT_FOUND
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
-import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 
 @Adaptor

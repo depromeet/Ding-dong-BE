@@ -8,6 +8,7 @@ import com.dingdong.api.user.controller.request.UserCharacterRequest;
 import com.dingdong.api.user.dto.UserProfileDto;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
+import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
@@ -16,7 +17,7 @@ import com.dingdong.domain.domains.idcard.domain.model.Character;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.entity.DeleteImage;
 import com.dingdong.domain.domains.notification.adaptor.NotificationAdaptor;
-import com.dingdong.domain.domains.user.domain.User;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,9 @@ public class UserService {
     private final NotificationAdaptor notificationAdaptor;
 
     public UserProfileDto getUserProfile() {
-        return UserProfileDto.from(userHelper.getCurrentUser());
+        List<Community> userJoinCommunities =
+                communityAdaptor.findByUserJoin(userHelper.getCurrentUser());
+        return UserProfileDto.of(userHelper.getCurrentUser(), userJoinCommunities);
     }
 
     @Transactional
