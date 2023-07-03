@@ -30,10 +30,6 @@ public class CommunityAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMUNITY));
     }
 
-    public boolean isAlreadyExistInvitationCode(String invitationCode) {
-        return communityRepository.existsCommunityByInvitationCode(invitationCode);
-    }
-
     public Community save(Community community, User user) {
         community.addAdmin(createAndSaveAdmin(user.getId()));
         user.joinCommunity(community);
@@ -56,5 +52,9 @@ public class CommunityAdaptor {
 
     public boolean existsAdminByUserId(Long userId) {
         return adminRepository.existsByUserId(userId);
+    }
+
+    public boolean isExistCommunity(Long communityId) {
+        return communityRepository.existsCommunityById(communityId);
     }
 }

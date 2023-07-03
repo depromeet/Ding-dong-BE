@@ -26,10 +26,6 @@ public class CommunityValidator {
                 .anyMatch(c -> c.getUserId().equals(userId));
     }
 
-    public boolean isAlreadyExistInvitationCode(String code) {
-        return communityAdaptor.isAlreadyExistInvitationCode(code);
-    }
-
     public void validateDuplicatedCommunityName(String name) {
         if (communityAdaptor.isAlreadyExistCommunityName(name)) {
             throw new BaseException(CommunityErrorCode.ALREADY_EXIST_COMMUNITY_NAME);
@@ -50,6 +46,12 @@ public class CommunityValidator {
     public void isExistInCommunity(User user, Long communityId) {
         if (user.getCommunities().stream().noneMatch(c -> c.getId().equals(communityId))) {
             throw new BaseException(NOT_JOIN_COMMUNITY);
+        }
+    }
+
+    public void isExistCommunity(Long communityId) {
+        if (!communityAdaptor.isExistCommunity(communityId)) {
+            throw new BaseException(NOT_FOUND_COMMUNITY);
         }
     }
 }
