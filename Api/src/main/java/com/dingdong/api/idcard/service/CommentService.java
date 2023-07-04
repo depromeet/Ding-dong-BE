@@ -20,7 +20,7 @@ import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
 import com.dingdong.domain.domains.notification.domain.model.NotificationContent;
-import com.dingdong.domain.domains.user.domain.User;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -216,7 +216,7 @@ public class CommentService {
 
     private IdCard validateUserIdCardInCommunityAndGetIdCard(Long userId, Long idCardId) {
         return idCardAdaptor
-                .findByUserAndCommunity(userId, idCardId)
+                .findOptionalByIdAndUser(idCardId, userId)
                 .orElseThrow(() -> new BaseException(NOT_EXIST_ID_CARD_IN_COMMUNITY));
     }
 

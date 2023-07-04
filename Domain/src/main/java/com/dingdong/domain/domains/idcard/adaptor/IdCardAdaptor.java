@@ -1,6 +1,7 @@
 package com.dingdong.domain.domains.idcard.adaptor;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_ID_CARD_USER;
 
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
@@ -22,6 +23,16 @@ public class IdCardAdaptor {
         return idCardRepository
                 .findById(idCardId)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
+    }
+
+    public IdCard findByIdAndUser(Long idCardId, Long userId) {
+        return idCardRepository
+                .findByIdAndUserInfo_UserId(idCardId, userId)
+                .orElseThrow(() -> new BaseException(NOT_VALID_ID_CARD_USER));
+    }
+
+    public Optional<IdCard> findOptionalByIdAndUser(Long idCardId, Long userId) {
+        return idCardRepository.findByIdAndUserInfo_UserId(idCardId, userId);
     }
 
     public IdCard save(IdCard idCard) {
@@ -48,5 +59,9 @@ public class IdCardAdaptor {
 
     public void deleteAll(List<IdCard> idCards) {
         idCardRepository.deleteAllInBatch(idCards);
+    }
+
+    public void delete(IdCard idCard) {
+        idCardRepository.delete(idCard);
     }
 }

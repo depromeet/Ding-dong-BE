@@ -17,14 +17,18 @@ import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
+import com.dingdong.domain.domains.community.domain.entity.UserJoinCommunity;
 import com.dingdong.domain.domains.community.domain.model.CommunityImage;
 import com.dingdong.domain.domains.community.domain.strategy.GenerateCommunityInvitationCodeStrategy;
 import com.dingdong.domain.domains.community.validator.CommunityValidator;
+import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
+import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
-import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +46,7 @@ public class CommunityService {
     private final IdCardAdaptor idCardAdaptor;
     private final UserAdaptor userAdaptor;
     private final UserHelper userHelper;
+    private final CommentAdaptor commentAdaptor;
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
         Community community = communityAdaptor.findById(communityId);
@@ -52,7 +57,7 @@ public class CommunityService {
     public List<CommunityListDto> getUserCommunityList(Long userId) {
         User user = userAdaptor.findById(userId);
 
-        return user.getCommunities().stream()
+        return communityAdaptor.findByUserJoin(user).stream()
                 .map(community -> CommunityListDto.from(community, community.getIdCards().size()))
                 .toList();
     }
@@ -121,7 +126,8 @@ public class CommunityService {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(request.getCommunityId());
         communityValidator.isAlreadyJoinCommunity(user, community.getId());
-        user.joinCommunity(community);
+        communityAdaptor.userJoinCommunity(
+                UserJoinCommunity.toEntity(user.getId(), community.getId()));
     }
 
     @Transactional
@@ -129,7 +135,9 @@ public class CommunityService {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
         communityValidator.isExistInCommunity(user, communityId);
-        user.getCommunities().remove(community);
+        deleteIdCard(community, user.getId());
+        communityAdaptor.deleteUserJoinCommunity(
+                communityAdaptor.findByUserAndCommunity(user, community));
     }
 
     public boolean checkForUserIdCardInCommunity(Long communityId) {
@@ -193,5 +201,16 @@ public class CommunityService {
         CommunityImage communityImage =
                 CommunityImage.createCommunityImage(logoImageUrl, coverImageUrl);
         community.updateCommunity(name, communityImage, description);
+    }
+
+    private void deleteIdCard(Community community, Long userId) {
+        Optional<IdCard> optionalIdCard =
+                idCardAdaptor.findByUserAndCommunity(community.getId(), userId);
+
+        if (optionalIdCard.isPresent()) {
+            IdCard idCard = optionalIdCard.get();
+            commentAdaptor.findAllByIdCard(idCard.getId()).forEach(Comment::delete);
+            community.deleteIdCard(idCard);
+        }
     }
 }

@@ -6,9 +6,9 @@ import static com.dingdong.domain.domains.user.domain.enums.GenderType.findGende
 import com.dingdong.api.auth.controller.request.AuthRequest;
 import com.dingdong.api.auth.controller.response.AuthResponse;
 import com.dingdong.core.jwt.JwtTokenProvider;
-import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.UserRepository;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import com.dingdong.infrastructure.client.feign.KakaoApiFeignClient;
 import com.dingdong.infrastructure.client.feign.KakaoAuthFeignClient;
 import com.dingdong.infrastructure.client.feign.dto.request.KakaoAuthRequest;
