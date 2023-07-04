@@ -5,10 +5,7 @@ import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_F
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.dto.CommunityDetailsDto;
-import com.dingdong.api.community.dto.CommunityIdCardsDto;
-import com.dingdong.api.community.dto.CommunityListDto;
-import com.dingdong.api.community.dto.MyInfoInCommunityDto;
+import com.dingdong.api.community.dto.*;
 import com.dingdong.api.community.service.generator.RandomCommunityCodeGeneratorStrategy;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
@@ -122,8 +119,9 @@ public class CommunityService {
         return communityAdaptor.isAlreadyExistCommunityName(name);
     }
 
-    public Long validateInvitationCode(String code) {
-        return communityAdaptor.findByInvitationCode(code).getId();
+    public ValidateInvitationCodeDto validateInvitationCode(String code) {
+        Community community = communityAdaptor.findByInvitationCode(code);
+        return ValidateInvitationCodeDto.of(community.getId(), community.getName());
     }
 
     @Transactional

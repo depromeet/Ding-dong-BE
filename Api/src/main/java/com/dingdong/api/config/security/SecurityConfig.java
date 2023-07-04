@@ -62,6 +62,8 @@ public class SecurityConfig {
                 .permitAll()
                 .mvcMatchers("/**/health/**")
                 .permitAll()
+                .mvcMatchers("/communities/validate/**")
+                .permitAll()
                 .anyRequest()
                 .hasRole("USER");
         http.apply(filterConfig);
