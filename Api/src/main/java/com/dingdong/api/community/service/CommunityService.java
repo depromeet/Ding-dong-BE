@@ -65,12 +65,17 @@ public class CommunityService {
     // 행성 만들기
     @Transactional
     public Long createCommunity(CreateCommunityRequest request) {
+        User currentUser = userHelper.getCurrentUser();
         communityValidator.validateDuplicatedCommunityName(request.getName());
-        return communityAdaptor
-                .save(
-                        createCommunityEntity(request.getName(), request.getLogoImageUrl()),
-                        userHelper.getCurrentUser())
-                .getId();
+        Long communityId =
+                communityAdaptor
+                        .save(
+                                createCommunityEntity(request.getName(), request.getLogoImageUrl()),
+                                currentUser)
+                        .getId();
+        communityAdaptor.userJoinCommunity(
+                UserJoinCommunity.toEntity(currentUser.getId(), communityId));
+        return communityId;
     }
 
     // 행성 꾸미기
