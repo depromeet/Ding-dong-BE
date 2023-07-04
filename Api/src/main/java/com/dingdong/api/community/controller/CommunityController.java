@@ -75,8 +75,8 @@ public class CommunityController {
 
     @Operation(summary = "행성 초대 코드 검사 (유효한 초대코드일 경우 : 행성 ID 와 행성 이름 응답 / 유효하지 않을 경우 : Error)")
     @GetMapping("/validate")
-    public ValidateInvitationCodeResponse validateInvitationCode(@RequestParam String code) {
-        return ValidateInvitationCodeResponse.from(communityService.validateInvitationCode(code));
+    public CheckInvitationCodeResponse checkInvitationCode(@RequestParam String code) {
+        return CheckInvitationCodeResponse.from(communityService.checkInvitationCode(code));
     }
 
     @Operation(summary = "행성 가입하기")

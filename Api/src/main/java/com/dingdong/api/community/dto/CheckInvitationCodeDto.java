@@ -7,14 +7,14 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ValidateInvitationCodeDto {
+public class CheckInvitationCodeDto {
     @Schema(description = "행성 ID")
     private Long communityId;
 
     @Schema(description = "행성 이름")
     private String name;
 
-    public static ValidateInvitationCodeDto of(Long communityId, String name) {
-        return ValidateInvitationCodeDto.builder().communityId(communityId).name(name).build();
+    public static CheckInvitationCodeDto of(Long communityId, String name) {
+        return CheckInvitationCodeDto.builder().communityId(communityId).name(name).build();
     }
 }

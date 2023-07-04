@@ -119,9 +119,9 @@ public class CommunityService {
         return communityAdaptor.isAlreadyExistCommunityName(name);
     }
 
-    public ValidateInvitationCodeDto validateInvitationCode(String code) {
+    public CheckInvitationCodeDto checkInvitationCode(String code) {
         Community community = communityAdaptor.findByInvitationCode(code);
-        return ValidateInvitationCodeDto.of(community.getId(), community.getName());
+        return CheckInvitationCodeDto.of(community.getId(), community.getName());
     }
 
     @Transactional
