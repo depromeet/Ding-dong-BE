@@ -86,4 +86,8 @@ public class CommunityAdaptor {
     public void deleteUserJoinCommunity(UserJoinCommunity userJoinCommunity) {
         userJoinCommunityRepository.delete(userJoinCommunity);
     }
+
+    public long getUserCount(Long communityId) {
+        return communityRepository.userCountByCommunityId(communityId);
+    }
 }

@@ -14,6 +14,9 @@ public class IdCardDetailsDto {
     @Schema(description = "주민증 Id")
     private Long idCardId;
 
+    @Schema(description = "주민증 작성자 Id")
+    private Long userId;
+
     @Schema(description = "이름")
     private String nickname;
 
@@ -32,6 +35,7 @@ public class IdCardDetailsDto {
     public static IdCardDetailsDto of(IdCard idCard, List<KeywordDto> keywordDtos) {
         return IdCardDetailsDto.builder()
                 .idCardId(idCard.getId())
+                .userId(idCard.getUserInfo().getUserId())
                 .nickname(idCard.getNickname())
                 .profileImageUrl(idCard.getProfileImageUrl())
                 .aboutMe(idCard.getAboutMe())

@@ -47,8 +47,9 @@ public class CommunityService {
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
         Community community = communityAdaptor.findById(communityId);
+        long userCount = communityAdaptor.getUserCount(communityId);
 
-        return CommunityDetailsDto.of(community, community.getIdCards().size());
+        return CommunityDetailsDto.of(community, userCount);
     }
 
     public List<CommunityListDto> getUserCommunityList(Long userId) {
