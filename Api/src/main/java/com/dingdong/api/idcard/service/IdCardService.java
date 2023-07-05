@@ -181,6 +181,6 @@ public class IdCardService {
 
     /** 유저가 해당 커뮤니티에 가입된 상태인지 확인 */
     private void validateIsJoinUser(User user, Long communityId) {
-        communityValidator.isExistInCommunity(user, communityId);
+        communityValidator.validateUserExistInCommunity(user, communityId);
     }
 }
