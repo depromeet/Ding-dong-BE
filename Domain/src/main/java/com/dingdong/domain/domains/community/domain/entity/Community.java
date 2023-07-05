@@ -1,6 +1,8 @@
 package com.dingdong.domain.domains.community.domain.entity;
 
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
 
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.community.domain.model.CommunityImage;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
@@ -87,5 +89,19 @@ public class Community extends AbstractTimeStamp {
 
     public void addIdCard(IdCard idCard) {
         this.getIdCards().add(idCard);
+    }
+
+    public boolean isAdmin(Long userId) {
+        if (this.getAdmins().isEmpty()) {
+            return false;
+        }
+
+        return this.getAdmins().stream().anyMatch(admin -> admin.getUserId().equals(userId));
+    }
+
+    public void deleteIdCard(IdCard idCard) {
+        if (!this.idCards.remove(idCard)) {
+            throw new BaseException(NOT_FOUND_ID_CARD);
+        }
     }
 }

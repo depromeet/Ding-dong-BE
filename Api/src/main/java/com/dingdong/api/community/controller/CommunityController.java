@@ -4,9 +4,7 @@ package com.dingdong.api.community.controller;
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.controller.response.CommunityDetailsResponse;
-import com.dingdong.api.community.controller.response.CommunityListResponse;
-import com.dingdong.api.community.controller.response.checkForUserIdCardInCommunityResponse;
+import com.dingdong.api.community.controller.response.*;
 import com.dingdong.api.community.dto.CommunityIdCardsDto;
 import com.dingdong.api.community.service.CommunityService;
 import com.dingdong.api.global.response.IdResponse;
@@ -75,10 +73,10 @@ public class CommunityController {
         return communityService.checkDuplicatedName(name);
     }
 
-    @Operation(summary = "행성 초대 코드 검사 (유효한 초대코드일 경우 : 행성 ID 응답 / 유효하지 않을 경우 : Error)")
+    @Operation(summary = "행성 초대 코드 검사 (유효한 초대코드일 경우 : 행성 ID 와 행성 이름 응답 / 유효하지 않을 경우 : Error)")
     @GetMapping("/validate")
-    public IdResponse validateInvitationCode(@RequestParam String code) {
-        return IdResponse.from(communityService.validateInvitationCode(code));
+    public CheckInvitationCodeResponse checkInvitationCode(@RequestParam String code) {
+        return CheckInvitationCodeResponse.from(communityService.checkInvitationCode(code));
     }
 
     @Operation(summary = "행성 가입하기")
@@ -95,9 +93,15 @@ public class CommunityController {
 
     @Operation(summary = "행성에 내 주민증이 있는지 조회")
     @GetMapping("/{communityId}/users")
-    public checkForUserIdCardInCommunityResponse checkForUserIdCardInCommunity(
+    public CheckForUserIdCardInCommunityResponse checkForUserIdCardInCommunity(
             @PathVariable Long communityId) {
-        return checkForUserIdCardInCommunityResponse.of(
+        return CheckForUserIdCardInCommunityResponse.of(
                 communityId, communityService.checkForUserIdCardInCommunity(communityId));
+    }
+
+    @Operation(summary = "현재 본인이 속한 행성 내 정보 조회")
+    @GetMapping("/{communityId}/my-info")
+    public MyInfoInCommunityResponse getMyInfoInCommunity(@PathVariable Long communityId) {
+        return MyInfoInCommunityResponse.from(communityService.getMyInfoInCommunity(communityId));
     }
 }
