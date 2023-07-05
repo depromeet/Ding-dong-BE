@@ -22,7 +22,7 @@ public class CommunityDetailsDto {
     private String title;
 
     @Schema(description = "주민 수")
-    private int userCount;
+    private long userCount;
 
     @Schema(description = "소개 글")
     private String description;
@@ -30,7 +30,7 @@ public class CommunityDetailsDto {
     @Schema(description = "행성 초대 코드")
     private String invitationCode;
 
-    public static CommunityDetailsDto of(Community community, int userCount) {
+    public static CommunityDetailsDto of(Community community, long userCount) {
         return CommunityDetailsDto.builder()
                 .communityId(community.getId())
                 .logoImageUrl(community.getLogoImageUrl())

@@ -58,7 +58,7 @@ public class CommunityAdaptor {
         return adminRepository.existsByUserId(userId);
     }
 
-    public int getUserCount(Long communityId) {
+    public long getUserCount(Long communityId) {
         return communityRepository.userCountByCommunityId(communityId);
     }
 }
