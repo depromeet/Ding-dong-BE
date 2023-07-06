@@ -25,7 +25,6 @@ import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -103,7 +102,7 @@ public class CommunityService {
     /** 행성에 있는 해당 유저 주민증 상세 조회 */
     public IdCardDetailsDto getUserIdCardDetails(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
-        communityValidator.isExistInCommunity(currentUser, communityId);
+        communityValidator.validateUserExistInCommunity(currentUser, communityId);
 
         IdCard idCard =
                 idCardAdaptor
@@ -116,7 +115,7 @@ public class CommunityService {
     }
 
     public boolean checkDuplicatedName(String name) {
-        communityValidator.validateCommunityNameSize(name);
+        communityValidator.validateCommunityNameLength(name);
         return communityAdaptor.isAlreadyExistCommunityName(name);
     }
 
@@ -129,7 +128,7 @@ public class CommunityService {
     public void joinCommunity(JoinCommunityRequest request) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(request.getCommunityId());
-        communityValidator.isAlreadyJoinCommunity(user, community.getId());
+        communityValidator.validateAlreadyJoinCommunity(user, community.getId());
         communityAdaptor.userJoinCommunity(
                 UserJoinCommunity.toEntity(user.getId(), community.getId()));
     }
@@ -138,7 +137,7 @@ public class CommunityService {
     public void withdrawCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
-        communityValidator.isExistInCommunity(user, communityId);
+        communityValidator.validateUserExistInCommunity(user, communityId);
         deleteIdCard(community, user.getId());
         communityAdaptor.deleteUserJoinCommunity(
                 communityAdaptor.findByUserAndCommunity(user, community));
@@ -154,8 +153,8 @@ public class CommunityService {
 
     public MyInfoInCommunityDto getMyInfoInCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
-        communityValidator.isExistCommunity(communityId);
-        communityValidator.isExistInCommunity(user, communityId);
+        communityValidator.validateExistCommunity(communityId);
+        communityValidator.validateUserExistInCommunity(user, communityId);
         Community community = communityAdaptor.findById(communityId);
 
         IdCard idCard =
@@ -172,7 +171,7 @@ public class CommunityService {
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
-        communityValidator.isExistInCommunity(currentUser, communityId);
+        communityValidator.validateUserExistInCommunity(currentUser, communityId);
         communityValidator.verifyAdminUser(communityId, currentUser.getId());
         return communityAdaptor.findById(communityId);
     }
@@ -208,13 +207,12 @@ public class CommunityService {
     }
 
     private void deleteIdCard(Community community, Long userId) {
-        Optional<IdCard> optionalIdCard =
-                idCardAdaptor.findByUserAndCommunity(community.getId(), userId);
-
-        if (optionalIdCard.isPresent()) {
-            IdCard idCard = optionalIdCard.get();
-            commentAdaptor.findAllByIdCard(idCard.getId()).forEach(Comment::delete);
-            community.deleteIdCard(idCard);
-        }
+        idCardAdaptor
+                .findByUserAndCommunity(community.getId(), userId)
+                .ifPresent(
+                        idCard -> {
+                            commentAdaptor.findAllByIdCard(idCard.getId()).forEach(Comment::delete);
+                            community.deleteIdCard(idCard);
+                        });
     }
 }
