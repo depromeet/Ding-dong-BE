@@ -25,6 +25,7 @@ import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -157,16 +158,9 @@ public class CommunityService {
         communityValidator.validateUserExistInCommunity(user, communityId);
         Community community = communityAdaptor.findById(communityId);
 
-        IdCard idCard =
-                idCardAdaptor
-                        .findByUserAndCommunity(communityId, user.getId())
-                        .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
+        Optional<IdCard> idCard = idCardAdaptor.findByUserAndCommunity(communityId, user.getId());
 
-        return MyInfoInCommunityDto.of(
-                user.getId(),
-                idCard.getNickname(),
-                idCard.getProfileImageUrl(),
-                community.isAdmin(user.getId()));
+        return MyInfoInCommunityDto.of(user.getId(), idCard, community.isAdmin(user.getId()));
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
