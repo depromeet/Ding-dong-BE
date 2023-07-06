@@ -1,12 +1,10 @@
 package com.dingdong.api.idcard.service;
 
-import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_EXIST_ID_CARD_IN_COMMUNITY;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.notification.service.NotificationService;
-import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
@@ -48,7 +46,7 @@ public class CommentService {
     @Transactional
     public Long createComment(Long idCardId, CreateCommentRequest request) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
 
         Comment comment =
                 Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
@@ -67,7 +65,7 @@ public class CommentService {
     @Transactional
     public Long createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = validateAndGetComment(idCard, commentId);
 
         CommentReply commentReply =
@@ -109,7 +107,7 @@ public class CommentService {
     @Transactional
     public void createCommentLike(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = validateAndGetComment(idCard, commentId);
 
         commentValidator.isExistCommentLike(comment, currentUser.getId());
@@ -127,7 +125,7 @@ public class CommentService {
     @Transactional
     public void createCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = validateAndGetComment(idCard, commentId);
         CommentReply commentReply = validateAndGetCommentReply(comment, commentReplyId);
 
@@ -147,7 +145,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = validateAndGetComment(idCard, commentId);
 
         commentValidator.isValidCommentUser(comment, currentUser.getId());
@@ -159,7 +157,7 @@ public class CommentService {
     @Transactional
     public void deleteCommentReply(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = validateAndGetComment(idCard, commentId);
         CommentReply commentReply = validateAndGetCommentReply(comment, commentReplyId);
 
@@ -172,7 +170,7 @@ public class CommentService {
     @Transactional
     public void deleteCommentLike(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
         Comment comment = validateAndGetComment(idCard, commentId);
         CommentLike commentLike =
                 commentAdaptor.findCommentLikeByUserId(comment, currentUser.getId());
@@ -184,7 +182,8 @@ public class CommentService {
     @Transactional
     public void deleteCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = validateUserIdCardInCommunityAndGetIdCard(currentUser.getId(), idCardId);
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+        ;
         Comment comment = validateAndGetComment(idCard, commentId);
         CommentReply commentReply = validateAndGetCommentReply(comment, commentReplyId);
         CommentReplyLike commentReplyLike =
@@ -212,12 +211,6 @@ public class CommentService {
     private Long getNotificationTargetUserId(CommentReply commentReply) {
         Comment comment = commentAdaptor.findById(commentReply.getId());
         return comment.getUserId();
-    }
-
-    private IdCard validateUserIdCardInCommunityAndGetIdCard(Long userId, Long idCardId) {
-        return idCardAdaptor
-                .findOptionalByIdAndUser(idCardId, userId)
-                .orElseThrow(() -> new BaseException(NOT_EXIST_ID_CARD_IN_COMMUNITY));
     }
 
     private CommentReply validateAndGetCommentReply(Comment comment, Long commentReplyId) {
