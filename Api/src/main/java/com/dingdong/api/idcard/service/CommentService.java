@@ -89,7 +89,9 @@ public class CommentService {
     public Slice<CommentDto> getComments(Long idCardId, Pageable pageable) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
-        Slice<CommentVo> comments = commentAdaptor.findCommentsByIdCard(idCard.getId(), pageable);
+        Slice<CommentVo> comments =
+                commentAdaptor.findCommentsByIdCard(
+                        idCard.getId(), idCard.getCommunityId(), pageable);
 
         return SliceUtil.valueOf(
                 comments.stream()

@@ -36,8 +36,9 @@ public class CommentAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT));
     }
 
-    public Slice<CommentVo> findCommentsByIdCard(Long idCardId, Pageable pageable) {
-        return commentRepository.findCommentsByIdCardId(idCardId, pageable);
+    public Slice<CommentVo> findCommentsByIdCard(
+            Long idCardId, Long communityId, Pageable pageable) {
+        return commentRepository.findCommentsByIdCardId(idCardId, communityId, pageable);
     }
 
     public CommentReply findCommentReply(Comment comment, Long commentReplyId) {

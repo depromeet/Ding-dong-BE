@@ -7,5 +7,5 @@ import org.springframework.data.domain.Slice;
 
 public interface CommentRepositoryExtension {
 
-    Slice<CommentVo> findCommentsByIdCardId(Long idCardId, Pageable pageable);
+    Slice<CommentVo> findCommentsByIdCardId(Long idCardId, Long communityId, Pageable pageable);
 }
