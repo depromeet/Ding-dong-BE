@@ -183,7 +183,6 @@ public class CommentService {
     public void deleteCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
-        ;
         Comment comment = validateAndGetComment(idCard, commentId);
         CommentReply commentReply = validateAndGetCommentReply(comment, commentReplyId);
         CommentReplyLike commentReplyLike =

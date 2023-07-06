@@ -23,12 +23,12 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
     public Slice<CommentVo> findCommentsByIdCardId(Long idCardId, Pageable pageable) {
         List<CommentVo> comments =
                 queryFactory
-                        .select(Projections.constructor(CommentVo.class, comment, idCard))
+                        .select(Projections.constructor(CommentVo.class, comment, idCard.userInfo))
                         .from(comment)
                         .leftJoin(comment.likes, commentLike)
                         .fetchJoin()
                         .join(idCard)
-                        .on(idCard.id.eq(comment.idCardId))
+                        .on(idCard.userInfo.userId.eq(comment.userId))
                         .where(comment.idCardId.eq(idCardId), comment.isDeleted.eq(N))
                         .orderBy(comment.id.desc())
                         .offset(pageable.getOffset())
