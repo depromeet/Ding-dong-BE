@@ -29,14 +29,16 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
         return queryFactory
                 .selectFrom(notification)
                 .join(community)
-                .on(community.id.eq(notification.content.communityId))
+                .on(notification.content.communityId.eq(community.id))
                 .join(idCard)
-                .on(idCard.userInfo.userId.eq(notification.content.fromUserId))
+                .on(notification.content.fromUserId.eq(idCard.userInfo.userId))
                 .join(comment)
                 .on(notification.content.commentId.eq(comment.id))
                 .where(
                         notification.userId.eq(userId),
-                        notification.createdAt.after(NotificationRepositoryImpl.FIVE_WEEKS_AGO));
+                        notification.createdAt.after(NotificationRepositoryImpl.FIVE_WEEKS_AGO),
+                        comment.userId.ne(userId))
+                .groupBy(notification.id);
     }
 
     @Override
