@@ -5,7 +5,6 @@ import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.model.UserInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Timestamp;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -30,9 +29,6 @@ public class CommentDto {
 
     @Schema(description = "댓글 좋아요 정보 dto")
     private final LikeDto commentLikeInfo;
-
-    @Schema(description = "댓글 대댓글 정보 dto list")
-    private final List<CommentReplyDto> commentReplyInfos;
 
     public static CommentDto of(Comment comment, UserInfo userInfo, Long currentUserId) {
         return CommentDto.builder()
