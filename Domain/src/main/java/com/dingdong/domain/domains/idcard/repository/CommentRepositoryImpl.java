@@ -55,7 +55,7 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                         idCard.userInfo.userId.eq(commentReply.userId),
                         idCard.communityId.eq(communityId))
                 .where(commentReply.commentId.eq(commentId))
-                .orderBy(commentReply.id.desc())
+                .orderBy(commentReply.id.asc())
                 .fetch();
     }
 }

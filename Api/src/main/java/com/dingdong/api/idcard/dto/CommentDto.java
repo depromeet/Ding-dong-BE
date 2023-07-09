@@ -31,7 +31,7 @@ public class CommentDto {
     private final LikeDto commentLikeInfo;
 
     @Schema(description = "대댓글 갯수 (답글 N개 더보기)")
-    private final Long repliesCount;
+    private final int repliesCount;
 
     public static CommentDto of(Comment comment, UserInfo userInfo, Long currentUserId) {
         return CommentDto.builder()
@@ -40,7 +40,7 @@ public class CommentDto {
                 .content(comment.getContent())
                 .writerInfo(UserInfoDto.from(userInfo))
                 .commentLikeInfo(LikeDto.ofCommentLike(comment.getLikes(), currentUserId))
-                .repliesCount((long) comment.getReplies().size())
+                .repliesCount(comment.getReplies().size())
                 .createdAt(comment.getCreatedAt())
                 .build();
     }

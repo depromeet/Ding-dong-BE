@@ -113,6 +113,7 @@ public class CommentService {
                 pageable);
     }
 
+    /** 대댓글 조회 */
     public List<CommentReplyDto> getReplies(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
