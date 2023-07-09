@@ -12,6 +12,7 @@ import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
+import com.dingdong.domain.domains.idcard.domain.model.CommentReplyVo;
 import com.dingdong.domain.domains.idcard.domain.model.CommentVo;
 import com.dingdong.domain.domains.idcard.repository.CommentRepository;
 import java.util.List;
@@ -72,5 +73,9 @@ public class CommentAdaptor {
 
     public List<Comment> findAllByIdCard(Long idCardId) {
         return commentRepository.findAllByIdCardIdAndIsDeleted(idCardId, N);
+    }
+
+    public List<CommentReplyVo> findCommentReplyByCommentId(Long commentId, Long communityId) {
+        return commentRepository.findReplies(commentId, communityId);
     }
 }
