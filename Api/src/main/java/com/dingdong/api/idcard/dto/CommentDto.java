@@ -30,6 +30,9 @@ public class CommentDto {
     @Schema(description = "댓글 좋아요 정보 dto")
     private final LikeDto commentLikeInfo;
 
+    @Schema(description = "대댓글 갯수 (답글 N개 더보기)")
+    private final Long repliesCount;
+
     public static CommentDto of(Comment comment, UserInfo userInfo, Long currentUserId) {
         return CommentDto.builder()
                 .idCardId(comment.getIdCardId())
@@ -37,6 +40,7 @@ public class CommentDto {
                 .content(comment.getContent())
                 .writerInfo(UserInfoDto.from(userInfo))
                 .commentLikeInfo(LikeDto.ofCommentLike(comment.getLikes(), currentUserId))
+                .repliesCount((long) comment.getReplies().size())
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
