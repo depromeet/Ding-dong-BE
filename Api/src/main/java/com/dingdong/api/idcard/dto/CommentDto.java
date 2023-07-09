@@ -41,12 +41,6 @@ public class CommentDto {
                 .content(comment.getContent())
                 .writerInfo(UserInfoDto.from(userInfo))
                 .commentLikeInfo(LikeDto.ofCommentLike(comment.getLikes(), currentUserId))
-                .commentReplyInfos(
-                        comment.getReplies().stream()
-                                .map(
-                                        commentReply ->
-                                                CommentReplyDto.of(commentReply, currentUserId))
-                                .toList())
                 .createdAt(comment.getCreatedAt())
                 .build();
     }

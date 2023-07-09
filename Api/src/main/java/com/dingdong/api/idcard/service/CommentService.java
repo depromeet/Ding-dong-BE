@@ -4,6 +4,7 @@ package com.dingdong.api.idcard.service;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.dto.CommentDto;
+import com.dingdong.api.idcard.dto.CommentReplyDto;
 import com.dingdong.api.notification.service.NotificationService;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
@@ -13,12 +14,14 @@ import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
+import com.dingdong.domain.domains.idcard.domain.model.CommentReplyVo;
 import com.dingdong.domain.domains.idcard.domain.model.CommentVo;
 import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
 import com.dingdong.domain.domains.notification.domain.model.NotificationContent;
 import com.dingdong.domain.domains.user.domain.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -48,6 +51,8 @@ public class CommentService {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
 
+        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
+
         Comment comment =
                 Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
         commentAdaptor.save(comment);
@@ -66,6 +71,9 @@ public class CommentService {
     public Long createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
+
         Comment comment = validateAndGetComment(idCard, commentId);
 
         CommentReply commentReply =
@@ -105,11 +113,37 @@ public class CommentService {
                 pageable);
     }
 
+    public List<CommentReplyDto> getReplies(Long idCardId, Long commentId) {
+        User currentUser = userHelper.getCurrentUser();
+        IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        Long communityId = idCard.getCommunityId();
+
+        Comment comment = commentAdaptor.findById(commentId);
+
+        idCardValidator.isValidIdCardComment(idCard, comment);
+
+        List<CommentReplyVo> replies =
+                commentAdaptor.findCommentReplyByCommentId(commentId, communityId);
+
+        return replies.stream()
+                .map(
+                        reply ->
+                                CommentReplyDto.of(
+                                        reply.getCommentReply(),
+                                        reply.getUserInfo(),
+                                        currentUser.getId()))
+                .toList();
+    }
+
     /** 댓글 좋아요 생성 */
     @Transactional
     public void createCommentLike(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
+
         Comment comment = validateAndGetComment(idCard, commentId);
 
         commentValidator.isExistCommentLike(comment, currentUser.getId());
@@ -128,6 +162,9 @@ public class CommentService {
     public void createCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
+
         Comment comment = validateAndGetComment(idCard, commentId);
         CommentReply commentReply = validateAndGetCommentReply(comment, commentReplyId);
 
@@ -210,7 +247,7 @@ public class CommentService {
     }
 
     private Long getNotificationTargetUserId(CommentReply commentReply) {
-        Comment comment = commentAdaptor.findById(commentReply.getId());
+        Comment comment = commentAdaptor.findById(commentReply.getCommentId());
         return comment.getUserId();
     }
 

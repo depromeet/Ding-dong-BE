@@ -3,9 +3,11 @@ package com.dingdong.domain.domains.idcard.repository;
 import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
+import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReply.commentReply;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 
 import com.dingdong.domain.common.util.SliceUtil;
+import com.dingdong.domain.domains.idcard.domain.model.CommentReplyVo;
 import com.dingdong.domain.domains.idcard.domain.model.CommentVo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -39,5 +41,21 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                         .fetch();
 
         return SliceUtil.valueOf(comments, pageable);
+    }
+
+    @Override
+    public List<CommentReplyVo> findReplies(Long commentId, Long communityId) {
+        return queryFactory
+                .select(
+                        Projections.constructor(
+                                CommentReplyVo.class, commentReply, idCard.userInfo))
+                .from(commentReply)
+                .join(idCard)
+                .on(
+                        idCard.userInfo.userId.eq(commentReply.userId),
+                        idCard.communityId.eq(communityId))
+                .where(commentReply.commentId.eq(commentId))
+                .orderBy(commentReply.id.desc())
+                .fetch();
     }
 }
