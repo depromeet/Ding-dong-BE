@@ -1,18 +1,14 @@
-package com.dingdong.domain.domains.user.domain;
+package com.dingdong.domain.domains.user.domain.entity;
 
 import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.common.consts.Status.Y;
 
 import com.dingdong.domain.common.consts.Status;
 import com.dingdong.domain.domains.AbstractTimeStamp;
-import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import com.dingdong.domain.domains.idcard.domain.model.Character;
 import com.dingdong.domain.domains.user.domain.enums.GenderType;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,7 +16,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,9 +43,6 @@ public class User extends AbstractTimeStamp {
     @Enumerated(EnumType.STRING)
     private Status isDeleted;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Community> communities = new ArrayList<>();
-
     private User(String email, GenderType genderType, String ageRange) {
         this.email = email;
         this.genderType = genderType;
@@ -62,10 +54,6 @@ public class User extends AbstractTimeStamp {
         return new User(email, genderType, ageRange);
     }
 
-    public void joinCommunity(Community community) {
-        this.getCommunities().add(community);
-    }
-
     public void updateCharacter(Character character) {
         this.character = character;
     }
@@ -75,7 +63,6 @@ public class User extends AbstractTimeStamp {
     }
 
     public void withdraw() {
-        this.communities.clear();
         this.isDeleted = Y;
     }
 }

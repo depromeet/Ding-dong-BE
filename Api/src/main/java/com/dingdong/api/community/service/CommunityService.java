@@ -5,10 +5,7 @@ import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_F
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.JoinCommunityRequest;
 import com.dingdong.api.community.controller.request.UpdateCommunityRequest;
-import com.dingdong.api.community.dto.CommunityDetailsDto;
-import com.dingdong.api.community.dto.CommunityIdCardsDto;
-import com.dingdong.api.community.dto.CommunityListDto;
-import com.dingdong.api.community.dto.MyInfoInCommunityDto;
+import com.dingdong.api.community.dto.*;
 import com.dingdong.api.community.service.generator.RandomCommunityCodeGeneratorStrategy;
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.dto.IdCardDetailsDto;
@@ -17,14 +14,18 @@ import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
+import com.dingdong.domain.domains.community.domain.entity.UserJoinCommunity;
 import com.dingdong.domain.domains.community.domain.model.CommunityImage;
 import com.dingdong.domain.domains.community.domain.strategy.GenerateCommunityInvitationCodeStrategy;
 import com.dingdong.domain.domains.community.validator.CommunityValidator;
+import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
+import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
-import com.dingdong.domain.domains.user.domain.User;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -42,17 +43,19 @@ public class CommunityService {
     private final IdCardAdaptor idCardAdaptor;
     private final UserAdaptor userAdaptor;
     private final UserHelper userHelper;
+    private final CommentAdaptor commentAdaptor;
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
         Community community = communityAdaptor.findById(communityId);
+        long userCount = communityAdaptor.getUserCount(communityId);
 
-        return CommunityDetailsDto.of(community, community.getIdCards().size());
+        return CommunityDetailsDto.of(community, userCount);
     }
 
     public List<CommunityListDto> getUserCommunityList(Long userId) {
         User user = userAdaptor.findById(userId);
 
-        return user.getCommunities().stream()
+        return communityAdaptor.findByUserJoin(user).stream()
                 .map(community -> CommunityListDto.from(community, community.getIdCards().size()))
                 .toList();
     }
@@ -60,12 +63,17 @@ public class CommunityService {
     // 행성 만들기
     @Transactional
     public Long createCommunity(CreateCommunityRequest request) {
+        User currentUser = userHelper.getCurrentUser();
         communityValidator.validateDuplicatedCommunityName(request.getName());
-        return communityAdaptor
-                .save(
-                        createCommunityEntity(request.getName(), request.getLogoImageUrl()),
-                        userHelper.getCurrentUser())
-                .getId();
+        Long communityId =
+                communityAdaptor
+                        .save(
+                                createCommunityEntity(request.getName(), request.getLogoImageUrl()),
+                                currentUser)
+                        .getId();
+        communityAdaptor.userJoinCommunity(
+                UserJoinCommunity.toEntity(currentUser.getId(), communityId));
+        return communityId;
     }
 
     // 행성 꾸미기
@@ -95,7 +103,7 @@ public class CommunityService {
     /** 행성에 있는 해당 유저 주민증 상세 조회 */
     public IdCardDetailsDto getUserIdCardDetails(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
-        communityValidator.isExistInCommunity(currentUser, communityId);
+        communityValidator.validateUserExistInCommunity(currentUser, communityId);
 
         IdCard idCard =
                 idCardAdaptor
@@ -108,28 +116,32 @@ public class CommunityService {
     }
 
     public boolean checkDuplicatedName(String name) {
-        communityValidator.validateCommunityNameSize(name);
+        communityValidator.validateCommunityNameLength(name);
         return communityAdaptor.isAlreadyExistCommunityName(name);
     }
 
-    public Long validateInvitationCode(String code) {
-        return communityAdaptor.findByInvitationCode(code).getId();
+    public CheckInvitationCodeDto checkInvitationCode(String code) {
+        Community community = communityAdaptor.findByInvitationCode(code);
+        return CheckInvitationCodeDto.of(community.getId(), community.getName());
     }
 
     @Transactional
     public void joinCommunity(JoinCommunityRequest request) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(request.getCommunityId());
-        communityValidator.isAlreadyJoinCommunity(user, community.getId());
-        user.joinCommunity(community);
+        communityValidator.validateAlreadyJoinCommunity(user, community.getId());
+        communityAdaptor.userJoinCommunity(
+                UserJoinCommunity.toEntity(user.getId(), community.getId()));
     }
 
     @Transactional
     public void withdrawCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
-        communityValidator.isExistInCommunity(user, communityId);
-        user.getCommunities().remove(community);
+        communityValidator.validateUserExistInCommunity(user, communityId);
+        deleteIdCard(community, user.getId());
+        communityAdaptor.deleteUserJoinCommunity(
+                communityAdaptor.findByUserAndCommunity(user, community));
     }
 
     public boolean checkForUserIdCardInCommunity(Long communityId) {
@@ -142,25 +154,18 @@ public class CommunityService {
 
     public MyInfoInCommunityDto getMyInfoInCommunity(Long communityId) {
         User user = userHelper.getCurrentUser();
-        communityValidator.isExistCommunity(communityId);
-        communityValidator.isExistInCommunity(user, communityId);
+        communityValidator.validateExistCommunity(communityId);
+        communityValidator.validateUserExistInCommunity(user, communityId);
         Community community = communityAdaptor.findById(communityId);
 
-        IdCard idCard =
-                idCardAdaptor
-                        .findByUserAndCommunity(communityId, user.getId())
-                        .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
+        Optional<IdCard> idCard = idCardAdaptor.findByUserAndCommunity(communityId, user.getId());
 
-        return MyInfoInCommunityDto.of(
-                user.getId(),
-                idCard.getNickname(),
-                idCard.getProfileImageUrl(),
-                community.isAdmin(user.getId()));
+        return MyInfoInCommunityDto.of(user.getId(), idCard, community.isAdmin(user.getId()));
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
-        communityValidator.isExistInCommunity(currentUser, communityId);
+        communityValidator.validateUserExistInCommunity(currentUser, communityId);
         communityValidator.verifyAdminUser(communityId, currentUser.getId());
         return communityAdaptor.findById(communityId);
     }
@@ -193,5 +198,15 @@ public class CommunityService {
         CommunityImage communityImage =
                 CommunityImage.createCommunityImage(logoImageUrl, coverImageUrl);
         community.updateCommunity(name, communityImage, description);
+    }
+
+    private void deleteIdCard(Community community, Long userId) {
+        idCardAdaptor
+                .findByUserAndCommunity(community.getId(), userId)
+                .ifPresent(
+                        idCard -> {
+                            commentAdaptor.findAllByIdCard(idCard.getId()).forEach(Comment::delete);
+                            community.deleteIdCard(idCard);
+                        });
     }
 }

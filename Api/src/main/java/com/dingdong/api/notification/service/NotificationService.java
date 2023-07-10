@@ -11,6 +11,7 @@ import com.dingdong.domain.domains.notification.domain.model.NotificationContent
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
@@ -109,6 +110,9 @@ public class NotificationService {
     @Transactional
     public void createAndPublishNotification(
             Long userId, NotificationType type, NotificationContent content) {
+        if (Objects.equals(userHelper.getCurrentUser().getId(), userId)) {
+            return;
+        }
         Notification notification = Notification.create(userId, type, content);
         notificationAdaptor.save(notification);
         applicationEventPublisher.publishEvent(notification);

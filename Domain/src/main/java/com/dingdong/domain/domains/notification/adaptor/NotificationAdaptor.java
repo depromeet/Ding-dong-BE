@@ -5,7 +5,6 @@ import static com.dingdong.domain.domains.notification.exception.NotificationErr
 import com.dingdong.core.annotation.Adaptor;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.notification.domain.entity.Notification;
-import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import com.dingdong.domain.domains.notification.repository.NotificationRepository;
 import java.util.List;
@@ -29,8 +28,7 @@ public class NotificationAdaptor {
     }
 
     public boolean existsUnreadNotifications(Long userId) {
-        return notificationRepository.existsByUserIdAndNotificationStatus(
-                userId, NotificationStatus.UNREAD);
+        return notificationRepository.existsUnreadNotification(userId);
     }
 
     public List<Notification> findByUserId(Long userId) {

@@ -2,7 +2,9 @@ package com.dingdong.domain.domains.community.domain.entity;
 
 import static com.dingdong.core.consts.StaticVal.COMMUNITY_DEFAULT_DESCRIPTION;
 import static com.dingdong.core.consts.StaticVal.COMMUNITY_DEFAULT_IMAGE;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
 
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.community.domain.model.CommunityImage;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
@@ -109,5 +111,11 @@ public class Community extends AbstractTimeStamp {
         }
 
         return this.getAdmins().stream().anyMatch(admin -> admin.getUserId().equals(userId));
+    }
+
+    public void deleteIdCard(IdCard idCard) {
+        if (!this.idCards.remove(idCard)) {
+            throw new BaseException(NOT_FOUND_ID_CARD);
+        }
     }
 }

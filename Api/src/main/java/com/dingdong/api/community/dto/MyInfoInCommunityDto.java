@@ -1,7 +1,9 @@
 package com.dingdong.api.community.dto;
 
 
+import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Optional;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,15 +21,18 @@ public class MyInfoInCommunityDto {
     private String profileImageUrl;
 
     @Schema(description = "관리자 인지 여부")
-    private boolean isAdmin;
+    private Boolean isAdmin;
 
-    public static MyInfoInCommunityDto of(
-            Long userId, String nickname, String profileImageUrl, boolean isAdmin) {
+    @Schema(description = "내 주민증 존재 여부")
+    private Boolean isExistsIdCard;
+
+    public static MyInfoInCommunityDto of(Long userId, Optional<IdCard> idCard, boolean isAdmin) {
         return MyInfoInCommunityDto.builder()
                 .userId(userId)
-                .nickname(nickname)
-                .profileImageUrl(profileImageUrl)
+                .nickname(idCard.map(IdCard::getNickname).orElse(null))
+                .profileImageUrl(idCard.map(IdCard::getProfileImageUrl).orElse(null))
                 .isAdmin(isAdmin)
+                .isExistsIdCard(idCard.isPresent())
                 .build();
     }
 }

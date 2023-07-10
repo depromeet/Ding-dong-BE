@@ -6,7 +6,7 @@ import com.dingdong.core.annotation.Validator;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.exception.CommunityErrorCode;
-import com.dingdong.domain.domains.user.domain.User;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import lombok.RequiredArgsConstructor;
 
 @Validator
@@ -32,24 +32,32 @@ public class CommunityValidator {
         }
     }
 
-    public void validateCommunityNameSize(String name) {
+    public void validateCommunityNameLength(String name) {
         if (name.length() < 1) throw new BaseException(MIN_LIMIT_COMMUNITY_NAME);
         if (name.length() > 16) throw new BaseException(MAX_LIMIT_COMMUNITY_NAME);
     }
 
-    public void isAlreadyJoinCommunity(User user, Long communityId) {
-        if (user.getCommunities().stream().anyMatch(c -> c.getId().equals(communityId))) {
+    public void validateAlreadyJoinCommunity(User user, Long communityId) {
+        boolean isAlreadyJoined =
+                communityAdaptor.findByUserJoin(user).stream()
+                        .anyMatch(c -> c.getId().equals(communityId));
+
+        if (isAlreadyJoined) {
             throw new BaseException(ALREADY_JOIN_COMMUNITY);
         }
     }
 
-    public void isExistInCommunity(User user, Long communityId) {
-        if (user.getCommunities().stream().noneMatch(c -> c.getId().equals(communityId))) {
+    public void validateUserExistInCommunity(User user, Long communityId) {
+        boolean isExistInCommunity =
+                communityAdaptor.findByUserJoin(user).stream()
+                        .anyMatch(c -> c.getId().equals(communityId));
+
+        if (!isExistInCommunity) {
             throw new BaseException(NOT_JOIN_COMMUNITY);
         }
     }
 
-    public void isExistCommunity(Long communityId) {
+    public void validateExistCommunity(Long communityId) {
         if (!communityAdaptor.isExistCommunity(communityId)) {
             throw new BaseException(NOT_FOUND_COMMUNITY);
         }

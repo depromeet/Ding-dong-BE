@@ -5,7 +5,6 @@ import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.model.UserInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Timestamp;
-import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -31,8 +30,8 @@ public class CommentDto {
     @Schema(description = "댓글 좋아요 정보 dto")
     private final LikeDto commentLikeInfo;
 
-    @Schema(description = "댓글 대댓글 정보 dto list")
-    private final List<CommentReplyDto> commentReplyInfos;
+    @Schema(description = "대댓글 갯수 (답글 N개 더보기)")
+    private final int repliesCount;
 
     public static CommentDto of(Comment comment, UserInfo userInfo, Long currentUserId) {
         return CommentDto.builder()
@@ -41,12 +40,7 @@ public class CommentDto {
                 .content(comment.getContent())
                 .writerInfo(UserInfoDto.from(userInfo))
                 .commentLikeInfo(LikeDto.ofCommentLike(comment.getLikes(), currentUserId))
-                .commentReplyInfos(
-                        comment.getReplies().stream()
-                                .map(
-                                        commentReply ->
-                                                CommentReplyDto.of(commentReply, currentUserId))
-                                .toList())
+                .repliesCount(comment.getReplies().size())
                 .createdAt(comment.getCreatedAt())
                 .build();
     }

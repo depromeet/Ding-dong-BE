@@ -1,6 +1,7 @@
 package com.dingdong.domain.domains.idcard.validator;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.ALREADY_EXIST_ID_CARD;
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_EXIST_ID_CARD_IN_COMMUNITY;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_VALID_ID_CARD_COMMENT;
 
 import com.dingdong.core.annotation.Validator;
@@ -30,5 +31,11 @@ public class IdCardValidator {
         if (!Objects.equals(comment.getIdCardId(), idCard.getId())) {
             throw new BaseException(NOT_VALID_ID_CARD_COMMENT);
         }
+    }
+
+    public void validateUserIdCardInCommunity(Long communityId, Long userId) {
+        idCardAdaptor
+                .findByUserAndCommunity(communityId, userId)
+                .orElseThrow(() -> new BaseException(NOT_EXIST_ID_CARD_IN_COMMUNITY));
     }
 }

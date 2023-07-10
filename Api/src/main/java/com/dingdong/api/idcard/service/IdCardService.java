@@ -9,6 +9,7 @@ import com.dingdong.api.idcard.dto.IdCardDetailsDto;
 import com.dingdong.api.idcard.dto.KeywordDto;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
+import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
@@ -17,7 +18,7 @@ import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.entity.DeleteImage;
-import com.dingdong.domain.domains.user.domain.User;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,8 @@ public class IdCardService {
 
     private final CommunityAdaptor communityAdaptor;
 
+    private final CommunityValidator communityValidator;
+
     private final ImageAdaptor imageAdaptor;
 
     private final CommentAdaptor commentAdaptor;
@@ -46,6 +49,8 @@ public class IdCardService {
     /** 주민증 세부 조회 */
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
         IdCard idCard = idCardAdaptor.findById(idCardsId);
+
+        validateIsJoinUser(userHelper.getCurrentUser(), idCard.getCommunityId());
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
@@ -55,6 +60,8 @@ public class IdCardService {
     /** 댓글 개수 조회 */
     public int getCommentCount(Long idCardId) {
         IdCard idCard = idCardAdaptor.findById(idCardId);
+
+        validateIsJoinUser(userHelper.getCurrentUser(), idCard.getCommunityId());
 
         return commentAdaptor.findAllByIdCard(idCard.getId()).size();
     }
@@ -68,6 +75,8 @@ public class IdCardService {
 
         Community community =
                 findAndValidateCommunity(request.getCommunityId(), currentUser.getId());
+
+        validateIsJoinUser(userHelper.getCurrentUser(), community.getId());
 
         IdCard saveIdCard =
                 createAndSaveIdCard(
@@ -89,7 +98,8 @@ public class IdCardService {
     /** 주민증 수정 */
     @Transactional
     public Long updateIdCard(Long idCardId, UpdateIdCardRequest request) {
-        IdCard idCard = idCardAdaptor.findById(idCardId);
+        User currentUser = userHelper.getCurrentUser();
+        IdCard idCard = idCardAdaptor.findByIdAndUser(idCardId, currentUser.getId());
 
         deleteKeywords(idCard);
 
@@ -167,5 +177,10 @@ public class IdCardService {
 
         // orphanRemoval 적용
         keywords.clear();
+    }
+
+    /** 유저가 해당 커뮤니티에 가입된 상태인지 확인 */
+    private void validateIsJoinUser(User user, Long communityId) {
+        communityValidator.validateUserExistInCommunity(user, communityId);
     }
 }

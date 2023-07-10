@@ -3,7 +3,7 @@ package com.dingdong.api.user.dto;
 
 import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
-import com.dingdong.domain.domains.user.domain.User;
+import com.dingdong.domain.domains.user.domain.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import lombok.Builder;
@@ -33,7 +33,7 @@ public class UserProfileDto {
     @Schema(description = "사용자가 속한 행성 ID 리스트")
     private List<Long> communityIds;
 
-    public static UserProfileDto from(User user) {
+    public static UserProfileDto of(User user, List<Community> communities) {
         return UserProfileDto.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
@@ -41,7 +41,7 @@ public class UserProfileDto {
                 .ageRange(user.getAgeRange())
                 .profileImageUrl(null)
                 .characterType(user.getUserCharacterType())
-                .communityIds(user.getCommunities().stream().map(Community::getId).toList())
+                .communityIds(communities.stream().map(Community::getId).toList())
                 .build();
     }
 }
