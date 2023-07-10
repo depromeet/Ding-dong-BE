@@ -43,4 +43,9 @@ public class StaticVal {
             "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/085363b2-53e0-490c-9967-e6534cf4ce16.png";
 
     public static final String COMMUNITY_DEFAULT_DESCRIPTION = "우리 행성에 온 걸 환영해!";
+
+    // Todo: 주민증 디폴트 이미지 나오면 바꾸기
+    /** 주민증 디폴트 이미지 */
+    public static final String ID_CARD_DEFAULT_IMAGE =
+            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/7c0d602c-7a54-42a5-84b2-41917e97dec5.jpeg";
 }

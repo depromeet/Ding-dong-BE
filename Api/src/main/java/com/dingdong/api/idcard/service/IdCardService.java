@@ -1,5 +1,6 @@
 package com.dingdong.api.idcard.service;
 
+import static com.dingdong.core.consts.StaticVal.ID_CARD_DEFAULT_IMAGE;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateIdCardRequest;
@@ -78,11 +79,17 @@ public class IdCardService {
 
         validateIsJoinUser(userHelper.getCurrentUser(), community.getId());
 
+        // Todo: 캐릭터 당 디폴트 이미지 넣는 로직 필요
+        String userProfileImage =
+                request.getProfileImageUrl() == null
+                        ? ID_CARD_DEFAULT_IMAGE
+                        : request.getProfileImageUrl();
+
         IdCard saveIdCard =
                 createAndSaveIdCard(
                         community.getId(),
                         currentUser,
-                        request.getProfileImageUrl(),
+                        userProfileImage,
                         request.getNickname(),
                         request.getAboutMe());
 
@@ -101,16 +108,19 @@ public class IdCardService {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findByIdAndUser(idCardId, currentUser.getId());
 
-        deleteKeywords(idCard);
+        deleteKeywordsAndImages(idCard);
 
         List<Keyword> keywords = createKeywords(request.getKeywords(), idCardId);
 
+        // Todo: 캐릭터 당 디폴트 이미지 넣는 로직 필요
+        String userProfileImage =
+                request.getProfileImageUrl() == null
+                        ? ID_CARD_DEFAULT_IMAGE
+                        : request.getProfileImageUrl();
+
         IdCard updateIdCard =
                 idCard.updateIdCard(
-                        request.getProfileImageUrl(),
-                        request.getNickname(),
-                        request.getAboutMe(),
-                        keywords);
+                        userProfileImage, request.getNickname(), request.getAboutMe(), keywords);
 
         return updateIdCard.getId();
     }
@@ -162,7 +172,7 @@ public class IdCardService {
     }
 
     /** keyword 리스트 삭제 */
-    private void deleteKeywords(IdCard idCard) {
+    private void deleteKeywordsAndImages(IdCard idCard) {
         List<Keyword> keywords = idCard.getKeywords();
 
         List<DeleteImage> deleteImages =
@@ -171,6 +181,10 @@ public class IdCardService {
                         .filter(Objects::nonNull)
                         .map(DeleteImage::toEntity)
                         .toList();
+
+        if (!idCard.getProfileImageUrl().equals(ID_CARD_DEFAULT_IMAGE)) {
+            deleteImages.add(DeleteImage.toEntity(idCard.getProfileImageUrl()));
+        }
 
         // deleteImage에 추가
         imageAdaptor.saveAll(deleteImages);
