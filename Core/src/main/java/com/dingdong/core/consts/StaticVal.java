@@ -37,4 +37,10 @@ public class StaticVal {
         "/v3/api-docs",
         "/swagger-ui.html",
     };
+
+    /** 행성 디폴트 커버 이미지/소개 */
+    public static final String COMMUNITY_DEFAULT_IMAGE =
+            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/085363b2-53e0-490c-9967-e6534cf4ce16.png";
+
+    public static final String COMMUNITY_DEFAULT_DESCRIPTION = "우리 행성에 온 걸 환영해!";
 }

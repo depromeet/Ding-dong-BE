@@ -1,5 +1,7 @@
 package com.dingdong.domain.domains.community.domain.entity;
 
+import static com.dingdong.core.consts.StaticVal.COMMUNITY_DEFAULT_DESCRIPTION;
+import static com.dingdong.core.consts.StaticVal.COMMUNITY_DEFAULT_IMAGE;
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
 
 import com.dingdong.core.exception.BaseException;
@@ -48,15 +50,17 @@ public class Community extends AbstractTimeStamp {
 
     private String invitationCode;
 
-    private Community(String name, CommunityImage communityImage, String invitationCode) {
+    private Community(
+            String name, CommunityImage communityImage, String description, String invitationCode) {
         this.name = name;
         this.communityImage = communityImage;
+        this.description = description;
         this.invitationCode = invitationCode;
     }
 
     public static Community toEntity(
-            String name, CommunityImage communityImage, String invitationCode) {
-        return new Community(name, communityImage, invitationCode);
+            String name, CommunityImage communityImage, String description, String invitationCode) {
+        return new Community(name, communityImage, description, invitationCode);
     }
 
     public String getLogoImageUrl() {
@@ -73,8 +77,10 @@ public class Community extends AbstractTimeStamp {
 
     public static Community createCommunity(
             String name, String logoImageUrl, String invitationCode) {
-        CommunityImage communityImage = CommunityImage.createCommunityImage(logoImageUrl, null);
-        return Community.toEntity(name, communityImage, invitationCode);
+        CommunityImage communityImage =
+                CommunityImage.createCommunityImage(logoImageUrl, getCommunityDefaultImage());
+        return Community.toEntity(
+                name, communityImage, getCommunityDefaultDescription(), invitationCode);
     }
 
     public void updateCommunity(String name, CommunityImage communityImage, String description) {
@@ -89,6 +95,14 @@ public class Community extends AbstractTimeStamp {
 
     public void addIdCard(IdCard idCard) {
         this.getIdCards().add(idCard);
+    }
+
+    private static String getCommunityDefaultImage() {
+        return COMMUNITY_DEFAULT_IMAGE;
+    }
+
+    private static String getCommunityDefaultDescription() {
+        return COMMUNITY_DEFAULT_DESCRIPTION;
     }
 
     public boolean isAdmin(Long userId) {
