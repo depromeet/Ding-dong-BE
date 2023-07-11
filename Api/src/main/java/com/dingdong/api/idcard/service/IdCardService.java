@@ -20,6 +20,7 @@ import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.entity.DeleteImage;
 import com.dingdong.domain.domains.user.domain.entity.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -176,11 +177,12 @@ public class IdCardService {
         List<Keyword> keywords = idCard.getKeywords();
 
         List<DeleteImage> deleteImages =
-                keywords.stream()
-                        .map(Keyword::getImagerUrl)
-                        .filter(Objects::nonNull)
-                        .map(DeleteImage::toEntity)
-                        .toList();
+                new ArrayList<>(
+                        keywords.stream()
+                                .map(Keyword::getImagerUrl)
+                                .filter(Objects::nonNull)
+                                .map(DeleteImage::toEntity)
+                                .toList());
 
         if (!idCard.getProfileImageUrl().equals(ID_CARD_DEFAULT_IMAGE)) {
             deleteImages.add(DeleteImage.toEntity(idCard.getProfileImageUrl()));
