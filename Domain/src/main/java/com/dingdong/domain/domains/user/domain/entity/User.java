@@ -40,6 +40,8 @@ public class User extends AbstractTimeStamp {
 
     @Embedded private Character character;
 
+    private String profileImageUrl;
+
     @Enumerated(EnumType.STRING)
     private Status isDeleted;
 
@@ -60,6 +62,10 @@ public class User extends AbstractTimeStamp {
 
     public CharacterType getUserCharacterType() {
         return Optional.ofNullable(character).map(Character::getCharacterType).orElse(null);
+    }
+
+    public void updateProfileImage(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 
     public void withdraw() {

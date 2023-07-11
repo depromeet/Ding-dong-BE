@@ -39,7 +39,7 @@ public class UserProfileDto {
                 .email(user.getEmail())
                 .gender(user.getGenderType().name())
                 .ageRange(user.getAgeRange())
-                .profileImageUrl(null)
+                .profileImageUrl(user.getProfileImageUrl())
                 .characterType(user.getUserCharacterType())
                 .communityIds(communities.stream().map(Community::getId).toList())
                 .build();
