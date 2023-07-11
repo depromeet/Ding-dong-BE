@@ -2,9 +2,7 @@ package com.dingdong.domain.domains.idcard.repository;
 
 import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
-import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReply.commentReply;
-import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReplyLike.commentReplyLike;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 
 import com.dingdong.domain.common.util.SliceUtil;
@@ -29,18 +27,14 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                 queryFactory
                         .select(Projections.constructor(CommentVo.class, comment, idCard.userInfo))
                         .from(comment)
-                        .leftJoin(comment.likes, commentLike)
-                        .fetchJoin()
                         .join(idCard)
                         .on(
                                 idCard.userInfo.userId.eq(comment.userId),
                                 idCard.communityId.eq(communityId))
                         .where(comment.idCardId.eq(idCardId), comment.isDeleted.eq(N))
                         .orderBy(comment.id.desc())
-                        .groupBy(comment.id)
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
-                        .distinct()
                         .fetch();
 
         return SliceUtil.valueOf(comments, pageable);
@@ -53,15 +47,12 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                         Projections.constructor(
                                 CommentReplyVo.class, commentReply, idCard.userInfo))
                 .from(commentReply)
-                .leftJoin(commentReply.replyLikes, commentReplyLike)
-                .fetchJoin()
                 .join(idCard)
                 .on(
                         idCard.userInfo.userId.eq(commentReply.userId),
                         idCard.communityId.eq(communityId))
                 .where(commentReply.commentId.eq(commentId))
                 .orderBy(commentReply.id.asc())
-                .groupBy(commentReply.id)
                 .fetch();
     }
 }
