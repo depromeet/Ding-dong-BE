@@ -44,6 +44,12 @@ public class StaticVal {
 
     public static final String COMMUNITY_DEFAULT_DESCRIPTION = "우리 행성에 온 걸 환영해!";
 
+    /** 캐릭터별 프로필 디폴트 이미지 */
+    public static final String BUDDY = "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/0977acb0-1f40-11ee-b2e7-659d4e68c9d0.png";
+    public static final String TOBBY = "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/a949fb30-1f40-11ee-b2e7-659d4e68c9d0.png";
+    public static final String PIPI = "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/c2eec520-1f40-11ee-b2e7-659d4e68c9d0.png";
+    public static final String TRUE = "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/d5f957c0-1f40-11ee-b2e7-659d4e68c9d0.png";
+
     // Todo: 주민증 디폴트 이미지 나오면 바꾸기
     /** 주민증 디폴트 이미지 */
     public static final String ID_CARD_DEFAULT_IMAGE =
