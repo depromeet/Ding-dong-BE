@@ -79,7 +79,7 @@ public class CommentAdaptor {
         return commentRepository.findReplies(commentId, communityId);
     }
 
-    public Long findCountCommentByIdCard(Long idCardId) {
+    public Long findCommentCountByIdCard(Long idCardId) {
         return commentRepository.countByIdCardIdAndIsDeleted(idCardId, N);
     }
 }

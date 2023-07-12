@@ -108,7 +108,7 @@ public class CommunityService {
                                         CommunityIdCardsDto.of(
                                                 idCard,
                                                 idCard.getKeywords(),
-                                                commentAdaptor.findCountCommentByIdCard(
+                                                commentAdaptor.findCommentCountByIdCard(
                                                         idCard.getId())))
                         .toList(),
                 pageable);
@@ -180,7 +180,7 @@ public class CommunityService {
                 community.isAdmin(user.getId()),
                 idCard.map(
                                 presentIdCard ->
-                                        commentAdaptor.findCountCommentByIdCard(
+                                        commentAdaptor.findCommentCountByIdCard(
                                                 presentIdCard.getId()))
                         .orElse(null));
     }
