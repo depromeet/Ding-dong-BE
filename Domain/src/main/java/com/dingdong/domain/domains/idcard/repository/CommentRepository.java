@@ -13,4 +13,6 @@ public interface CommentRepository
     Optional<Comment> findByIdAndIsDeleted(Long commentId, Status isDeleted);
 
     List<Comment> findAllByIdCardIdAndIsDeleted(Long idCardId, Status isDeleted);
+
+    Long countByIdCardIdAndIsDeleted(Long idCardId, Status isDeleted);
 }

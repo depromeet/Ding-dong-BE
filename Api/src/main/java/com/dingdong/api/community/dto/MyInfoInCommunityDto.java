@@ -26,13 +26,18 @@ public class MyInfoInCommunityDto {
     @Schema(description = "내 주민증 존재 여부")
     private Boolean isExistsIdCard;
 
-    public static MyInfoInCommunityDto of(Long userId, Optional<IdCard> idCard, boolean isAdmin) {
+    @Schema(description = "주민증의 댓글 개수")
+    private Long commentCount;
+
+    public static MyInfoInCommunityDto of(
+            Long userId, Optional<IdCard> idCard, boolean isAdmin, Long commentCount) {
         return MyInfoInCommunityDto.builder()
                 .userId(userId)
                 .nickname(idCard.map(IdCard::getNickname).orElse(null))
                 .profileImageUrl(idCard.map(IdCard::getProfileImageUrl).orElse(null))
                 .isAdmin(isAdmin)
                 .isExistsIdCard(idCard.isPresent())
+                .commentCount(commentCount)
                 .build();
     }
 }

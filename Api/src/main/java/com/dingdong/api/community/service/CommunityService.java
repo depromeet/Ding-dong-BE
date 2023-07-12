@@ -1,6 +1,7 @@
 package com.dingdong.api.community.service;
 
 import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
+import static java.util.stream.Collectors.toList;
 
 import com.dingdong.api.community.controller.request.CreateCommunityRequest;
 import com.dingdong.api.community.controller.request.JoinCommunityRequest;
@@ -26,7 +27,6 @@ import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -95,7 +95,13 @@ public class CommunityService {
 
         return SliceUtil.valueOf(
                 idCards.stream()
-                        .map(idCard -> CommunityIdCardsDto.of(idCard, idCard.getKeywords()))
+                        .map(
+                                idCard ->
+                                        CommunityIdCardsDto.of(
+                                                idCard,
+                                                idCard.getKeywords(),
+                                                commentAdaptor.findCountCommentByIdCard(
+                                                        idCard.getId())))
                         .toList(),
                 pageable);
     }
@@ -160,7 +166,15 @@ public class CommunityService {
 
         Optional<IdCard> idCard = idCardAdaptor.findByUserAndCommunity(communityId, user.getId());
 
-        return MyInfoInCommunityDto.of(user.getId(), idCard, community.isAdmin(user.getId()));
+        return MyInfoInCommunityDto.of(
+                user.getId(),
+                idCard,
+                community.isAdmin(user.getId()),
+                idCard.map(
+                                presentIdCard ->
+                                        commentAdaptor.findCountCommentByIdCard(
+                                                presentIdCard.getId()))
+                        .orElse(null));
     }
 
     private Community findAndValidateAdminUserInCommunity(Long communityId) {
@@ -186,7 +200,7 @@ public class CommunityService {
     private List<String> getCommunityInvitationCodes() {
         return communityAdaptor.findAll().stream()
                 .map(Community::getInvitationCode)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private void updateCommunityEntity(

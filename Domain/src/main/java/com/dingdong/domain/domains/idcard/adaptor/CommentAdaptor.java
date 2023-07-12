@@ -78,4 +78,8 @@ public class CommentAdaptor {
     public List<CommentReplyVo> findCommentReplyByCommentId(Long commentId, Long communityId) {
         return commentRepository.findReplies(commentId, communityId);
     }
+
+    public Long findCountCommentByIdCard(Long idCardId) {
+        return commentRepository.countByIdCardIdAndIsDeleted(idCardId, N);
+    }
 }
