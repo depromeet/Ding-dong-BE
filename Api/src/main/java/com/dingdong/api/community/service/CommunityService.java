@@ -46,7 +46,11 @@ public class CommunityService {
     private final CommentAdaptor commentAdaptor;
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
+        User currentUser = userHelper.getCurrentUser();
         Community community = communityAdaptor.findById(communityId);
+
+        communityValidator.validateUserExistInCommunity(currentUser, communityId);
+
         long userCount = communityAdaptor.getUserCount(communityId);
 
         return CommunityDetailsDto.of(community, userCount);
@@ -91,6 +95,10 @@ public class CommunityService {
 
     /** 행성의 모든 주민증 조회 */
     public Slice<CommunityIdCardsDto> getCommunityIdCards(Long communityId, Pageable pageable) {
+
+        User currentUser = userHelper.getCurrentUser();
+        communityValidator.validateUserExistInCommunity(currentUser, communityId);
+
         Slice<IdCard> idCards = idCardAdaptor.findIdCardByConditionInPage(communityId, pageable);
 
         return SliceUtil.valueOf(
