@@ -7,6 +7,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      maxFileSize: 100MB
+      maxRequestSize: 100MB
+
 swagger:
   user: ${SWAGGER_USER:user}
   password: ${SWAGGER_PASSWORD:password}

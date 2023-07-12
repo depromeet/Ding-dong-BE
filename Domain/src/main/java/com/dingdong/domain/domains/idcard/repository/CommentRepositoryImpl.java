@@ -2,7 +2,6 @@ package com.dingdong.domain.domains.idcard.repository;
 
 import static com.dingdong.domain.common.consts.Status.N;
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
-import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReply.commentReply;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 
@@ -28,8 +27,6 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                 queryFactory
                         .select(Projections.constructor(CommentVo.class, comment, idCard.userInfo))
                         .from(comment)
-                        .leftJoin(comment.likes, commentLike)
-                        .fetchJoin()
                         .join(idCard)
                         .on(
                                 idCard.userInfo.userId.eq(comment.userId),
