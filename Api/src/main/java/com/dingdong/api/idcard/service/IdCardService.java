@@ -80,7 +80,6 @@ public class IdCardService {
 
         validateIsJoinUser(userHelper.getCurrentUser(), community.getId());
 
-        // Todo: 캐릭터 당 디폴트 이미지 넣는 로직 필요
         String userProfileImage =
                 request.getProfileImageUrl() == null
                         ? ID_CARD_DEFAULT_IMAGE

@@ -28,13 +28,17 @@ public class CommunityIdCardsDto {
     @Schema(description = "키워드 타이틀 목록")
     private final List<String> keywordTitles;
 
-    public static CommunityIdCardsDto of(IdCard idCard, List<Keyword> keywords) {
+    @Schema(description = "댓글 개수")
+    private final Long commentCount;
+
+    public static CommunityIdCardsDto of(IdCard idCard, List<Keyword> keywords, Long commentCount) {
         return CommunityIdCardsDto.builder()
                 .idCardId(idCard.getId())
                 .nickname(idCard.getNickname())
                 .aboutMe(idCard.getAboutMe())
                 .characterType(idCard.getCharacterType())
                 .keywordTitles(keywords.stream().map(Keyword::getTitle).toList())
+                .commentCount(commentCount)
                 .build();
     }
 }
