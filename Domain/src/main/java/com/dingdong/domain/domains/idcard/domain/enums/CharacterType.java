@@ -9,7 +9,7 @@ import lombok.Getter;
 @Getter
 public enum CharacterType {
     BUDDY,
-    TOBY,
+    TOBBY,
     PIPI,
     TRUE;
 

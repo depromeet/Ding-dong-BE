@@ -6,6 +6,7 @@ import static com.dingdong.domain.domains.user.exception.UserErrorCode.ADMIN_USE
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.user.controller.request.UserCharacterRequest;
 import com.dingdong.api.user.dto.UserProfileDto;
+import com.dingdong.core.consts.StaticVal;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
@@ -13,6 +14,7 @@ import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
+import com.dingdong.domain.domains.idcard.domain.enums.CharacterType;
 import com.dingdong.domain.domains.idcard.domain.model.Character;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
 import com.dingdong.domain.domains.image.domain.entity.DeleteImage;
@@ -46,9 +48,10 @@ public class UserService {
 
     @Transactional
     public void saveUserCharacter(UserCharacterRequest request) {
-        userHelper
-                .getCurrentUser()
-                .updateCharacter(Character.toEntity(findCharacterType(request.getCharacter())));
+        User user = userHelper.getCurrentUser();
+        CharacterType characterType = findCharacterType(request.getCharacter());
+        user.updateCharacter(Character.toEntity(characterType));
+        user.updateProfileImage(StaticVal.getDefaultProfileImage(String.valueOf(characterType)));
     }
 
     @Transactional

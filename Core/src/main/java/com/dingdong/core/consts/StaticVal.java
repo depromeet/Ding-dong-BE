@@ -1,5 +1,8 @@
 package com.dingdong.core.consts;
 
+
+import java.util.Map;
+
 public class StaticVal {
 
     /*
@@ -43,6 +46,23 @@ public class StaticVal {
             "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/085363b2-53e0-490c-9967-e6534cf4ce16.png";
 
     public static final String COMMUNITY_DEFAULT_DESCRIPTION = "우리 행성에 온 걸 환영해!";
+
+    /** 캐릭터별 프로필 디폴트 이미지 */
+    private static final Map<String, String> DEFAULT_PROFILE_IMAGES =
+            Map.of(
+                    "BUDDY",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/0977acb0-1f40-11ee-b2e7-659d4e68c9d0.png",
+                    "TOBBY",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/a949fb30-1f40-11ee-b2e7-659d4e68c9d0.png",
+                    "PIPI",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/c2eec520-1f40-11ee-b2e7-659d4e68c9d0.png",
+                    "TRUE",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/d5f957c0-1f40-11ee-b2e7-659d4e68c9d0.png");
+
+    public static String getDefaultProfileImage(String characterType) {
+        return DEFAULT_PROFILE_IMAGES.getOrDefault(
+                characterType.toUpperCase(), DEFAULT_PROFILE_IMAGES.get("BUDDY"));
+    }
 
     // Todo: 주민증 디폴트 이미지 나오면 바꾸기
     /** 주민증 디폴트 이미지 */
