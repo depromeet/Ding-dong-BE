@@ -1,8 +1,7 @@
 package com.dingdong.core.consts;
 
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 
 public class StaticVal {
 
@@ -49,24 +48,20 @@ public class StaticVal {
     public static final String COMMUNITY_DEFAULT_DESCRIPTION = "우리 행성에 온 걸 환영해!";
 
     /** 캐릭터별 프로필 디폴트 이미지 */
-    public static final String BUDDY =
-            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/0977acb0-1f40-11ee-b2e7-659d4e68c9d0.png";
-
-    public static final String TOBBY =
-            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/a949fb30-1f40-11ee-b2e7-659d4e68c9d0.png";
-    public static final String PIPI =
-            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/c2eec520-1f40-11ee-b2e7-659d4e68c9d0.png";
-    public static final String TRUE =
-            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/d5f957c0-1f40-11ee-b2e7-659d4e68c9d0.png";
-
-    private static final List<String> DEFAULT_PROFILE_IMAGE_LIST =
-            Arrays.asList(BUDDY, TOBBY, PIPI, TRUE);
+    private static final Map<String, String> DEFAULT_PROFILE_IMAGES =
+            Map.of(
+                    "BUDDY",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/0977acb0-1f40-11ee-b2e7-659d4e68c9d0.png",
+                    "TOBBY",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/a949fb30-1f40-11ee-b2e7-659d4e68c9d0.png",
+                    "PIPI",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/c2eec520-1f40-11ee-b2e7-659d4e68c9d0.png",
+                    "TRUE",
+                            "https://depromeet-image-bucket.s3.ap-northeast-2.amazonaws.com/d5f957c0-1f40-11ee-b2e7-659d4e68c9d0.png");
 
     public static String getDefaultProfileImage(String characterType) {
-        return DEFAULT_PROFILE_IMAGE_LIST.stream()
-                .filter(image -> image.equals(characterType.toLowerCase()))
-                .findAny()
-                .orElse(BUDDY);
+        return DEFAULT_PROFILE_IMAGES.getOrDefault(
+                characterType.toUpperCase(), DEFAULT_PROFILE_IMAGES.get("BUDDY"));
     }
 
     // Todo: 주민증 디폴트 이미지 나오면 바꾸기
