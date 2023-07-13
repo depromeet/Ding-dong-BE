@@ -19,6 +19,9 @@ public class CommunityIdCardsDto {
     @Schema(description = "이름")
     private String nickname;
 
+    @Schema(description = "주민증 프로필 이미지")
+    private String profileImageUrl;
+
     @Schema(description = "자기소개")
     private String aboutMe;
 
@@ -35,6 +38,7 @@ public class CommunityIdCardsDto {
         return CommunityIdCardsDto.builder()
                 .idCardId(idCard.getId())
                 .nickname(idCard.getNickname())
+                .profileImageUrl(idCard.getProfileImageUrl())
                 .aboutMe(idCard.getAboutMe())
                 .characterType(idCard.getCharacterType())
                 .keywordTitles(keywords.stream().map(Keyword::getTitle).toList())
