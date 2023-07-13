@@ -7,6 +7,7 @@ import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.dto.CommentReplyDto;
 import com.dingdong.api.notification.service.NotificationService;
 import com.dingdong.domain.common.util.SliceUtil;
+import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
@@ -44,6 +45,8 @@ public class CommentService {
     private final CommentValidator commentValidator;
 
     private final NotificationService notificationService;
+
+    private final CommunityValidator communityValidator;
 
     /** 댓글 생성 */
     @Transactional
@@ -97,6 +100,7 @@ public class CommentService {
     public Slice<CommentDto> getComments(Long idCardId, Pageable pageable) {
         User currentUser = userHelper.getCurrentUser();
         IdCard idCard = idCardAdaptor.findById(idCardId);
+        communityValidator.validateUserExistInCommunity(currentUser, idCard.getCommunityId());
         Slice<CommentVo> comments =
                 commentAdaptor.findCommentsByIdCard(
                         idCard.getId(), idCard.getCommunityId(), pageable);
@@ -119,6 +123,8 @@ public class CommentService {
         IdCard idCard = idCardAdaptor.findById(idCardId);
 
         Long communityId = idCard.getCommunityId();
+
+        communityValidator.validateUserExistInCommunity(currentUser, idCard.getCommunityId());
 
         Comment comment = commentAdaptor.findById(commentId);
 
