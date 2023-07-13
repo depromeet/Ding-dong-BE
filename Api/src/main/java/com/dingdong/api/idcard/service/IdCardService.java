@@ -54,9 +54,11 @@ public class IdCardService {
 
         validateIsJoinUser(userHelper.getCurrentUser(), idCard.getCommunityId());
 
+        Long commentCount = commentAdaptor.findCommentCountByIdCard(idCardsId);
+
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
-        return IdCardDetailsDto.of(idCard, keywordDtos);
+        return IdCardDetailsDto.of(idCard, keywordDtos, commentCount);
     }
 
     /** 댓글 개수 조회 */

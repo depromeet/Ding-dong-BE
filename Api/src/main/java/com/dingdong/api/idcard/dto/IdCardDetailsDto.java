@@ -32,7 +32,11 @@ public class IdCardDetailsDto {
     @Schema(description = "캐릭터 타입")
     private CharacterType characterType;
 
-    public static IdCardDetailsDto of(IdCard idCard, List<KeywordDto> keywordDtos) {
+    @Schema(description = "댓글 개수")
+    private Long commentCount;
+
+    public static IdCardDetailsDto of(
+            IdCard idCard, List<KeywordDto> keywordDtos, Long commentCount) {
         return IdCardDetailsDto.builder()
                 .idCardId(idCard.getId())
                 .userId(idCard.getUserInfo().getUserId())
@@ -41,6 +45,7 @@ public class IdCardDetailsDto {
                 .aboutMe(idCard.getAboutMe())
                 .keywords(keywordDtos)
                 .characterType(idCard.getCharacterType())
+                .commentCount(commentCount)
                 .build();
     }
 }

@@ -124,9 +124,11 @@ public class CommunityService {
                         .findByUserAndCommunity(communityId, currentUser.getId())
                         .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
 
+        Long commentCount = commentAdaptor.findCommentCountByIdCard(idCard.getId());
+
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
-        return IdCardDetailsDto.of(idCard, keywordDtos);
+        return IdCardDetailsDto.of(idCard, keywordDtos, commentCount);
     }
 
     public boolean checkDuplicatedName(String name) {
