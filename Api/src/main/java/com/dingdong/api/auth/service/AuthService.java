@@ -2,9 +2,11 @@ package com.dingdong.api.auth.service;
 
 import static com.dingdong.core.consts.StaticVal.BEARER;
 import static com.dingdong.domain.domains.user.domain.enums.GenderType.findGenderType;
+import static com.dingdong.domain.domains.user.exception.AuthErrorCode.REQUIRED_EMAIL_COLLECTION_CONSENT;
 
 import com.dingdong.api.auth.controller.request.AuthRequest;
 import com.dingdong.api.auth.controller.response.AuthResponse;
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.core.jwt.JwtTokenProvider;
 import com.dingdong.domain.domains.user.domain.UserRepository;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
@@ -56,6 +58,7 @@ public class AuthService {
     }
 
     public AuthResponse saveUserAndGetToken(KakaoUserInfoResponse kakaoUserInfoResponse) {
+        checkLoginEmail(kakaoUserInfoResponse.getKakaoAcount().getEmail());
         User user =
                 userRepository
                         .findByEmail(kakaoUserInfoResponse.getKakaoAcount().getEmail())
@@ -76,6 +79,12 @@ public class AuthService {
         redisTemplate
                 .opsForValue()
                 .set(parseToken, "logout", leftAccessTokenTTlSecond, TimeUnit.MILLISECONDS);
+    }
+
+    private void checkLoginEmail(String email) {
+        if (email == null) {
+            throw new BaseException(REQUIRED_EMAIL_COLLECTION_CONSENT);
+        }
     }
 
     private User createUser(KakaoUserInfoResponse kakaoUserInfoResponse) {
