@@ -23,7 +23,7 @@ public class IdCardRepositoryImpl implements IdCardRepositoryExtension {
                         .leftJoin(idCard.keywords, keyword)
                         .fetchJoin()
                         .where(idCard.communityId.eq(communityId))
-                        .orderBy(idCard.id.asc())
+                        .orderBy(idCard.id.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
