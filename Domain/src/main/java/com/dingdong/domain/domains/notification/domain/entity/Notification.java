@@ -30,7 +30,9 @@ public class Notification extends AbstractTimeStamp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull private Long userId;
+    @NotNull private Long toUserId;
+
+    @NotNull private Long fromUserIdCardId;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -43,29 +45,35 @@ public class Notification extends AbstractTimeStamp {
     private NotificationStatus notificationStatus = NotificationStatus.UNREAD;
 
     public void read(Long userId) {
-        if (this.userId != userId) {
+        if (this.toUserId != userId) {
             throw new BaseException(NO_AUTHORITY_UPDATE_NOTIFICATION);
         }
         this.notificationStatus = NotificationStatus.READ;
     }
 
     private Notification(
-            Long userId, NotificationType notificationType, NotificationContent content) {
-        this.userId = userId;
+            Long toUserId,
+            Long fromUserIdCardId,
+            NotificationType notificationType,
+            NotificationContent content) {
+        this.toUserId = toUserId;
+        this.fromUserIdCardId = fromUserIdCardId;
         this.notificationType = notificationType;
         this.content = content;
     }
 
     public static Notification create(
-            Long userId,
+            Long toUserId,
+            Long fromUserIdCardId,
             NotificationType notificationType,
             NotificationContent notificationContent) {
         return new Notification(
-                userId,
+                toUserId,
+                fromUserIdCardId,
                 notificationType,
                 NotificationContent.create(
                         notificationContent.getCommunityId(),
-                        notificationContent.getFromUserId(),
+                        notificationContent.getIdCardId(),
                         notificationContent.getCommentId()));
     }
 }

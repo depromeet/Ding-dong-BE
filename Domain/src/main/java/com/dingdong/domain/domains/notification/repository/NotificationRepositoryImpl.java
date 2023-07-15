@@ -31,11 +31,11 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                 .join(community)
                 .on(notification.content.communityId.eq(community.id))
                 .join(idCard)
-                .on(notification.content.fromUserId.eq(idCard.userInfo.userId))
+                .on(notification.fromUserIdCardId.eq(idCard.id))
                 .join(comment)
                 .on(notification.content.commentId.eq(comment.id))
                 .where(
-                        notification.userId.eq(userId),
+                        notification.toUserId.eq(userId),
                         notification.createdAt.after(NotificationRepositoryImpl.FIVE_WEEKS_AGO))
                 .groupBy(notification.id);
     }
@@ -52,12 +52,12 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                                         notification.createdAt,
                                         community.id,
                                         community.name,
-                                        notification.content.fromUserId,
+                                        notification.fromUserIdCardId,
                                         idCard.userInfo.profileImageUrl,
                                         idCard.userInfo.nickname,
                                         community.id,
                                         comment.content,
-                                        idCard.id))
+                                        comment.idCardId))
                         .orderBy(notification.id.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)

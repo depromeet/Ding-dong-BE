@@ -31,8 +31,8 @@ public class NotificationAdaptor {
         return notificationRepository.existsUnreadNotification(userId);
     }
 
-    public List<Notification> findByUserId(Long userId) {
-        return notificationRepository.findAllByUserId(userId);
+    public List<Notification> findByToUserId(Long toUserId) {
+        return notificationRepository.findAllByToUserId(toUserId);
     }
 
     public void deleteAll(List<Notification> notifications) {
