@@ -22,7 +22,7 @@ public class NotificationContent {
         this.commentId = commentId;
     }
 
-    public static NotificationContent create(Long communityId, Long fromUserId, Long commentId) {
-        return new NotificationContent(communityId, fromUserId, commentId);
+    public static NotificationContent create(Long communityId, Long fromIdCardId, Long commentId) {
+        return new NotificationContent(communityId, fromIdCardId, commentId);
     }
 }
