@@ -36,8 +36,7 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                 .on(notification.content.commentId.eq(comment.id))
                 .where(
                         notification.userId.eq(userId),
-                        notification.createdAt.after(NotificationRepositoryImpl.FIVE_WEEKS_AGO),
-                        comment.userId.ne(userId))
+                        notification.createdAt.after(NotificationRepositoryImpl.FIVE_WEEKS_AGO))
                 .groupBy(notification.id);
     }
 
