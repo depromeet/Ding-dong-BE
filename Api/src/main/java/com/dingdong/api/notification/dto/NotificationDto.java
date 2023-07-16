@@ -46,7 +46,7 @@ public class NotificationDto {
                 .communityDto(new CommunityDto(vo.getCommunityId(), vo.getCommunityName()))
                 .userDto(
                         new UserDto(
-                                vo.getFromUserId(),
+                                vo.getFromIdCardId(),
                                 vo.getFromUserProfileImageUrl(),
                                 vo.getFromUserNickname()))
                 .commentDto(new CommentDto(vo.getCommentId(), vo.getComment()))

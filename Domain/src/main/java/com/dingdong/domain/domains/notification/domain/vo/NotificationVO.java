@@ -21,7 +21,7 @@ public class NotificationVO {
 
     private final String communityName;
 
-    private final Long fromUserId;
+    private final Long fromIdCardId;
 
     private final String fromUserProfileImageUrl;
 
@@ -41,7 +41,7 @@ public class NotificationVO {
             Timestamp createdAt,
             Long communityId,
             String communityName,
-            Long fromUserId,
+            Long fromIdCardId,
             String fromUserProfileImageUrl,
             String fromUserNickname,
             Long commentId,
@@ -53,7 +53,7 @@ public class NotificationVO {
         this.createdAt = createdAt;
         this.communityId = communityId;
         this.communityName = communityName;
-        this.fromUserId = fromUserId;
+        this.fromIdCardId = fromIdCardId;
         this.fromUserProfileImageUrl = fromUserProfileImageUrl;
         this.fromUserNickname = fromUserNickname;
         this.commentId = commentId;

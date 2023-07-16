@@ -111,11 +111,14 @@ public class NotificationService {
 
     @Transactional
     public void createAndPublishNotification(
-            Long userId, NotificationType type, NotificationContent content) {
-        if (Objects.equals(userHelper.getCurrentUser().getId(), userId)) {
+            Long toUserId,
+            Long fromUserIdCardId,
+            NotificationType type,
+            NotificationContent content) {
+        if (Objects.equals(userHelper.getCurrentUser().getId(), toUserId)) {
             return;
         }
-        Notification notification = Notification.create(userId, type, content);
+        Notification notification = Notification.create(toUserId, fromUserIdCardId, type, content);
         notificationAdaptor.save(notification);
         applicationEventPublisher.publishEvent(notification);
     }

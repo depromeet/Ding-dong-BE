@@ -6,23 +6,24 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/** 알림의 타겟이 되는 필드들 */
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NotificationContent {
     private Long communityId;
 
-    private Long fromUserId;
+    private Long idCardId;
 
     private Long commentId;
 
-    private NotificationContent(Long communityId, Long fromUserId, Long commentId) {
+    private NotificationContent(Long communityId, Long idCardId, Long commentId) {
         this.communityId = communityId;
-        this.fromUserId = fromUserId;
+        this.idCardId = idCardId;
         this.commentId = commentId;
     }
 
-    public static NotificationContent create(Long communityId, Long fromUserId, Long commentId) {
-        return new NotificationContent(communityId, fromUserId, commentId);
+    public static NotificationContent create(Long communityId, Long idCardId, Long commentId) {
+        return new NotificationContent(communityId, idCardId, commentId);
     }
 }

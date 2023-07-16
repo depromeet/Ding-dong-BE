@@ -1,11 +1,13 @@
 package com.dingdong.api.idcard.service;
 
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_ID_CARD;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.idcard.controller.request.CreateCommentRequest;
 import com.dingdong.api.idcard.dto.CommentDto;
 import com.dingdong.api.idcard.dto.CommentReplyDto;
 import com.dingdong.api.notification.service.NotificationService;
+import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
@@ -52,19 +54,17 @@ public class CommentService {
     @Transactional
     public Long createComment(Long idCardId, CreateCommentRequest request) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = idCardAdaptor.findById(idCardId);
-
-        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
-
+        IdCard targetIdCard = validateAndGetIdCard(idCardId, currentUser.getId());
         Comment comment =
-                Comment.toEntity(idCard.getId(), currentUser.getId(), request.getContents());
+                Comment.toEntity(targetIdCard.getId(), currentUser.getId(), request.getContents());
         commentAdaptor.save(comment);
 
         notificationService.createAndPublishNotification(
-                getNotificationTargetUserId(idCard),
+                getNotificationTargetUserId(targetIdCard),
+                getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.ID_CARD_COMMENT,
                 NotificationContent.create(
-                        idCard.getCommunityId(), currentUser.getId(), comment.getId()));
+                        targetIdCard.getCommunityId(), targetIdCard.getId(), comment.getId()));
 
         return comment.getId();
     }
@@ -73,11 +73,9 @@ public class CommentService {
     @Transactional
     public Long createCommentReply(Long idCardId, Long commentId, CreateCommentRequest request) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = idCardAdaptor.findById(idCardId);
+        IdCard targetIdCard = validateAndGetIdCard(idCardId, currentUser.getId());
 
-        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
-
-        Comment comment = validateAndGetComment(idCard, commentId);
+        Comment comment = validateAndGetComment(targetIdCard, commentId);
 
         CommentReply commentReply =
                 CommentReply.toEntity(
@@ -87,10 +85,11 @@ public class CommentService {
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(comment),
+                getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.COMMENT_REPLY,
                 NotificationContent.create(
-                        idCard.getCommunityId(),
-                        currentUser.getId(),
+                        targetIdCard.getCommunityId(),
+                        targetIdCard.getId(),
                         comment.latestCommentReply().getId()));
 
         return comment.latestCommentReply().getId();
@@ -147,19 +146,18 @@ public class CommentService {
     @Transactional
     public void createCommentLike(Long idCardId, Long commentId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = idCardAdaptor.findById(idCardId);
+        IdCard targetIdCard = validateAndGetIdCard(idCardId, currentUser.getId());
 
-        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
-
-        Comment comment = validateAndGetComment(idCard, commentId);
+        Comment comment = validateAndGetComment(targetIdCard, commentId);
 
         commentValidator.isExistCommentLike(comment, currentUser.getId());
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(comment),
+                getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.COMMENT_LIKE,
                 NotificationContent.create(
-                        idCard.getCommunityId(), currentUser.getId(), comment.getId()));
+                        targetIdCard.getCommunityId(), targetIdCard.getId(), comment.getId()));
 
         comment.addLike(CommentLike.toEntity(comment.getId(), currentUser.getId()));
     }
@@ -168,20 +166,19 @@ public class CommentService {
     @Transactional
     public void createCommentReplyLike(Long idCardId, Long commentId, Long commentReplyId) {
         User currentUser = userHelper.getCurrentUser();
-        IdCard idCard = idCardAdaptor.findById(idCardId);
+        IdCard targetIdCard = validateAndGetIdCard(idCardId, currentUser.getId());
 
-        idCardValidator.validateUserIdCardInCommunity(idCard.getCommunityId(), currentUser.getId());
-
-        Comment comment = validateAndGetComment(idCard, commentId);
+        Comment comment = validateAndGetComment(targetIdCard, commentId);
         CommentReply commentReply = validateAndGetCommentReply(comment, commentReplyId);
 
         commentValidator.isExistCommentReplyLike(commentReply, currentUser.getId());
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(commentReply),
+                getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.COMMENT_LIKE,
                 NotificationContent.create(
-                        idCard.getCommunityId(), currentUser.getId(), commentReply.getId()));
+                        targetIdCard.getCommunityId(), targetIdCard.getId(), commentReply.getId()));
 
         commentReply.updateReplyLikes(
                 CommentReplyLike.toEntity(commentReplyId, currentUser.getId()));
@@ -262,5 +259,17 @@ public class CommentService {
         CommentReply commentReply = commentAdaptor.findCommentReply(comment, commentReplyId);
         commentValidator.isValidCommentReply(commentReply, comment.getId());
         return commentReply;
+    }
+
+    private IdCard validateAndGetIdCard(Long idCardId, Long userId) {
+        IdCard targetIdCard = idCardAdaptor.findById(idCardId);
+        idCardValidator.validateUserIdCardInCommunity(targetIdCard.getCommunityId(), userId);
+        return targetIdCard;
+    }
+
+    private IdCard getCurrentUserIdCard(Long communityId, Long userId) {
+        return idCardAdaptor
+                .findByUserAndCommunity(communityId, userId)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
     }
 }

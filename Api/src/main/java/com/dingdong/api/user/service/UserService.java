@@ -71,8 +71,8 @@ public class UserService {
         currentUser.withdraw();
     }
 
-    private void deleteUserNotification(Long userId) {
-        notificationAdaptor.deleteAll(notificationAdaptor.findByUserId(userId));
+    private void deleteUserNotification(Long toUserId) {
+        notificationAdaptor.deleteAll(notificationAdaptor.findByToUserId(toUserId));
     }
 
     private void deleteUserIdCards(List<IdCard> idCards) {

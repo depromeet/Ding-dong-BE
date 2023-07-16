@@ -15,6 +15,6 @@ public class EventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
     public void notify(Notification notification) {
-        notificationService.notify(notification.getUserId(), true);
+        notificationService.notify(notification.getToUserId(), true);
     }
 }
