@@ -92,7 +92,7 @@ public class NotificationService {
         List<NotificationDto> notificationDtos =
                 notificationByConditionInPage.stream().map(NotificationDto::from).toList();
 
-        return SliceUtil.valueOf(notificationDtos, notificationByConditionInPage.getPageable());
+        return SliceUtil.createSliceWithPageable(notificationDtos, pageable);
     }
 
     @Transactional

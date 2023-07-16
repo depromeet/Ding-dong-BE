@@ -101,7 +101,7 @@ public class CommunityService {
 
         Slice<IdCard> idCards = idCardAdaptor.findIdCardByConditionInPage(communityId, pageable);
 
-        return SliceUtil.valueOf(
+        return SliceUtil.createSliceWithPageable(
                 idCards.stream()
                         .map(
                                 idCard ->

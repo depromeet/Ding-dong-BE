@@ -104,7 +104,7 @@ public class CommentService {
                 commentAdaptor.findCommentsByIdCard(
                         idCard.getId(), idCard.getCommunityId(), pageable);
 
-        return SliceUtil.valueOf(
+        return SliceUtil.createSliceWithPageable(
                 comments.stream()
                         .map(
                                 commentVo ->
