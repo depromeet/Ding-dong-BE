@@ -98,6 +98,7 @@ public class UserService {
         imageAdaptor.saveAll(profileImages.stream().map(DeleteImage::toEntity).toList());
     }
 
+    @Transactional
     public void removeUserCharacter() {
         userHelper.getCurrentUser().updateCharacter(null);
     }
