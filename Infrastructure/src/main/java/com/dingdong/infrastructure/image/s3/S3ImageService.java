@@ -5,14 +5,17 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.dingdong.infrastructure.image.ImageHandler;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class S3ImageService implements ImageHandler {
 
     @Value("${aws.s3.bucket}")
@@ -27,9 +30,14 @@ public class S3ImageService implements ImageHandler {
         return s3Api.uploadImage(bucket, fileName, multipartFile, objectMetadata);
     }
 
+    @Async
     public void removeImage(String imageUrl) {
         String fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
-        s3Api.removeImage(bucket, fileName);
+        try {
+            s3Api.removeImage(bucket, fileName);
+        } catch (RuntimeException e) {
+            log.error("imageUrl: {}, errorMessage: {}", imageUrl, e.getMessage());
+        }
     }
 
     private String createFileName(String fileName) {

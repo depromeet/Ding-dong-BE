@@ -7,6 +7,7 @@ import com.dingdong.infrastructure.image.ImageHandler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ImageService {
-    private final ImageHandler imageHandler;
     private final ImageAdaptor imageAdaptor;
+    private final ImageHandler imageHandler;
+    private final ApplicationEventPublisher publisher;
 
     public String uploadImage(MultipartFile multipartFile) {
         return imageHandler.uploadImage(multipartFile);
@@ -26,25 +28,17 @@ public class ImageService {
 
     /** 사용하지 않는 이미지 S3에서 제거 스케쥴러 매일 00:00에 수행 */
     @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
     public void deleteImage() {
         List<DeleteImage> deleteImages = imageAdaptor.findAll();
 
         for (DeleteImage deleteImage : deleteImages) {
-            try {
-                removeImageFromS3(deleteImage);
-                deleteImageInDB(deleteImage);
-            } catch (RuntimeException e) {
-                log.error("ImageId: {}, errorMessage: {}", deleteImage.getId(), e.getMessage());
-            }
+            deleteImage(deleteImage);
         }
     }
 
-    @Transactional
-    public void deleteImageInDB(DeleteImage deleteImage) {
+    private void deleteImage(DeleteImage deleteImage) {
         imageAdaptor.delete(deleteImage);
-    }
-
-    private void removeImageFromS3(DeleteImage deleteImage) {
-        imageHandler.removeImage(deleteImage.getImageUrl());
+        publisher.publishEvent(deleteImage);
     }
 }
