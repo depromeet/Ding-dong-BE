@@ -63,7 +63,7 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        return SliceUtil.valueOf(notificationVOs, pageable);
+        return SliceUtil.createSliceWithoutPageable(notificationVOs);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        return SliceUtil.valueOf(comments, pageable);
+        return SliceUtil.createSliceWithoutPageable(comments);
     }
 
     @Override

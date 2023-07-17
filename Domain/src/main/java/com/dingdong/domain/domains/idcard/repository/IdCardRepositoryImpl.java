@@ -28,6 +28,6 @@ public class IdCardRepositoryImpl implements IdCardRepositoryExtension {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        return SliceUtil.valueOf(idCards, pageable);
+        return SliceUtil.createSliceWithoutPageable(idCards);
     }
 }
