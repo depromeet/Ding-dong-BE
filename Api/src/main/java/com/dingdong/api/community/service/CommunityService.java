@@ -124,7 +124,7 @@ public class CommunityService {
                         .findByUserAndCommunity(communityId, currentUser.getId())
                         .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
 
-        Long commentCount = commentAdaptor.findCommentCountByIdCard(idCard.getId());
+        int commentCount = commentAdaptor.findCommentCount(idCard.getId());
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 

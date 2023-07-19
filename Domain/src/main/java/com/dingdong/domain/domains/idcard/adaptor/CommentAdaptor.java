@@ -17,6 +17,7 @@ import com.dingdong.domain.domains.idcard.domain.model.CommentVo;
 import com.dingdong.domain.domains.idcard.repository.CommentRepository;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -81,5 +82,13 @@ public class CommentAdaptor {
 
     public Long findCommentCountByIdCard(Long idCardId) {
         return commentRepository.countByIdCardIdAndIsDeleted(idCardId, N);
+    }
+
+    public int findCommentCount(Long idCardId) {
+        List<Comment> comments = findAllByIdCard(idCardId);
+        AtomicInteger result = new AtomicInteger(comments.size());
+
+        comments.forEach(comment -> result.addAndGet(comment.getReplies().size()));
+        return result.get();
     }
 }

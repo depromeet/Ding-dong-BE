@@ -54,7 +54,7 @@ public class IdCardService {
 
         validateIsJoinUser(userHelper.getCurrentUser(), idCard.getCommunityId());
 
-        Long commentCount = commentAdaptor.findCommentCountByIdCard(idCardsId);
+        int commentCount = commentAdaptor.findCommentCount(idCard.getId());
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
@@ -67,7 +67,7 @@ public class IdCardService {
 
         validateIsJoinUser(userHelper.getCurrentUser(), idCard.getCommunityId());
 
-        return commentAdaptor.findAllByIdCard(idCard.getId()).size();
+        return commentAdaptor.findCommentCount(idCard.getId());
     }
 
     /** 주민증 생성 */
