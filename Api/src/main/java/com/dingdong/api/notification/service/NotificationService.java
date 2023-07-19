@@ -6,6 +6,7 @@ import com.dingdong.api.notification.dto.NotificationDto;
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.notification.adaptor.NotificationAdaptor;
 import com.dingdong.domain.domains.notification.domain.entity.Notification;
+import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
 import com.dingdong.domain.domains.notification.domain.model.NotificationContent;
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
@@ -90,7 +91,10 @@ public class NotificationService {
                 notificationAdaptor.findNotificationByConditionInPage(userId, pageable);
 
         List<NotificationDto> notificationDtos =
-                notificationByConditionInPage.stream().map(NotificationDto::from).toList();
+                notificationByConditionInPage.stream()
+                        .map(NotificationDto::from)
+                        .filter(notificationDto -> notificationDto.getCommentId() != null)
+                        .toList();
 
         return SliceUtil.createSliceWithPageable(notificationDtos, pageable);
     }
@@ -106,7 +110,17 @@ public class NotificationService {
     public boolean existsUnreadNotifications() {
         Long userId = userHelper.getCurrentUserId();
 
-        return notificationAdaptor.existsUnreadNotifications(userId);
+        Slice<NotificationVO> notificationByConditionInPage =
+                notificationAdaptor.findNotificationByConditionInPage(userId, Pageable.unpaged());
+
+        return notificationByConditionInPage.stream()
+                .map(NotificationDto::from)
+                .anyMatch(
+                        notificationDto ->
+                                notificationDto.getCommentId() != null
+                                        && notificationDto
+                                                .getNotificationStatus()
+                                                .equals(NotificationStatus.UNREAD));
     }
 
     @Transactional

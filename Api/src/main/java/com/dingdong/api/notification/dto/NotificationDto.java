@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.sql.Timestamp;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.lang3.ObjectUtils;
 
 @Getter
 @Builder
@@ -49,8 +50,26 @@ public class NotificationDto {
                                 vo.getFromIdCardId(),
                                 vo.getFromUserProfileImageUrl(),
                                 vo.getFromUserNickname()))
-                .commentDto(new CommentDto(vo.getCommentId(), vo.getComment()))
+                .commentDto(new CommentDto(getCommentId(vo), getCommentContent(vo)))
                 .idCardDto(new IdCardDto(vo.getIdCardId()))
                 .build();
+    }
+
+    private static Long getCommentId(NotificationVO vo) {
+        if (ObjectUtils.allNotNull(vo.getComment(), vo.getCommentId())) {
+            return vo.getCommentId();
+        }
+        return vo.getReplyId();
+    }
+
+    private static String getCommentContent(NotificationVO vo) {
+        if (ObjectUtils.allNotNull(vo.getComment(), vo.getCommentId())) {
+            return vo.getComment();
+        }
+        return vo.getReply();
+    }
+
+    public Long getCommentId() {
+        return this.commentDto.getCommentId();
     }
 }

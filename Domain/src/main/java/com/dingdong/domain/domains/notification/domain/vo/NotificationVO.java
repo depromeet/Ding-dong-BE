@@ -31,6 +31,10 @@ public class NotificationVO {
 
     private final String comment;
 
+    private final Long replyId;
+
+    private final String reply;
+
     private final Long IdCardId;
 
     @QueryProjection
@@ -46,6 +50,8 @@ public class NotificationVO {
             String fromUserNickname,
             Long commentId,
             String comment,
+            Long replyId,
+            String reply,
             Long idCardId) {
         this.notificationId = notificationId;
         this.notificationType = notificationType;
@@ -58,6 +64,8 @@ public class NotificationVO {
         this.fromUserNickname = fromUserNickname;
         this.commentId = commentId;
         this.comment = comment;
+        this.replyId = replyId;
+        this.reply = reply;
         this.IdCardId = idCardId;
     }
 }

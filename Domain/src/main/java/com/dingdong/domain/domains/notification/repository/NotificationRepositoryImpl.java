@@ -2,12 +2,12 @@ package com.dingdong.domain.domains.notification.repository;
 
 import static com.dingdong.domain.domains.community.domain.entity.QCommunity.community;
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
+import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReply.commentReply;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 import static com.dingdong.domain.domains.notification.domain.entity.QNotification.notification;
 
 import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.notification.domain.entity.Notification;
-import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import com.dingdong.domain.domains.notification.domain.vo.QNotificationVO;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -32,8 +32,10 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                 .on(notification.content.communityId.eq(community.id))
                 .join(idCard)
                 .on(notification.fromUserIdCardId.eq(idCard.id))
-                .join(comment)
+                .leftJoin(comment)
                 .on(notification.content.commentId.eq(comment.id))
+                .leftJoin(commentReply)
+                .on(notification.content.commentId.eq(commentReply.id))
                 .where(
                         notification.toUserId.eq(userId),
                         notification.createdAt.after(NotificationRepositoryImpl.FIVE_WEEKS_AGO))
@@ -57,22 +59,14 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                                         idCard.userInfo.nickname,
                                         community.id,
                                         comment.content,
-                                        comment.idCardId))
+                                        commentReply.id,
+                                        commentReply.content,
+                                        notification.content.idCardId))
                         .orderBy(notification.id.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
         return SliceUtil.createSliceWithoutPageable(notificationVOs);
-    }
-
-    @Override
-    public boolean existsUnreadNotification(Long userId) {
-        long count =
-                buildQuery(userId)
-                        .where(notification.notificationStatus.eq(NotificationStatus.UNREAD))
-                        .fetchCount();
-
-        return count > 0;
     }
 }

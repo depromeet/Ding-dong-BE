@@ -27,10 +27,6 @@ public class NotificationAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_NOTIFICATION));
     }
 
-    public boolean existsUnreadNotifications(Long userId) {
-        return notificationRepository.existsUnreadNotification(userId);
-    }
-
     public List<Notification> findByToUserId(Long toUserId) {
         return notificationRepository.findAllByToUserId(toUserId);
     }

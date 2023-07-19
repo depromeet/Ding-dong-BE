@@ -7,6 +7,4 @@ import org.springframework.data.domain.Slice;
 
 public interface NotificationRepositoryExtension {
     Slice<NotificationVO> findNotificationByConditionInPage(Long userId, Pageable pageable);
-
-    boolean existsUnreadNotification(Long userId);
 }
