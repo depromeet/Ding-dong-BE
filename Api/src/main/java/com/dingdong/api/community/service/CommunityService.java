@@ -108,8 +108,7 @@ public class CommunityService {
                                         CommunityIdCardsDto.of(
                                                 idCard,
                                                 idCard.getKeywords(),
-                                                commentAdaptor.findCommentCountByIdCard(
-                                                        idCard.getId())))
+                                                commentAdaptor.findCommentCount(idCard.getId())))
                         .toList(),
                 pageable);
     }
