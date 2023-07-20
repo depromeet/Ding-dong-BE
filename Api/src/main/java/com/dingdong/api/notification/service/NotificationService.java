@@ -110,8 +110,8 @@ public class NotificationService {
     public boolean existsUnreadNotifications() {
         Long userId = userHelper.getCurrentUserId();
 
-        Slice<NotificationVO> notificationByConditionInPage =
-                notificationAdaptor.findNotificationByConditionInPage(userId, Pageable.unpaged());
+        List<NotificationVO> notificationByConditionInPage =
+                notificationAdaptor.findNotificationByCondition(userId);
 
         return notificationByConditionInPage.stream()
                 .map(NotificationDto::from)

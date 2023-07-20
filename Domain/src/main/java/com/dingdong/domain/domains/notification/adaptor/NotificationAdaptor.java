@@ -21,6 +21,10 @@ public class NotificationAdaptor {
         return notificationRepository.findNotificationByConditionInPage(userId, pageable);
     }
 
+    public List<NotificationVO> findNotificationByCondition(Long userId) {
+        return notificationRepository.findNotificationByCondition(userId);
+    }
+
     public Notification findById(Long notificationId) {
         return notificationRepository
                 .findById(notificationId)

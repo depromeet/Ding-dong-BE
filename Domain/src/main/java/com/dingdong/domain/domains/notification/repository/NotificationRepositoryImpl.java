@@ -69,4 +69,27 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
 
         return SliceUtil.createSliceWithoutPageable(notificationVOs);
     }
+
+    @Override
+    public List<NotificationVO> findNotificationByCondition(Long userId) {
+        return buildQuery(userId)
+                .select(
+                        new QNotificationVO(
+                                notification.id,
+                                notification.notificationType,
+                                notification.notificationStatus,
+                                notification.createdAt,
+                                community.id,
+                                community.name,
+                                notification.fromUserIdCardId,
+                                idCard.userInfo.profileImageUrl,
+                                idCard.userInfo.nickname,
+                                community.id,
+                                comment.content,
+                                commentReply.id,
+                                commentReply.content,
+                                notification.content.idCardId))
+                .orderBy(notification.id.desc())
+                .fetch();
+    }
 }
