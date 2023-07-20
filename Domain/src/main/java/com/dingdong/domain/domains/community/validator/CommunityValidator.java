@@ -62,4 +62,8 @@ public class CommunityValidator {
             throw new BaseException(NOT_FOUND_COMMUNITY);
         }
     }
+
+    public boolean validateUserJoinDefaultCommunity(Long userId, Long communityId) {
+        return communityAdaptor.findByUserAndCommunityForValidate(userId, communityId).isPresent();
+    }
 }

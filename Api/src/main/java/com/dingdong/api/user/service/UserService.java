@@ -10,6 +10,8 @@ import com.dingdong.core.consts.StaticVal;
 import com.dingdong.core.exception.BaseException;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
+import com.dingdong.domain.domains.community.domain.entity.UserJoinCommunity;
+import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
@@ -38,6 +40,7 @@ public class UserService {
     private final CommentAdaptor commentAdaptor;
     private final ImageAdaptor imageAdaptor;
     private final CommunityAdaptor communityAdaptor;
+    private final CommunityValidator communityValidator;
     private final NotificationAdaptor notificationAdaptor;
 
     public UserProfileDto getUserProfile() {
@@ -52,6 +55,11 @@ public class UserService {
         CharacterType characterType = findCharacterType(request.getCharacter());
         user.updateCharacter(Character.toEntity(characterType));
         user.updateProfileImage(StaticVal.getDefaultProfileImage(String.valueOf(characterType)));
+
+        // workAround (유저 회원가입 시 행성 1번 자동 가입)
+        if (!communityValidator.validateUserJoinDefaultCommunity(user.getId(), 1L)) {
+            communityAdaptor.userJoinCommunity(UserJoinCommunity.toEntity(user.getId(), 1L));
+        }
     }
 
     @Transactional
