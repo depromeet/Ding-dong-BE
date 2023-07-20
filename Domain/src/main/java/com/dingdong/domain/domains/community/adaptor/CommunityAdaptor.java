@@ -14,6 +14,7 @@ import com.dingdong.domain.domains.community.repository.CommunityRepository;
 import com.dingdong.domain.domains.community.repository.UserJoinCommunityRepository;
 import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @Adaptor
@@ -81,6 +82,11 @@ public class CommunityAdaptor {
         return userJoinCommunityRepository
                 .findByUserIdAndCommunityId(user.getId(), community.getId())
                 .orElseThrow(() -> new BaseException(NOT_JOIN_COMMUNITY));
+    }
+
+    public Optional<UserJoinCommunity> findByUserAndCommunityForValidate(
+            Long userId, Long communityId) {
+        return userJoinCommunityRepository.findByUserIdAndCommunityId(userId, communityId);
     }
 
     public void deleteUserJoinCommunity(UserJoinCommunity userJoinCommunity) {
