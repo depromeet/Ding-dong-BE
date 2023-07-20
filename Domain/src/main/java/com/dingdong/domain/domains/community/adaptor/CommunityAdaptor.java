@@ -37,7 +37,6 @@ public class CommunityAdaptor {
 
     public Community save(Community community, User user) {
         community.addAdmin(createAndSaveAdmin(user.getId()));
-        userJoinCommunity(UserJoinCommunity.toEntity(user.getId(), community.getId()));
         return communityRepository.save(community);
     }
 
