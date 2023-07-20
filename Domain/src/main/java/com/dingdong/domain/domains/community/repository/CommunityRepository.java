@@ -18,5 +18,5 @@ public interface CommunityRepository
 
     boolean existsCommunityById(Long id);
 
-    List<Community> findAllByIdIn(List<Long> communitiesId);
+    List<Community> findAllByIdInOrderByIdDesc(List<Long> communitiesId);
 }

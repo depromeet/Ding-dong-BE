@@ -57,7 +57,7 @@ public class UserService {
         user.updateProfileImage(StaticVal.getDefaultProfileImage(String.valueOf(characterType)));
 
         // workAround (유저 회원가입 시 행성 1번 자동 가입)
-        if (communityValidator.validateUserJoinDefaultCommunity(user.getId(), 1L)) {
+        if (!communityValidator.validateUserJoinDefaultCommunity(user.getId(), 1L)) {
             communityAdaptor.userJoinCommunity(UserJoinCommunity.toEntity(user.getId(), 1L));
         }
     }

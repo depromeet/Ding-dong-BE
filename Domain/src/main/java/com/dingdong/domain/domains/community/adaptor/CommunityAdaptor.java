@@ -75,7 +75,7 @@ public class CommunityAdaptor {
         List<Long> communities =
                 findByUser(user).stream().map(UserJoinCommunity::getCommunityId).toList();
 
-        return communityRepository.findAllByIdIn(communities);
+        return communityRepository.findAllByIdInOrderByIdDesc(communities);
     }
 
     public UserJoinCommunity findByUserAndCommunity(User user, Community community) {
