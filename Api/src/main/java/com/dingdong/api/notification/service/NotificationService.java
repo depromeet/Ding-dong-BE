@@ -43,7 +43,7 @@ public class NotificationService {
         return emitter;
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void notify(Long userId, Object event) {
         sendNotification(userId, event);
     }
