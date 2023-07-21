@@ -3,20 +3,18 @@ package com.dingdong.api.notification.service;
 
 import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.notification.dto.NotificationDto;
-import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.notification.adaptor.NotificationAdaptor;
 import com.dingdong.domain.domains.notification.domain.entity.Notification;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationStatus;
 import com.dingdong.domain.domains.notification.domain.enums.NotificationType;
 import com.dingdong.domain.domains.notification.domain.model.NotificationContent;
-import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,19 +82,18 @@ public class NotificationService {
         return emitter;
     }
 
-    public Slice<NotificationDto> getNotifications(Pageable pageable) {
-        Long userId = 7L;
+    public List<NotificationDto> getNotifications() {
+        Long userId = userHelper.getCurrentUserId();
 
-        Slice<NotificationVO> notificationByConditionInPage =
-                notificationAdaptor.findNotificationByConditionInPage(userId, pageable);
-
-        List<NotificationDto> notificationDtos =
-                notificationByConditionInPage.stream()
-                        .map(NotificationDto::from)
-                        .filter(notificationDto -> notificationDto.getCommentId() != null)
-                        .toList();
-
-        return SliceUtil.createSliceWithPageable(notificationDtos, pageable);
+        return Stream.of(
+                        notificationAdaptor.getCommentsNotification(userId),
+                        notificationAdaptor.getCommentRepliesNotification(userId),
+                        notificationAdaptor.getCommentLikesNotification(userId),
+                        notificationAdaptor.getCommentReplyLikesNotification(userId))
+                .flatMap(List::stream)
+                .map(NotificationDto::from)
+                .sorted(Comparator.comparing(NotificationDto::getCreatedAt).reversed())
+                .toList();
     }
 
     @Transactional
@@ -108,19 +105,14 @@ public class NotificationService {
     }
 
     public boolean existsUnreadNotifications() {
-        Long userId = userHelper.getCurrentUserId();
+        List<NotificationDto> notificationDtos = getNotifications();
 
-        List<NotificationVO> notificationByConditionInPage =
-                notificationAdaptor.findNotificationByCondition(userId);
-
-        return notificationByConditionInPage.stream()
-                .map(NotificationDto::from)
+        return notificationDtos.stream()
                 .anyMatch(
                         notificationDto ->
-                                notificationDto.getCommentId() != null
-                                        && notificationDto
-                                                .getNotificationStatus()
-                                                .equals(NotificationStatus.UNREAD));
+                                notificationDto
+                                        .getNotificationStatus()
+                                        .equals(NotificationStatus.UNREAD));
     }
 
     @Transactional

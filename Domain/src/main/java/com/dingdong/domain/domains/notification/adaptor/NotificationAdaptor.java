@@ -9,21 +9,11 @@ import com.dingdong.domain.domains.notification.domain.vo.NotificationVO;
 import com.dingdong.domain.domains.notification.repository.NotificationRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 @Adaptor
 @RequiredArgsConstructor
 public class NotificationAdaptor {
     private final NotificationRepository notificationRepository;
-
-    public Slice<NotificationVO> findNotificationByConditionInPage(Long userId, Pageable pageable) {
-        return notificationRepository.findNotificationByConditionInPage(userId, pageable);
-    }
-
-    public List<NotificationVO> findNotificationByCondition(Long userId) {
-        return notificationRepository.findNotificationByCondition(userId);
-    }
 
     public Notification findById(Long notificationId) {
         return notificationRepository
@@ -41,5 +31,21 @@ public class NotificationAdaptor {
 
     public void save(Notification notification) {
         notificationRepository.save(notification);
+    }
+
+    public List<NotificationVO> getCommentsNotification(Long userId) {
+        return notificationRepository.getCommentsNotification(userId);
+    }
+
+    public List<NotificationVO> getCommentRepliesNotification(Long userId) {
+        return notificationRepository.getCommentRepliesNotification(userId);
+    }
+
+    public List<NotificationVO> getCommentLikesNotification(Long userId) {
+        return notificationRepository.getCommentLikesNotification(userId);
+    }
+
+    public List<NotificationVO> getCommentReplyLikesNotification(Long userId) {
+        return notificationRepository.getCommentReplyLikesNotification(userId);
     }
 }

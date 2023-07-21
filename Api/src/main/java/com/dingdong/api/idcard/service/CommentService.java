@@ -250,8 +250,7 @@ public class CommentService {
     }
 
     private Long getNotificationTargetUserId(CommentReply commentReply) {
-        Comment comment = commentAdaptor.findById(commentReply.getCommentId());
-        return comment.getUserId();
+        return commentReply.getUserId();
     }
 
     private CommentReply validateAndGetCommentReply(Comment comment, Long commentReplyId) {

@@ -1,15 +1,12 @@
 package com.dingdong.api.notification.controller;
 
 
-import com.dingdong.api.global.response.SliceResponse;
-import com.dingdong.api.notification.dto.NotificationDto;
+import com.dingdong.api.notification.controller.response.NotificationResponse;
 import com.dingdong.api.notification.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,8 +38,8 @@ public class NotificationController {
 
     @Operation(summary = "알림 목록 조회")
     @GetMapping
-    public SliceResponse<NotificationDto> getNotifications(@PageableDefault Pageable pageable) {
-        return SliceResponse.from(notificationService.getNotifications(pageable));
+    public NotificationResponse getNotifications() {
+        return NotificationResponse.from(notificationService.getNotifications());
     }
 
     @Operation(summary = "미확인 알림 존재 여부")
