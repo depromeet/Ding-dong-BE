@@ -27,7 +27,7 @@ public class AuthController {
 
     @Operation(summary = "리프레시 토큰으로 액세스 토큰 재발급")
     @GetMapping("/login/reissue")
-    public AuthResponse reissue(@RequestHeader(value = "REFRESH_TOKEN") String refreshToken) {
+    public AuthResponse reissue(@RequestHeader(value = "Refresh-Token") String refreshToken) {
         return authService.reissue(refreshToken);
     }
 
