@@ -7,5 +7,6 @@ import lombok.Getter;
 public enum NotificationType {
     ID_CARD_COMMENT,
     COMMENT_REPLY,
-    COMMENT_LIKE
+    COMMENT_LIKE,
+    COMMENT_REPLY_LIKE
 }

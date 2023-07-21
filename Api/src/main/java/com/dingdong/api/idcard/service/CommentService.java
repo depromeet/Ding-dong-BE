@@ -176,7 +176,7 @@ public class CommentService {
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(commentReply),
                 getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
-                NotificationType.COMMENT_LIKE,
+                NotificationType.COMMENT_REPLY_LIKE,
                 NotificationContent.create(
                         targetIdCard.getCommunityId(), idCardId, commentReply.getId()));
 

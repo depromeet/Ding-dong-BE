@@ -79,7 +79,7 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                                 commentReply.id,
                                 commentReply.content,
                                 notification.content.idCardId))
-                .leftJoin(commentReply)
+                .join(commentReply)
                 .on(notification.content.commentId.eq(commentReply.id))
                 .where(notification.notificationType.eq(NotificationType.COMMENT_REPLY))
                 .orderBy(notification.id.desc())
@@ -133,7 +133,7 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                 .on(notification.content.commentId.eq(commentReply.id))
                 .join(commentReplyLike)
                 .on(commentReplyLike.commentReplyId.eq(commentReply.id))
-                .where(notification.notificationType.eq(NotificationType.COMMENT_LIKE))
+                .where(notification.notificationType.eq(NotificationType.COMMENT_REPLY_LIKE))
                 .orderBy(notification.id.desc())
                 .fetch();
     }
