@@ -50,23 +50,17 @@ public class NotificationDto {
                                 vo.getFromIdCardId(),
                                 vo.getFromUserProfileImageUrl(),
                                 vo.getFromUserNickname()))
-                .commentDto(new CommentDto(getCommentId(vo), getCommentContent(vo)))
+                .commentDto(getCommentDto(vo))
                 .idCardDto(new IdCardDto(vo.getIdCardId()))
                 .build();
     }
 
-    private static Long getCommentId(NotificationVO vo) {
-        if (ObjectUtils.allNotNull(vo.getComment(), vo.getCommentId())) {
-            return vo.getCommentId();
+    public static CommentDto getCommentDto(NotificationVO vo) {
+        if (ObjectUtils.allNotNull(
+                vo.getComment(), vo.getCommentId(), vo.getReplyId(), vo.getReply())) {
+            return new CommentDto(vo.getReplyId(), vo.getReply());
         }
-        return vo.getReplyId();
-    }
-
-    private static String getCommentContent(NotificationVO vo) {
-        if (ObjectUtils.allNotNull(vo.getComment(), vo.getCommentId())) {
-            return vo.getComment();
-        }
-        return vo.getReply();
+        return new CommentDto(vo.getCommentId(), vo.getComment());
     }
 
     public Long getCommentId() {

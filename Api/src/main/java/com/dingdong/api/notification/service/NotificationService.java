@@ -85,7 +85,7 @@ public class NotificationService {
     }
 
     public Slice<NotificationDto> getNotifications(Pageable pageable) {
-        Long userId = userHelper.getCurrentUserId();
+        Long userId = 7L;
 
         Slice<NotificationVO> notificationByConditionInPage =
                 notificationAdaptor.findNotificationByConditionInPage(userId, pageable);

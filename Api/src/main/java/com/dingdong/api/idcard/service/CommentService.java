@@ -64,7 +64,7 @@ public class CommentService {
                 getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.ID_CARD_COMMENT,
                 NotificationContent.create(
-                        targetIdCard.getCommunityId(), targetIdCard.getId(), comment.getId()));
+                        targetIdCard.getCommunityId(), idCardId, comment.getId()));
 
         return comment.getId();
     }
@@ -89,7 +89,7 @@ public class CommentService {
                 NotificationType.COMMENT_REPLY,
                 NotificationContent.create(
                         targetIdCard.getCommunityId(),
-                        targetIdCard.getId(),
+                        idCardId,
                         comment.latestCommentReply().getId()));
 
         return comment.latestCommentReply().getId();
@@ -157,7 +157,7 @@ public class CommentService {
                 getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.COMMENT_LIKE,
                 NotificationContent.create(
-                        targetIdCard.getCommunityId(), targetIdCard.getId(), comment.getId()));
+                        targetIdCard.getCommunityId(), idCardId, comment.getId()));
 
         comment.addLike(CommentLike.toEntity(comment.getId(), currentUser.getId()));
     }
@@ -178,7 +178,7 @@ public class CommentService {
                 getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.COMMENT_LIKE,
                 NotificationContent.create(
-                        targetIdCard.getCommunityId(), targetIdCard.getId(), commentReply.getId()));
+                        targetIdCard.getCommunityId(), idCardId, commentReply.getId()));
 
         commentReply.updateReplyLikes(
                 CommentReplyLike.toEntity(commentReplyId, currentUser.getId()));
@@ -246,8 +246,7 @@ public class CommentService {
     }
 
     private Long getNotificationTargetUserId(Comment comment) {
-        IdCard idCard = idCardAdaptor.findById(comment.getIdCardId());
-        return idCard.getUserInfo().getUserId();
+        return comment.getUserId();
     }
 
     private Long getNotificationTargetUserId(CommentReply commentReply) {
