@@ -30,7 +30,7 @@ public class S3ImageService implements ImageHandler {
         return s3Api.uploadImage(bucket, fileName, multipartFile, objectMetadata);
     }
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void removeImage(String imageUrl) {
         String fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
         try {
