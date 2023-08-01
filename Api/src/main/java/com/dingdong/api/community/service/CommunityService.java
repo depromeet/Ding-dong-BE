@@ -108,7 +108,8 @@ public class CommunityService {
                                         CommunityIdCardsDto.of(
                                                 idCard,
                                                 idCard.getKeywords(),
-                                                commentAdaptor.findCommentCount(idCard.getId())))
+                                                commentAdaptor.findCommentCountByIdCard(
+                                                        idCard.getId())))
                         .toList(),
                 pageable);
     }
@@ -123,7 +124,7 @@ public class CommunityService {
                         .findByUserAndCommunity(communityId, currentUser.getId())
                         .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
 
-        int commentCount = commentAdaptor.findCommentCount(idCard.getId());
+        Long commentCount = commentAdaptor.findCommentCountByIdCard(idCard.getId());
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 

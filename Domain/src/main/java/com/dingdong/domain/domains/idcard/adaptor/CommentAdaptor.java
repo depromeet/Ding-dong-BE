@@ -84,7 +84,9 @@ public class CommentAdaptor {
         return commentRepository.countByIdCardIdAndIsDeleted(idCardId, N);
     }
 
+    @Deprecated
     public int findCommentCount(Long idCardId) {
+
         List<Comment> comments = findAllByIdCard(idCardId);
         AtomicInteger result = new AtomicInteger(comments.size());
 

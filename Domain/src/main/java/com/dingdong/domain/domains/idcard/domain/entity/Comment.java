@@ -41,6 +41,8 @@ public class Comment extends AbstractTimeStamp {
 
     @NotNull private String content;
 
+    private Long parentCommentId;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     private Status isDeleted;
@@ -93,5 +95,9 @@ public class Comment extends AbstractTimeStamp {
             return null;
         }
         return this.replies.get(this.replies.size() - 1);
+    }
+
+    public void updateParentCommentId(Long parentCommentId) {
+        this.parentCommentId = parentCommentId;
     }
 }

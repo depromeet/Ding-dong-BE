@@ -77,22 +77,21 @@ public class CommentService {
 
         Comment comment = validateAndGetComment(targetIdCard, commentId);
 
-        CommentReply commentReply =
-                CommentReply.toEntity(
-                        idCardId, comment.getId(), currentUser.getId(), request.getContents());
-        comment.addReply(commentReply);
-        commentAdaptor.save(comment);
+        Comment commentReply =
+                Comment.toEntity(targetIdCard.getId(), currentUser.getId(), request.getContents());
+
+        commentReply.updateParentCommentId(comment.getId());
+
+        commentAdaptor.save(commentReply);
 
         notificationService.createAndPublishNotification(
                 getNotificationTargetUserId(comment),
                 getCurrentUserIdCard(targetIdCard.getCommunityId(), currentUser.getId()).getId(),
                 NotificationType.COMMENT_REPLY,
                 NotificationContent.create(
-                        targetIdCard.getCommunityId(),
-                        idCardId,
-                        comment.latestCommentReply().getId()));
+                        targetIdCard.getCommunityId(), idCardId, commentReply.getId()));
 
-        return comment.latestCommentReply().getId();
+        return commentReply.getId();
     }
 
     /** 댓글 조회 */

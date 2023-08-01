@@ -33,10 +33,10 @@ public class IdCardDetailsDto {
     private CharacterType characterType;
 
     @Schema(description = "댓글 개수")
-    private int commentCount;
+    private Long commentCount;
 
     public static IdCardDetailsDto of(
-            IdCard idCard, List<KeywordDto> keywordDtos, int commentCount) {
+            IdCard idCard, List<KeywordDto> keywordDtos, Long commentCount) {
         return IdCardDetailsDto.builder()
                 .idCardId(idCard.getId())
                 .userId(idCard.getUserInfo().getUserId())
