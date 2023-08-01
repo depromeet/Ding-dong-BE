@@ -86,7 +86,6 @@ public class Comment extends AbstractTimeStamp {
 
     public void delete() {
         this.likes.clear();
-        this.replies.clear();
         this.isDeleted = Y;
     }
 

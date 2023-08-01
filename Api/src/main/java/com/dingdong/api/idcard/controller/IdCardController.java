@@ -101,6 +101,7 @@ public class IdCardController {
         commentService.createCommentLike(idCardsId, commentId);
     }
 
+    @Deprecated(since = "DEP-205", forRemoval = true)
     @Operation(summary = "주민증 대댓글 좋아요")
     @PostMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
     public void postCommentReplyLike(
@@ -116,6 +117,7 @@ public class IdCardController {
         commentService.deleteComment(idCardsId, commentId);
     }
 
+    @Deprecated(since = "DEP-205", forRemoval = true)
     @Operation(summary = "주민증 대댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}")
     public void deleteCommentReply(

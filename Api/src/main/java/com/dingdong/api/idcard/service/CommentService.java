@@ -191,6 +191,8 @@ public class CommentService {
 
         commentValidator.isValidCommentUser(comment, currentUser.getId());
 
+        getReplies(commentId).forEach(Comment::delete);
+
         comment.delete();
     }
 
@@ -237,6 +239,10 @@ public class CommentService {
         Comment comment = commentAdaptor.findById(commentId);
         idCardValidator.isValidIdCardComment(idCard, comment);
         return comment;
+    }
+
+    private List<Comment> getReplies(Long parentCommentId) {
+        return commentAdaptor.findReplies(parentCommentId);
     }
 
     private Long getNotificationTargetUserId(IdCard idCard) {

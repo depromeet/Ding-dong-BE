@@ -56,6 +56,10 @@ public class CommentAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_COMMENT_REPLY));
     }
 
+    public List<Comment> findReplies(Long parentCommentId) {
+        return commentRepository.findAllByParentCommentIdAndIsDeleted(parentCommentId, N);
+    }
+
     public CommentLike findCommentLikeByUserId(Comment comment, Long currentUserId) {
         List<CommentLike> likes = comment.getLikes();
 
