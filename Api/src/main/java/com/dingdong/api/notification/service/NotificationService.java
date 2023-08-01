@@ -87,9 +87,7 @@ public class NotificationService {
 
         return Stream.of(
                         notificationAdaptor.getCommentsNotification(userId),
-                        notificationAdaptor.getCommentRepliesNotification(userId),
-                        notificationAdaptor.getCommentLikesNotification(userId),
-                        notificationAdaptor.getCommentReplyLikesNotification(userId))
+                        notificationAdaptor.getCommentLikesNotification(userId))
                 .flatMap(List::stream)
                 .map(NotificationDto::from)
                 .sorted(Comparator.comparing(NotificationDto::getCreatedAt).reversed())

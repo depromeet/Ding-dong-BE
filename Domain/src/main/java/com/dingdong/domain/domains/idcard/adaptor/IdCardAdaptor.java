@@ -31,10 +31,6 @@ public class IdCardAdaptor {
                 .orElseThrow(() -> new BaseException(NOT_VALID_ID_CARD_USER));
     }
 
-    public Optional<IdCard> findOptionalByIdAndUser(Long idCardId, Long userId) {
-        return idCardRepository.findByIdAndUserInfo_UserId(idCardId, userId);
-    }
-
     public IdCard save(IdCard idCard) {
         return idCardRepository.save(idCard);
     }
@@ -47,21 +43,11 @@ public class IdCardAdaptor {
         return idCardRepository.findIdCardByConditionInPage(communityId, pageable);
     }
 
-    public IdCard findByCommunityIdAndUserId(Long communityId, Long userId) {
-        return idCardRepository
-                .findByCommunityIdAndUserInfo_UserId(communityId, userId)
-                .orElseThrow(() -> new BaseException(NOT_FOUND_ID_CARD));
-    }
-
     public List<IdCard> findByUserId(Long userId) {
         return idCardRepository.findAllByUserInfo_UserId(userId);
     }
 
     public void deleteAll(List<IdCard> idCards) {
         idCardRepository.deleteAllInBatch(idCards);
-    }
-
-    public void delete(IdCard idCard) {
-        idCardRepository.delete(idCard);
     }
 }

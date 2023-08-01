@@ -2,7 +2,6 @@ package com.dingdong.api.idcard.dto;
 
 
 import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
-import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.Objects;
@@ -27,19 +26,6 @@ public class LikeDto {
                                 .anyMatch(
                                         commentLike ->
                                                 Objects.equals(commentLike.getUserId(), userId)))
-                .build();
-    }
-
-    public static LikeDto ofCommentReplyLike(
-            List<CommentReplyLike> commentReplyLikes, Long userId) {
-        return LikeDto.builder()
-                .likeCount((long) commentReplyLikes.size())
-                .isLikedByCurrentUser(
-                        commentReplyLikes.stream()
-                                .anyMatch(
-                                        commentReplyLike ->
-                                                Objects.equals(
-                                                        commentReplyLike.getUserId(), userId)))
                 .build();
     }
 }

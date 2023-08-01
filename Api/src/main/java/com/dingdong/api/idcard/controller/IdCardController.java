@@ -101,44 +101,15 @@ public class IdCardController {
         commentService.createCommentLike(idCardsId, commentId);
     }
 
-    @Deprecated(since = "DEP-205", forRemoval = true)
-    @Operation(summary = "주민증 대댓글 좋아요")
-    @PostMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
-    public void postCommentReplyLike(
-            @PathVariable Long idCardsId,
-            @PathVariable Long commentId,
-            @PathVariable Long commentReplyId) {
-        commentService.createCommentReplyLike(idCardsId, commentId, commentReplyId);
-    }
-
     @Operation(summary = "주민증 댓글 삭제")
     @DeleteMapping("/{idCardsId}/comments/{commentId}")
     public void deleteComment(@PathVariable Long idCardsId, @PathVariable Long commentId) {
         commentService.deleteComment(idCardsId, commentId);
     }
 
-    @Deprecated(since = "DEP-205", forRemoval = true)
-    @Operation(summary = "주민증 대댓글 삭제")
-    @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}")
-    public void deleteCommentReply(
-            @PathVariable Long idCardsId,
-            @PathVariable Long commentId,
-            @PathVariable Long commentReplyId) {
-        commentService.deleteCommentReply(idCardsId, commentId, commentReplyId);
-    }
-
     @Operation(summary = "주민증 댓글 좋아요 취소")
     @DeleteMapping("/{idCardsId}/comments/{commentId}/likes")
     public void deleteCommentLike(@PathVariable Long idCardsId, @PathVariable Long commentId) {
         commentService.deleteCommentLike(idCardsId, commentId);
-    }
-
-    @Operation(summary = "주민증 대댓글 좋아요 취소")
-    @DeleteMapping("/{idCardsId}/comments/{commentId}/replies/{commentReplyId}/reply-likes")
-    public void deleteCommentReplyLike(
-            @PathVariable Long idCardsId,
-            @PathVariable Long commentId,
-            @PathVariable Long commentReplyId) {
-        commentService.deleteCommentReplyLike(idCardsId, commentId, commentReplyId);
     }
 }

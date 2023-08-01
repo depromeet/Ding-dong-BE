@@ -3,8 +3,6 @@ package com.dingdong.domain.domains.notification.repository;
 import static com.dingdong.domain.domains.community.domain.entity.QCommunity.community;
 import static com.dingdong.domain.domains.idcard.domain.entity.QComment.comment;
 import static com.dingdong.domain.domains.idcard.domain.entity.QCommentLike.commentLike;
-import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReply.commentReply;
-import static com.dingdong.domain.domains.idcard.domain.entity.QCommentReplyLike.commentReplyLike;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 import static com.dingdong.domain.domains.notification.domain.entity.QNotification.notification;
 
@@ -62,29 +60,29 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                 .fetch();
     }
 
-    @Override
-    public List<NotificationVO> getCommentRepliesNotification(Long userId) {
-        return buildQuery(userId)
-                .select(
-                        new QNotificationVO(
-                                notification.id,
-                                notification.notificationType,
-                                notification.notificationStatus,
-                                notification.createdAt,
-                                community.id,
-                                community.name,
-                                notification.fromUserIdCardId,
-                                idCard.userInfo.profileImageUrl,
-                                idCard.userInfo.nickname,
-                                commentReply.id,
-                                commentReply.content,
-                                notification.content.idCardId))
-                .join(commentReply)
-                .on(notification.content.commentId.eq(commentReply.id))
-                .where(notification.notificationType.eq(NotificationType.COMMENT_REPLY))
-                .orderBy(notification.id.desc())
-                .fetch();
-    }
+    //    @Override
+    //    public List<NotificationVO> getCommentRepliesNotification(Long userId) {
+    //        return buildQuery(userId)
+    //                .select(
+    //                        new QNotificationVO(
+    //                                notification.id,
+    //                                notification.notificationType,
+    //                                notification.notificationStatus,
+    //                                notification.createdAt,
+    //                                community.id,
+    //                                community.name,
+    //                                notification.fromUserIdCardId,
+    //                                idCard.userInfo.profileImageUrl,
+    //                                idCard.userInfo.nickname,
+    //                                commentReply.id,
+    //                                commentReply.content,
+    //                                notification.content.idCardId))
+    //                .join(commentReply)
+    //                .on(notification.content.commentId.eq(commentReply.id))
+    //                .where(notification.notificationType.eq(NotificationType.COMMENT_REPLY))
+    //                .orderBy(notification.id.desc())
+    //                .fetch();
+    //    }
 
     @Override
     public List<NotificationVO> getCommentLikesNotification(Long userId) {
@@ -112,29 +110,29 @@ public class NotificationRepositoryImpl implements NotificationRepositoryExtensi
                 .fetch();
     }
 
-    @Override
-    public List<NotificationVO> getCommentReplyLikesNotification(Long userId) {
-        return buildQuery(userId)
-                .select(
-                        new QNotificationVO(
-                                notification.id,
-                                notification.notificationType,
-                                notification.notificationStatus,
-                                notification.createdAt,
-                                community.id,
-                                community.name,
-                                notification.fromUserIdCardId,
-                                idCard.userInfo.profileImageUrl,
-                                idCard.userInfo.nickname,
-                                commentReply.id,
-                                commentReply.content,
-                                notification.content.idCardId))
-                .join(commentReply)
-                .on(notification.content.commentId.eq(commentReply.id))
-                .join(commentReplyLike)
-                .on(commentReplyLike.commentReplyId.eq(commentReply.id))
-                .where(notification.notificationType.eq(NotificationType.COMMENT_REPLY_LIKE))
-                .orderBy(notification.id.desc())
-                .fetch();
-    }
+    //    @Override
+    //    public List<NotificationVO> getCommentReplyLikesNotification(Long userId) {
+    //        return buildQuery(userId)
+    //                .select(
+    //                        new QNotificationVO(
+    //                                notification.id,
+    //                                notification.notificationType,
+    //                                notification.notificationStatus,
+    //                                notification.createdAt,
+    //                                community.id,
+    //                                community.name,
+    //                                notification.fromUserIdCardId,
+    //                                idCard.userInfo.profileImageUrl,
+    //                                idCard.userInfo.nickname,
+    //                                commentReply.id,
+    //                                commentReply.content,
+    //                                notification.content.idCardId))
+    //                .join(commentReply)
+    //                .on(notification.content.commentId.eq(commentReply.id))
+    //                .join(commentReplyLike)
+    //                .on(commentReplyLike.commentReplyId.eq(commentReply.id))
+    //                .where(notification.notificationType.eq(NotificationType.COMMENT_REPLY_LIKE))
+    //                .orderBy(notification.id.desc())
+    //                .fetch();
+    //    }
 }

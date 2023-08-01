@@ -33,14 +33,15 @@ public class CommentDto {
     @Schema(description = "대댓글 갯수 (답글 N개 더보기)")
     private final int repliesCount;
 
-    public static CommentDto of(Comment comment, UserInfo userInfo, Long currentUserId) {
+    public static CommentDto of(
+            Comment comment, UserInfo userInfo, Long currentUserId, int repliesCount) {
         return CommentDto.builder()
                 .idCardId(comment.getIdCardId())
                 .commentId(comment.getId())
                 .content(comment.getContent())
                 .writerInfo(UserInfoDto.from(userInfo))
                 .commentLikeInfo(LikeDto.ofCommentLike(comment.getLikes(), currentUserId))
-                .repliesCount(comment.getReplies().size())
+                .repliesCount(repliesCount)
                 .createdAt(comment.getCreatedAt())
                 .build();
     }
