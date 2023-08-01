@@ -43,6 +43,10 @@ public class CommentAdaptor {
         return commentRepository.findCommentsByIdCardId(idCardId, communityId, pageable);
     }
 
+    public List<CommentVo> findCommentsByParentCommentId(Long communityId, Long parentCommentId) {
+        return commentRepository.findCommentsByParentCommentId(communityId, parentCommentId);
+    }
+
     public CommentReply findCommentReply(Comment comment, Long commentReplyId) {
         List<CommentReply> replies = comment.getReplies();
 

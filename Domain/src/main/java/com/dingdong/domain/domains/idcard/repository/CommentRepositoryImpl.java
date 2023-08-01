@@ -31,13 +31,28 @@ public class CommentRepositoryImpl implements CommentRepositoryExtension {
                         .on(
                                 idCard.userInfo.userId.eq(comment.userId),
                                 idCard.communityId.eq(communityId))
-                        .where(comment.idCardId.eq(idCardId), comment.isDeleted.eq(N))
+                        .where(
+                                comment.idCardId.eq(idCardId),
+                                comment.isDeleted.eq(N),
+                                comment.parentCommentId.isNull())
                         .orderBy(comment.id.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
         return SliceUtil.createSliceWithoutPageable(comments);
+    }
+
+    @Override
+    public List<CommentVo> findCommentsByParentCommentId(Long communityId, Long parentCommentId) {
+        return queryFactory
+                .select(Projections.constructor(CommentVo.class, comment, idCard.userInfo))
+                .from(comment)
+                .join(idCard)
+                .on(idCard.userInfo.userId.eq(comment.userId), idCard.communityId.eq(communityId))
+                .where(comment.isDeleted.eq(N), comment.parentCommentId.eq(parentCommentId))
+                .orderBy(comment.id.asc())
+                .fetch();
     }
 
     @Override

@@ -17,7 +17,6 @@ import com.dingdong.domain.domains.idcard.domain.entity.CommentLike;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReply;
 import com.dingdong.domain.domains.idcard.domain.entity.CommentReplyLike;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
-import com.dingdong.domain.domains.idcard.domain.model.CommentReplyVo;
 import com.dingdong.domain.domains.idcard.domain.model.CommentVo;
 import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
@@ -128,14 +127,14 @@ public class CommentService {
 
         idCardValidator.isValidIdCardComment(idCard, comment);
 
-        List<CommentReplyVo> replies =
-                commentAdaptor.findCommentReplyByCommentId(commentId, communityId);
+        List<CommentVo> replies =
+                commentAdaptor.findCommentsByParentCommentId(communityId, commentId);
 
         return replies.stream()
                 .map(
                         reply ->
                                 CommentReplyDto.of(
-                                        reply.getCommentReply(),
+                                        reply.getComment(),
                                         reply.getUserInfo(),
                                         currentUser.getId()))
                 .toList();

@@ -11,5 +11,7 @@ public interface CommentRepositoryExtension {
 
     Slice<CommentVo> findCommentsByIdCardId(Long idCardId, Long communityId, Pageable pageable);
 
+    List<CommentVo> findCommentsByParentCommentId(Long communityId, Long parentCommentId);
+
     List<CommentReplyVo> findReplies(Long commentId, Long communityId);
 }
