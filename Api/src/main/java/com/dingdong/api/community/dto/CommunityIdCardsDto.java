@@ -32,9 +32,9 @@ public class CommunityIdCardsDto {
     private final List<String> keywordTitles;
 
     @Schema(description = "댓글 개수")
-    private final int commentCount;
+    private final Long commentCount;
 
-    public static CommunityIdCardsDto of(IdCard idCard, List<Keyword> keywords, int commentCount) {
+    public static CommunityIdCardsDto of(IdCard idCard, List<Keyword> keywords, Long commentCount) {
         return CommunityIdCardsDto.builder()
                 .idCardId(idCard.getId())
                 .nickname(idCard.getNickname())

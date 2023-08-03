@@ -15,4 +15,6 @@ public interface CommentRepository
     List<Comment> findAllByIdCardIdAndIsDeleted(Long idCardId, Status isDeleted);
 
     Long countByIdCardIdAndIsDeleted(Long idCardId, Status isDeleted);
+
+    List<Comment> findAllByParentCommentIdAndIsDeleted(Long parentCommentId, Status isDeleted);
 }

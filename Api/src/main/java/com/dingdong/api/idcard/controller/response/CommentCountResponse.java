@@ -9,9 +9,9 @@ import lombok.Getter;
 @Builder
 public class CommentCountResponse {
     @Schema(description = "댓글 갯수")
-    private int count;
+    private Long count;
 
-    public static CommentCountResponse from(int count) {
+    public static CommentCountResponse from(Long count) {
         return CommentCountResponse.builder().count(count).build();
     }
 }

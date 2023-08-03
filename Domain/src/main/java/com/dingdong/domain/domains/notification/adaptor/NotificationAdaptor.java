@@ -37,15 +37,15 @@ public class NotificationAdaptor {
         return notificationRepository.getCommentsNotification(userId);
     }
 
-    public List<NotificationVO> getCommentRepliesNotification(Long userId) {
-        return notificationRepository.getCommentRepliesNotification(userId);
-    }
+    //    public List<NotificationVO> getCommentRepliesNotification(Long userId) {
+    //        return notificationRepository.getCommentRepliesNotification(userId);
+    //    }
 
     public List<NotificationVO> getCommentLikesNotification(Long userId) {
         return notificationRepository.getCommentLikesNotification(userId);
     }
 
-    public List<NotificationVO> getCommentReplyLikesNotification(Long userId) {
-        return notificationRepository.getCommentReplyLikesNotification(userId);
-    }
+    //    public List<NotificationVO> getCommentReplyLikesNotification(Long userId) {
+    //        return notificationRepository.getCommentReplyLikesNotification(userId);
+    //    }
 }
