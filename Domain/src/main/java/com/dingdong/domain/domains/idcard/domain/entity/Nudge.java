@@ -1,7 +1,6 @@
 package com.dingdong.domain.domains.idcard.domain.entity;
 
 
-import com.dingdong.core.consts.Status;
 import com.dingdong.domain.domains.AbstractTimeStamp;
 import com.dingdong.domain.domains.idcard.domain.enums.NudgeType;
 import com.esotericsoftware.kryo.serializers.FieldSerializer.NotNull;
@@ -33,14 +32,10 @@ public class Nudge extends AbstractTimeStamp {
 
     @NotNull private Long toUserId;
 
-    @Enumerated(EnumType.STRING)
-    private Status isLike;
-
     private Nudge(NudgeType type, Long fromUserId, Long toUserId) {
         this.type = type;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
-        this.isLike = Status.N;
     }
 
     public static Nudge toEntity(NudgeType type, Long fromUserId, Long toUserId) {
