@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class NudgeDetailResponse {
 
     @Schema(description = "상대 유저가 나에게 보낸 콕 찌르기 타입")
-    private final String toNudgeType;
+    private String toNudgeType;
 }
