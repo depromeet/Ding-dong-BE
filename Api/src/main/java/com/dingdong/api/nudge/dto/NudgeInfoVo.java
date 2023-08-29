@@ -3,10 +3,12 @@ package com.dingdong.api.nudge.dto;
 
 import com.dingdong.api.idcard.dto.UserInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 public class NudgeInfoVo {
 
