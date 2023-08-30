@@ -1,6 +1,9 @@
 package com.dingdong.domain.domains.idcard.domain.enums;
 
+import static com.dingdong.domain.domains.idcard.exception.IdCardErrorCode.NOT_FOUND_NUDGE_TYPE;
 
+import com.dingdong.core.exception.BaseException;
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -14,4 +17,11 @@ public enum NudgeType {
     ;
 
     final String value;
+
+    public static NudgeType findNudgeType(String value) {
+        return Arrays.stream(values())
+                .filter(c -> c.name().equals(value.toUpperCase()))
+                .findAny()
+                .orElseThrow(() -> new BaseException(NOT_FOUND_NUDGE_TYPE));
+    }
 }

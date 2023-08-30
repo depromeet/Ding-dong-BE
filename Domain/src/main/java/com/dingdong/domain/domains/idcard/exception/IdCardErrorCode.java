@@ -35,7 +35,9 @@ public enum IdCardErrorCode implements BaseErrorCode {
     NOT_FOUND_COMMENT_REPLY_LIKE(NOT_FOUND, "CommentReplyLike-404-1", "존재하지 않는 대댓글 좋아요입니다."),
     NOT_EXIST_ID_CARD_IN_COMMUNITY(
             FORBIDDEN, "IdCard-403-1", "행성에 주민증을 만들지 않은 유저는 댓글, 좋아요를 등록 할 수 있는 권한이 없습니다."),
-    NOT_VALID_ID_CARD_USER(BAD_REQUEST, "IdCard-400-4", "해당 유저가 작성한 주민증이 아닙니다.");
+    NOT_VALID_ID_CARD_USER(BAD_REQUEST, "IdCard-400-4", "해당 유저가 작성한 주민증이 아닙니다."),
+    NOT_FOUND_NUDGE_TYPE(BAD_REQUEST, "NudgeType-404-1", "콕 찌르기 유형을 찾을 수 없습니다."),
+    ;
 
     private final Integer statusCode;
     private final String errorCode;

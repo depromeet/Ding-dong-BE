@@ -28,17 +28,20 @@ public class Nudge extends AbstractTimeStamp {
     @Enumerated(EnumType.STRING)
     private NudgeType type;
 
+    @NotNull private Long communityId;
+
     @NotNull private Long fromUserId;
 
     @NotNull private Long toUserId;
 
-    private Nudge(NudgeType type, Long fromUserId, Long toUserId) {
+    private Nudge(NudgeType type, Long communityId, Long fromUserId, Long toUserId) {
         this.type = type;
+        this.communityId = communityId;
         this.fromUserId = fromUserId;
         this.toUserId = toUserId;
     }
 
-    public static Nudge toEntity(NudgeType type, Long fromUserId, Long toUserId) {
-        return new Nudge(type, fromUserId, toUserId);
+    public static Nudge toEntity(NudgeType type, Long communityId, Long fromUserId, Long toUserId) {
+        return new Nudge(type, communityId, fromUserId, toUserId);
     }
 }

@@ -30,7 +30,9 @@ public class NudgeController {
 
     @Operation(summary = "상대 유저를 콕 찌릅니다.")
     @PostMapping("/users/{userId}")
-    public void postNudge(@PathVariable Long userId, @RequestBody @Valid NudgeRequest body) {}
+    public void postNudge(@PathVariable Long userId, @RequestBody @Valid NudgeRequest body) {
+        nudgeService.createNudge(userId, body);
+    }
 
     @Operation(summary = "상대 유저가 나에게 콕 찌르기 한 정보를 확인합니다.")
     @GetMapping("/users/{userId}")
