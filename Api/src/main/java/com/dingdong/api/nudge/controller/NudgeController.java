@@ -35,9 +35,10 @@ public class NudgeController {
     }
 
     @Operation(summary = "상대 유저가 나에게 콕 찌르기 한 정보를 확인합니다.")
-    @GetMapping("/users/{userId}")
-    public NudgeDetailResponse getNudgeDetail(@PathVariable Long userId) {
-        return new NudgeDetailResponse("test");
+    @GetMapping("/users/{userId}/{communityId}")
+    public NudgeDetailResponse getNudgeDetail(
+            @PathVariable Long userId, @PathVariable Long communityId) {
+        return NudgeDetailResponse.from(nudgeService.getNudgeDetail(userId, communityId));
     }
 
     @Operation(summary = "나의 콕 찌르기 현황을 조회합니다.")

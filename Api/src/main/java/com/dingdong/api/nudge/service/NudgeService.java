@@ -39,4 +39,19 @@ public class NudgeService {
                         currentUserId,
                         toUserId));
     }
+
+    public String getNudgeDetail(Long fromUserId, Long communityId) {
+        Community community = communityAdaptor.findById(communityId);
+
+        Long currentUserId = userHelper.getCurrentUserId();
+
+        idCardValidator.validateUserIdCardInCommunity(community.getId(), currentUserId);
+        idCardValidator.validateUserIdCardInCommunity(community.getId(), fromUserId);
+
+        return nudgeAdaptor
+                .findNudge(communityId, fromUserId, currentUserId)
+                .map(Nudge::getType)
+                .map(NudgeType::getValue)
+                .orElse(null);
+    }
 }
