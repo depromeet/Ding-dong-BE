@@ -3,7 +3,7 @@ package com.dingdong.api.nudge.controller;
 
 import com.dingdong.api.nudge.controller.request.NudgeRequest;
 import com.dingdong.api.nudge.controller.response.NudgeDetailResponse;
-import com.dingdong.api.nudge.dto.NudgeInfoVo;
+import com.dingdong.api.nudge.controller.response.NudgeInfoListResponse;
 import com.dingdong.api.nudge.service.NudgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -43,7 +43,7 @@ public class NudgeController {
 
     @Operation(summary = "나의 콕 찌르기 현황을 조회합니다.")
     @GetMapping
-    public NudgeInfoVo getNudges(@ParameterObject Pageable pageable) {
-        return new NudgeInfoVo();
+    public NudgeInfoListResponse getNudges(@ParameterObject Pageable pageable) {
+        return new NudgeInfoListResponse();
     }
 }
