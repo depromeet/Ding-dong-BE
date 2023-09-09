@@ -3,6 +3,7 @@ package com.dingdong.api.nudge.controller;
 
 import com.dingdong.api.nudge.controller.request.NudgeRequest;
 import com.dingdong.api.nudge.controller.response.NudgeDetailResponse;
+import com.dingdong.api.nudge.controller.response.NudgeInfoListResponse;
 import com.dingdong.api.nudge.service.NudgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
