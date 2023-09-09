@@ -46,12 +46,6 @@ public class NudgeController {
         return NudgeDetailResponse.from(nudgeService.getNudgeDetail(userId, communityId));
     }
 
-    //    @Operation(summary = "나의 콕 찌르기 현황을 조회합니다.")
-    //    @GetMapping
-    //    public NudgeInfoListResponse getNudges(@ParameterObject Pageable pageable) {
-    //        return new NudgeInfoListResponse();
-    //    }
-
     @Operation(summary = "나의 콕 찌르기 현황을 조회합니다.")
     @GetMapping
     public SliceResponse<NudgeInfoDto> getNudges(@ParameterObject Pageable pageable) {
