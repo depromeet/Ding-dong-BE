@@ -35,6 +35,9 @@ public class IdCardDetailsDto {
     @Schema(description = "댓글 개수")
     private int commentCount;
 
+    @Schema(description = "상대 유저가 나에게 보낸 콕 찌르기 타입")
+    private String toNudgeType;
+
     public static IdCardDetailsDto of(
             IdCard idCard, List<KeywordDto> keywordDtos, int commentCount) {
         return IdCardDetailsDto.builder()

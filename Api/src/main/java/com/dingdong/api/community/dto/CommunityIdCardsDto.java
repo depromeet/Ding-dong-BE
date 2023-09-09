@@ -34,6 +34,9 @@ public class CommunityIdCardsDto {
     @Schema(description = "댓글 개수")
     private final int commentCount;
 
+    @Schema(description = "상대 유저가 나에게 보낸 콕 찌르기 타입")
+    private String toNudgeType;
+
     public static CommunityIdCardsDto of(IdCard idCard, List<Keyword> keywords, int commentCount) {
         return CommunityIdCardsDto.builder()
                 .idCardId(idCard.getId())
