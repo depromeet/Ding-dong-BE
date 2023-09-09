@@ -56,7 +56,7 @@ public class NudgeService {
     }
 
     @Transactional
-    public void updateNudge(Long formUserId, Long nudgeId, NudgeRequest body) {
+    public void updateNudge(Long formUserId, NudgeRequest body) {
         Community community = communityAdaptor.findById(body.getCommunityId());
 
         Long currentUserId = userHelper.getCurrentUserId();
