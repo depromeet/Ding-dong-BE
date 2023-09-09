@@ -13,8 +13,11 @@ import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
+import com.dingdong.domain.domains.idcard.adaptor.NudgeAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
 import com.dingdong.domain.domains.idcard.domain.entity.Keyword;
+import com.dingdong.domain.domains.idcard.domain.entity.Nudge;
+import com.dingdong.domain.domains.idcard.domain.enums.NudgeType;
 import com.dingdong.domain.domains.idcard.validator.CommentValidator;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.image.adaptor.ImageAdaptor;
@@ -48,6 +51,8 @@ public class IdCardService {
 
     private final CommentAdaptor commentAdaptor;
 
+    private final NudgeAdaptor nudgeAdaptor;
+
     /** 주민증 세부 조회 */
     public IdCardDetailsDto getIdCardDetails(Long idCardsId) {
         IdCard idCard = idCardAdaptor.findById(idCardsId);
@@ -58,7 +63,14 @@ public class IdCardService {
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
-        return IdCardDetailsDto.of(idCard, keywordDtos, commentCount);
+        return IdCardDetailsDto.of(
+                idCard,
+                keywordDtos,
+                commentCount,
+                findNudgeType(
+                        idCard.getCommunityId(),
+                        idCard.getUserInfo().getUserId(),
+                        userHelper.getCurrentUserId()));
     }
 
     /** 댓글 개수 조회 */
@@ -199,5 +211,14 @@ public class IdCardService {
     /** 유저가 해당 커뮤니티에 가입된 상태인지 확인 */
     private void validateIsJoinUser(User user, Long communityId) {
         communityValidator.validateUserExistInCommunity(user, communityId);
+    }
+
+    /** 주민증의 유저가 나에게 보낸 콕찌르기 타입 조회 */
+    private String findNudgeType(Long communityId, Long fromUserId, Long toUserId) {
+        return nudgeAdaptor
+                .findNudge(communityId, fromUserId, toUserId)
+                .map(Nudge::getType)
+                .map(NudgeType::getValue)
+                .orElse(null);
     }
 }
