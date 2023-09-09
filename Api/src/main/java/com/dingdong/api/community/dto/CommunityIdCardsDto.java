@@ -37,7 +37,8 @@ public class CommunityIdCardsDto {
     @Schema(description = "상대 유저가 나에게 보낸 콕 찌르기 타입")
     private String toNudgeType;
 
-    public static CommunityIdCardsDto of(IdCard idCard, List<Keyword> keywords, int commentCount) {
+    public static CommunityIdCardsDto of(
+            IdCard idCard, List<Keyword> keywords, int commentCount, String toNudgeType) {
         return CommunityIdCardsDto.builder()
                 .idCardId(idCard.getId())
                 .nickname(idCard.getNickname())
@@ -46,6 +47,7 @@ public class CommunityIdCardsDto {
                 .characterType(idCard.getCharacterType())
                 .keywordTitles(keywords.stream().map(Keyword::getTitle).toList())
                 .commentCount(commentCount)
+                .toNudgeType(toNudgeType)
                 .build();
     }
 }

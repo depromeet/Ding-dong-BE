@@ -39,7 +39,7 @@ public class IdCardDetailsDto {
     private String toNudgeType;
 
     public static IdCardDetailsDto of(
-            IdCard idCard, List<KeywordDto> keywordDtos, int commentCount) {
+            IdCard idCard, List<KeywordDto> keywordDtos, int commentCount, String toNudgeType) {
         return IdCardDetailsDto.builder()
                 .idCardId(idCard.getId())
                 .userId(idCard.getUserInfo().getUserId())
@@ -49,6 +49,7 @@ public class IdCardDetailsDto {
                 .keywords(keywordDtos)
                 .characterType(idCard.getCharacterType())
                 .commentCount(commentCount)
+                .toNudgeType(toNudgeType)
                 .build();
     }
 }

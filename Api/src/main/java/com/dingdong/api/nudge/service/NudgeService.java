@@ -7,7 +7,6 @@ import com.dingdong.api.global.helper.UserHelper;
 import com.dingdong.api.nudge.controller.request.NudgeRequest;
 import com.dingdong.api.nudge.dto.NudgeInfoDto;
 import com.dingdong.core.exception.BaseException;
-import com.dingdong.domain.common.util.SliceUtil;
 import com.dingdong.domain.domains.community.adaptor.CommunityAdaptor;
 import com.dingdong.domain.domains.community.domain.entity.Community;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
@@ -18,9 +17,10 @@ import com.dingdong.domain.domains.idcard.domain.enums.NudgeType;
 import com.dingdong.domain.domains.idcard.domain.model.NudgeVo;
 import com.dingdong.domain.domains.idcard.validator.IdCardValidator;
 import com.dingdong.domain.domains.idcard.validator.NudgeValidator;
+import java.util.List;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,22 +83,21 @@ public class NudgeService {
         return findNudgeType(communityId, fromUserId, currentUserId);
     }
 
-    public Slice<NudgeInfoDto> getNudges(Pageable pageable) {
+    public List<NudgeInfoDto> getNudges(Pageable pageable) {
         Long currentUserId = userHelper.getCurrentUserId();
 
-        Slice<NudgeVo> nudgeVos = nudgeAdaptor.getNudges(currentUserId, pageable);
-        return SliceUtil.createSliceWithPageable(
-                nudgeVos.getContent().stream()
-                        .map(
-                                nudgeVo ->
-                                        NudgeInfoDto.of(
-                                                nudgeVo,
-                                                findNudgeType(
-                                                        nudgeVo.getNudge().getCommunityId(),
-                                                        nudgeVo.getNudge().getToUserId(),
-                                                        nudgeVo.getNudge().getFromUserId())))
-                        .toList(),
-                pageable);
+        List<NudgeVo> nudgeVos = nudgeAdaptor.getNudges(currentUserId, pageable);
+        return Stream.of(nudgeVos)
+                .flatMap(List::stream)
+                .map(
+                        nudgeVo ->
+                                NudgeInfoDto.of(
+                                        nudgeVo,
+                                        findNudgeType(
+                                                nudgeVo.getNudge().getCommunityId(),
+                                                nudgeVo.getNudge().getToUserId(),
+                                                nudgeVo.getNudge().getFromUserId())))
+                .toList();
     }
 
     // 내가 상대에게 보낸 / 상대가 나에게 보낸 콕찌르기 타입 조회

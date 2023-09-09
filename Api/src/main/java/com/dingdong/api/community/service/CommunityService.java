@@ -21,8 +21,11 @@ import com.dingdong.domain.domains.community.domain.strategy.GenerateCommunityIn
 import com.dingdong.domain.domains.community.validator.CommunityValidator;
 import com.dingdong.domain.domains.idcard.adaptor.CommentAdaptor;
 import com.dingdong.domain.domains.idcard.adaptor.IdCardAdaptor;
+import com.dingdong.domain.domains.idcard.adaptor.NudgeAdaptor;
 import com.dingdong.domain.domains.idcard.domain.entity.Comment;
 import com.dingdong.domain.domains.idcard.domain.entity.IdCard;
+import com.dingdong.domain.domains.idcard.domain.entity.Nudge;
+import com.dingdong.domain.domains.idcard.domain.enums.NudgeType;
 import com.dingdong.domain.domains.user.domain.adaptor.UserAdaptor;
 import com.dingdong.domain.domains.user.domain.entity.User;
 import java.util.List;
@@ -44,6 +47,7 @@ public class CommunityService {
     private final UserAdaptor userAdaptor;
     private final UserHelper userHelper;
     private final CommentAdaptor commentAdaptor;
+    private final NudgeAdaptor nudgeAdaptor;
 
     public CommunityDetailsDto getCommunityDetails(Long communityId) {
         User currentUser = userHelper.getCurrentUser();
@@ -108,7 +112,11 @@ public class CommunityService {
                                         CommunityIdCardsDto.of(
                                                 idCard,
                                                 idCard.getKeywords(),
-                                                commentAdaptor.findCommentCount(idCard.getId())))
+                                                commentAdaptor.findCommentCount(idCard.getId()),
+                                                findNudgeType(
+                                                        communityId,
+                                                        idCard.getUserInfo().getUserId(),
+                                                        currentUser.getId())))
                         .toList(),
                 pageable);
     }
@@ -127,7 +135,11 @@ public class CommunityService {
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
-        return IdCardDetailsDto.of(idCard, keywordDtos, commentCount);
+        return IdCardDetailsDto.of(
+                idCard,
+                keywordDtos,
+                commentCount,
+                findNudgeType(communityId, idCard.getUserInfo().getUserId(), currentUser.getId()));
     }
 
     public boolean checkDuplicatedName(String name) {
@@ -231,5 +243,14 @@ public class CommunityService {
                             commentAdaptor.findAllByIdCard(idCard.getId()).forEach(Comment::delete);
                             community.deleteIdCard(idCard);
                         });
+    }
+
+    /** 주민증의 유저가 나에게 보낸 콕찌르기 타입 조회 */
+    private String findNudgeType(Long communityId, Long fromUserId, Long toUserId) {
+        return nudgeAdaptor
+                .findNudge(communityId, fromUserId, toUserId)
+                .map(Nudge::getType)
+                .map(NudgeType::getValue)
+                .orElse(null);
     }
 }

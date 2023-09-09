@@ -1,10 +1,9 @@
 package com.dingdong.api.nudge.controller;
 
 
-import com.dingdong.api.global.response.SliceResponse;
 import com.dingdong.api.nudge.controller.request.NudgeRequest;
 import com.dingdong.api.nudge.controller.response.NudgeDetailResponse;
-import com.dingdong.api.nudge.dto.NudgeInfoDto;
+import com.dingdong.api.nudge.controller.response.NudgeInfoListResponse;
 import com.dingdong.api.nudge.service.NudgeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -48,7 +47,7 @@ public class NudgeController {
 
     @Operation(summary = "나의 콕 찌르기 현황을 조회합니다.")
     @GetMapping
-    public SliceResponse<NudgeInfoDto> getNudges(@ParameterObject Pageable pageable) {
-        return SliceResponse.from(nudgeService.getNudges(pageable));
+    public NudgeInfoListResponse getNudges(@ParameterObject Pageable pageable) {
+        return NudgeInfoListResponse.from(nudgeService.getNudges(pageable));
     }
 }
