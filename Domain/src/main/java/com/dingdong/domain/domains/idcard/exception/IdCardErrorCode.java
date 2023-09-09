@@ -37,6 +37,8 @@ public enum IdCardErrorCode implements BaseErrorCode {
             FORBIDDEN, "IdCard-403-1", "행성에 주민증을 만들지 않은 유저는 댓글, 좋아요를 등록 할 수 있는 권한이 없습니다."),
     NOT_VALID_ID_CARD_USER(BAD_REQUEST, "IdCard-400-4", "해당 유저가 작성한 주민증이 아닙니다."),
     NOT_FOUND_NUDGE_TYPE(BAD_REQUEST, "NudgeType-404-1", "콕 찌르기 유형을 찾을 수 없습니다."),
+    NOT_FOUND_NUDGE(BAD_REQUEST, "NudgeType-404-2", "존재하지 않는 콕 찌르기입니다."),
+    ALREADY_EXIST_NUDGE(BAD_REQUEST, "NudgeType-404-3", "이미 최초 콕 찌르기를 하였습니다."),
     ;
 
     private final Integer statusCode;

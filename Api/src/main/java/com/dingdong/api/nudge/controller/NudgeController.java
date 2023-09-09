@@ -12,12 +12,7 @@ import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @SecurityRequirement(name = "access-token")
 @Tag(name = "콕 찌르기")
@@ -32,6 +27,15 @@ public class NudgeController {
     @PostMapping("/users/{userId}")
     public void postNudge(@PathVariable Long userId, @RequestBody @Valid NudgeRequest body) {
         nudgeService.createNudge(userId, body);
+    }
+
+    @Operation(summary = "상대 유저를 콕 찌르기 종류를 변경합니다.")
+    @PutMapping("/users/{userId}/{nudgeId}")
+    public void updateNudge(
+            @PathVariable Long userId,
+            @PathVariable Long nudgeId,
+            @RequestBody @Valid NudgeRequest body) {
+        nudgeService.updateNudge(userId, nudgeId, body);
     }
 
     @Operation(summary = "상대 유저가 나에게 콕 찌르기 한 정보를 확인합니다.")

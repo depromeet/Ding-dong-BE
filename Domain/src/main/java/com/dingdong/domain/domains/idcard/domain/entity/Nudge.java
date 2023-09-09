@@ -44,4 +44,8 @@ public class Nudge extends AbstractTimeStamp {
     public static Nudge toEntity(NudgeType type, Long communityId, Long fromUserId, Long toUserId) {
         return new Nudge(type, communityId, fromUserId, toUserId);
     }
+
+    public void updateNudgeType(NudgeType type) {
+        this.type = type;
+    }
 }
