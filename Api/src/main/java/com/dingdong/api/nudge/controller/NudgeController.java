@@ -30,12 +30,9 @@ public class NudgeController {
     }
 
     @Operation(summary = "상대 유저를 콕 찌르기 종류를 변경합니다.")
-    @PutMapping("/users/{userId}/{nudgeId}")
-    public void updateNudge(
-            @PathVariable Long userId,
-            @PathVariable Long nudgeId,
-            @RequestBody @Valid NudgeRequest body) {
-        nudgeService.updateNudge(userId, nudgeId, body);
+    @PutMapping("/users/{userId}")
+    public void updateNudge(@PathVariable Long userId, @RequestBody @Valid NudgeRequest body) {
+        nudgeService.updateNudge(userId, body);
     }
 
     @Operation(summary = "상대 유저가 나에게 콕 찌르기 한 정보를 확인합니다.")
@@ -45,9 +42,11 @@ public class NudgeController {
         return NudgeDetailResponse.from(nudgeService.getNudgeDetail(userId, communityId));
     }
 
-    @Operation(summary = "나의 콕 찌르기 현황을 조회합니다.")
-    @GetMapping
-    public NudgeInfoListResponse getNudges(@ParameterObject Pageable pageable) {
+
+    @Operation(summary = "나의 주민증의 콕 찌르기 현황을 조회합니다.")
+    @GetMapping("/id-cards/{idCardsId}")
+    public NudgeInfoListResponse getNudges(
+            @PathVariable Long idCardsId, @ParameterObject Pageable pageable) {
         return NudgeInfoListResponse.from(nudgeService.getNudges(pageable));
     }
 }
