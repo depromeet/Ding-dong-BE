@@ -72,7 +72,7 @@ public class IdCardService {
                 idCard,
                 keywordDtos,
                 commentCount,
-                findNudgeType(idCard.getId(), currentUserIdCard.getId()));
+                findNudgeType(currentUserIdCard.getId(), idCard.getId()));
     }
 
     /** 댓글 개수 조회 */
