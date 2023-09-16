@@ -47,7 +47,7 @@ public class NudgeService {
 
         IdCard toIdCardId = idCardAdaptor.findByCommunityIdAndUserId(community.getId(), toUserId);
 
-        nudgeValidator.isAlreadyCreateNudge(body.getCommunityId(), currentUserId, toUserId);
+        nudgeValidator.isAlreadyCreateNudge(currentUserId, toUserId);
         nudgeAdaptor.save(
                 Nudge.toEntity(
                         NudgeType.findNudgeType(body.getNudgeType()),
@@ -104,9 +104,9 @@ public class NudgeService {
     }
 
     // 내가 상대에게 보낸 / 상대가 나에게 보낸 콕찌르기 타입 조회
-    private String findNudgeType(Long fromUserId, Long toUserId) {
+    private String findNudgeType(Long fromUserIdCardId, Long toUserIdCardId) {
         return nudgeAdaptor
-                .findNudge(fromUserId, toUserId)
+                .findNudge(fromUserIdCardId, toUserIdCardId)
                 .map(Nudge::getType)
                 .map(NudgeType::getValue)
                 .orElse(null);

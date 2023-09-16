@@ -1,6 +1,5 @@
 package com.dingdong.domain.domains.idcard.repository;
 
-import static com.dingdong.domain.domains.community.domain.entity.QCommunity.community;
 import static com.dingdong.domain.domains.idcard.domain.entity.QIdCard.idCard;
 import static com.dingdong.domain.domains.idcard.domain.entity.QNudge.nudge;
 
@@ -21,11 +20,8 @@ public class NudgeRepositoryImpl implements NudgeRepositoryExtension {
     private JPAQuery<Nudge> buildQuery(Long toUserId) {
         return queryFactory
                 .selectFrom(nudge)
-                .join(community)
-                .on(nudge.communityId.eq(community.id))
                 .join(idCard)
                 .on(nudge.fromUserIdCardId.eq(idCard.id))
-                .where(nudge.toUserId.eq(toUserId))
                 .groupBy(nudge.id);
     }
 
