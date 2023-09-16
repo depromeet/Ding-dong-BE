@@ -248,7 +248,7 @@ public class CommunityService {
     /** 주민증의 유저가 나에게 보낸 콕찌르기 타입 조회 */
     private String findNudgeType(Long communityId, Long fromUserId, Long toUserId) {
         return nudgeAdaptor
-                .findNudge(communityId, fromUserId, toUserId)
+                .findNudge(fromUserId, toUserId)
                 .map(Nudge::getType)
                 .map(NudgeType::getValue)
                 .orElse(null);

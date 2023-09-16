@@ -15,8 +15,8 @@ public class NudgeValidator {
 
     private final NudgeAdaptor nudgeAdaptor;
 
-    public void isAlreadyCreateNudge(Long communityId, Long fromUserId, Long toUserId) {
-        Optional<Nudge> nudge = nudgeAdaptor.findNudge(communityId, fromUserId, toUserId);
+    public void isAlreadyCreateNudge(Long fromUserId, Long toUserId) {
+        Optional<Nudge> nudge = nudgeAdaptor.findNudge(fromUserId, toUserId);
 
         if (nudge.isPresent()) {
             throw new BaseException(ALREADY_EXIST_NUDGE);
