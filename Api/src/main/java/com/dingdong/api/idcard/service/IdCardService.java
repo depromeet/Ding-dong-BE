@@ -63,14 +63,16 @@ public class IdCardService {
 
         List<KeywordDto> keywordDtos = idCard.getKeywords().stream().map(KeywordDto::of).toList();
 
+        Long currentUserId = userHelper.getCurrentUserId();
+
+        IdCard currentUserIdCard =
+                idCardAdaptor.findByCommunityIdAndUserId(idCard.getCommunityId(), currentUserId);
+
         return IdCardDetailsDto.of(
                 idCard,
                 keywordDtos,
                 commentCount,
-                findNudgeType(
-                        idCard.getCommunityId(),
-                        idCard.getUserInfo().getUserId(),
-                        userHelper.getCurrentUserId()));
+                findNudgeType(idCard.getId(), currentUserIdCard.getId()));
     }
 
     /** 댓글 개수 조회 */
@@ -214,9 +216,9 @@ public class IdCardService {
     }
 
     /** 주민증의 유저가 나에게 보낸 콕찌르기 타입 조회 */
-    private String findNudgeType(Long communityId, Long fromUserId, Long toUserId) {
+    private String findNudgeType(Long fromUserId, Long toUserId) {
         return nudgeAdaptor
-                .findNudge(communityId, fromUserId, toUserId)
+                .findNudge(fromUserId, toUserId)
                 .map(Nudge::getType)
                 .map(NudgeType::getValue)
                 .orElse(null);

@@ -32,19 +32,13 @@ public class Nudge extends AbstractTimeStamp {
 
     @NotNull private Long toUserIdCardId;
 
-    private Nudge(
-            NudgeType type,
-            Long fromUserIdCardId,
-            Long toUserIdCardId) {
+    private Nudge(NudgeType type, Long fromUserIdCardId, Long toUserIdCardId) {
         this.type = type;
         this.fromUserIdCardId = fromUserIdCardId;
         this.toUserIdCardId = toUserIdCardId;
     }
 
-    public static Nudge toEntity(
-            NudgeType type,
-            Long fromUserIdCardId,
-            Long toUserIdCardId) {
+    public static Nudge toEntity(NudgeType type, Long fromUserIdCardId, Long toUserIdCardId) {
         return new Nudge(type, fromUserIdCardId, toUserIdCardId);
     }
 

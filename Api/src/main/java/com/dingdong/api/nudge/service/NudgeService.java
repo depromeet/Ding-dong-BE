@@ -42,45 +42,49 @@ public class NudgeService {
 
         Long currentUserId = userHelper.getCurrentUserId();
 
-        idCardValidator.validateUserIdCardInCommunity(community.getId(), currentUserId);
-        idCardValidator.validateUserIdCardInCommunity(community.getId(), toUserId);
+        IdCard fromIdCardId =
+                idCardAdaptor.findByCommunityIdAndUserId(body.getCommunityId(), currentUserId);
+
+        IdCard toIdCardId = idCardAdaptor.findByCommunityIdAndUserId(community.getId(), toUserId);
 
         nudgeValidator.isAlreadyCreateNudge(body.getCommunityId(), currentUserId, toUserId);
         nudgeAdaptor.save(
                 Nudge.toEntity(
                         NudgeType.findNudgeType(body.getNudgeType()),
-                        community.getId(),
-                        currentUserId,
-                        getCurrentUserIdCard(community.getId(), currentUserId).getId(),
-                        toUserId));
+                        fromIdCardId.getId(),
+                        toIdCardId.getId()));
     }
 
     @Transactional
-    public void updateNudge(Long formUserId, NudgeRequest body) {
+    public void updateNudge(Long toUserId, NudgeRequest body) {
         Community community = communityAdaptor.findById(body.getCommunityId());
 
         Long currentUserId = userHelper.getCurrentUserId();
 
-        idCardValidator.validateUserIdCardInCommunity(community.getId(), currentUserId);
-        idCardValidator.validateUserIdCardInCommunity(community.getId(), formUserId);
+        IdCard fromIdCardId =
+                idCardAdaptor.findByCommunityIdAndUserId(body.getCommunityId(), currentUserId);
+
+        IdCard toIdCardId = idCardAdaptor.findByCommunityIdAndUserId(community.getId(), toUserId);
 
         Nudge nudge =
                 nudgeAdaptor
-                        .findNudge(body.getCommunityId(), formUserId, currentUserId)
+                        .findNudge(fromIdCardId.getId(), toIdCardId.getId())
                         .orElseThrow(() -> new BaseException(NOT_FOUND_NUDGE));
 
         nudge.updateNudgeType(NudgeType.findNudgeType(body.getNudgeType()));
     }
 
-    public String getNudgeDetail(Long fromUserId, Long communityId) {
+    public String getNudgeDetail(Long userId, Long communityId) {
         Community community = communityAdaptor.findById(communityId);
 
         Long currentUserId = userHelper.getCurrentUserId();
 
-        idCardValidator.validateUserIdCardInCommunity(community.getId(), currentUserId);
-        idCardValidator.validateUserIdCardInCommunity(community.getId(), fromUserId);
+        IdCard fromIdCardId = idCardAdaptor.findByCommunityIdAndUserId(community.getId(), userId);
 
-        return findNudgeType(communityId, fromUserId, currentUserId);
+        IdCard toIdCardId =
+                idCardAdaptor.findByCommunityIdAndUserId(community.getId(), currentUserId);
+
+        return findNudgeType(fromIdCardId.getId(), toIdCardId.getId());
     }
 
     public List<NudgeInfoDto> getNudges(Pageable pageable) {
@@ -94,16 +98,15 @@ public class NudgeService {
                                 NudgeInfoDto.of(
                                         nudgeVo,
                                         findNudgeType(
-                                                nudgeVo.getNudge().getCommunityId(),
-                                                nudgeVo.getNudge().getToUserId(),
-                                                nudgeVo.getNudge().getFromUserId())))
+                                                nudgeVo.getNudge().getFromUserIdCardId(),
+                                                nudgeVo.getNudge().getToUserIdCardId())))
                 .toList();
     }
 
     // 내가 상대에게 보낸 / 상대가 나에게 보낸 콕찌르기 타입 조회
-    private String findNudgeType(Long communityId, Long fromUserId, Long toUserId) {
+    private String findNudgeType(Long fromUserId, Long toUserId) {
         return nudgeAdaptor
-                .findNudge(communityId, fromUserId, toUserId)
+                .findNudge(fromUserId, toUserId)
                 .map(Nudge::getType)
                 .map(NudgeType::getValue)
                 .orElse(null);

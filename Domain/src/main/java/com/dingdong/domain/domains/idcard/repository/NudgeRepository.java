@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NudgeRepository extends JpaRepository<Nudge, Long>, NudgeRepositoryExtension {
 
-    Optional<Nudge> findNudgeByCommunityIdAndFromUserIdAndToUserId(
-            Long communityId, Long fromUserId, Long toUserId);
+    Optional<Nudge> findNudgeByFromUserIdCardIdAndToUserIdCardId(
+            Long fromUserIdCardId, Long toUserIdCardId);
 }

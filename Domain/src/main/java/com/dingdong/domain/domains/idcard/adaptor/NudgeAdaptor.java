@@ -20,9 +20,8 @@ public class NudgeAdaptor {
         nudgeRepository.save(nudge);
     }
 
-    public Optional<Nudge> findNudge(Long communityId, Long fromUserId, Long toUserId) {
-        return nudgeRepository.findNudgeByCommunityIdAndFromUserIdAndToUserId(
-                communityId, fromUserId, toUserId);
+    public Optional<Nudge> findNudge(Long fromUserId, Long toUserId) {
+        return nudgeRepository.findNudgeByFromUserIdCardIdAndToUserIdCardId(fromUserId, toUserId);
     }
 
     public List<NudgeVo> getNudges(Long toUserId, Pageable pageable) {

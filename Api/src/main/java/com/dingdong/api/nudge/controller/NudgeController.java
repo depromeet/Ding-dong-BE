@@ -42,7 +42,6 @@ public class NudgeController {
         return NudgeDetailResponse.from(nudgeService.getNudgeDetail(userId, communityId));
     }
 
-
     @Operation(summary = "나의 주민증의 콕 찌르기 현황을 조회합니다.")
     @GetMapping("/id-cards/{idCardsId}")
     public NudgeInfoListResponse getNudges(
