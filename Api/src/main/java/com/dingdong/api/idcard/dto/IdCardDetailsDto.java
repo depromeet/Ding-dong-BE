@@ -38,6 +38,9 @@ public class IdCardDetailsDto {
     @Schema(description = "상대 유저가 나에게 보낸 콕 찌르기 타입")
     private String toNudgeType;
 
+    @Schema(description = "읽지 않은 딩동 개수")
+    private int unreadNudges;
+
     public static IdCardDetailsDto of(
             IdCard idCard, List<KeywordDto> keywordDtos, int commentCount, String toNudgeType) {
         return IdCardDetailsDto.builder()
